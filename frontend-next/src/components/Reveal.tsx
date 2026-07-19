@@ -11,6 +11,8 @@ export default function Reveal({ children, delay = 0 }: { children: ReactNode; d
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // threshold 0 (nu un procent): un bloc mai înalt decât ecranul nu poate atinge niciodată
+    // un prag procentual, așa că se afișează de îndată ce intră în ecran — la orice înălțime.
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -18,7 +20,7 @@ export default function Reveal({ children, delay = 0 }: { children: ReactNode; d
           io.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+      { threshold: 0, rootMargin: '0px 0px -8% 0px' },
     );
     io.observe(el);
     return () => io.disconnect();
