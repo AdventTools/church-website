@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-19 (9)
+- fix(reveal): „Ce credem" apărea complet goală — animația scroll-reveal folosea `threshold: 0.12` (12% din element vizibil), imposibil de atins când tot conținutul (28 de credințe, ~12.000px) e într-un singur bloc mai înalt decât ecranul → nu se afișa niciodată. Prag schimbat la `0` (se afișează cum intră în ecran, la orice înălțime). Verificat pe toate paginile.
+
 ## 2026-07-19 (8)
 - content(ce-credem): pagina „Ce credem" conține acum textul INTEGRAL al celor 28 de convingeri fundamentale (RO+EN), grupate pe cele 6 categorii — în locul rezumatelor + link extern către adventist.ro. Nicio referință externă în corpul paginii; diacritice normalizate la virgulă. Aplicat în CMS (live) + seed (pentru instalări noi).
 
