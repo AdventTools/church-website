@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-19 (8)
+- content(ce-credem): pagina „Ce credem" conține acum textul INTEGRAL al celor 28 de convingeri fundamentale (RO+EN), grupate pe cele 6 categorii — în locul rezumatelor + link extern către adventist.ro. Nicio referință externă în corpul paginii; diacritice normalizate la virgulă. Aplicat în CMS (live) + seed (pentru instalări noi).
+
 ## 2026-07-19 (7)
 - fix(mobile): meniul mobil se deschidea ca o pagină albă goală — token-urile CSS (`--ease-spring`, `--ink`, `--row-scrolled`) erau definite pe `.header`, dar overlay-ul meniului e frate cu `<header>`, nu descendent, deci nu le moștenea; `var(--ease-spring)` invalida animația → linkurile rămâneau `opacity:0`. Redeclarate token-urile pe `.mobileMenu`. Verificat cu render real pe mobil.
 
