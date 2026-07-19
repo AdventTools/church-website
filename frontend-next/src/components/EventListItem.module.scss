@@ -1,0 +1,89 @@
+.item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--fg);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.item.clickable:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: var(--fg);
+}
+
+/* Eveniment fără poză → o singură coloană, cu accent la stânga. */
+.noImage {
+  grid-template-columns: 1fr;
+  border-left: 4px solid var(--primary-color);
+}
+.noImage .body {
+  padding: 1.15rem 1.5rem;
+}
+
+.image {
+  position: relative;
+  background: var(--surface);
+  min-height: 160px;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.body {
+  padding: 1.25rem 1.5rem 1.25rem 0;
+}
+
+.meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+.period {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.type {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.title {
+  font-size: 1.3rem;
+  margin: 0 0 0.5rem;
+}
+.summary {
+  color: var(--muted);
+  margin: 0;
+}
+
+.past {
+  opacity: 0.75;
+}
+.past:hover {
+  opacity: 1;
+}
+
+@media (max-width: 620px) {
+  .item {
+    grid-template-columns: 1fr;
+  }
+  .image {
+    min-height: 180px;
+  }
+  .body {
+    padding: 0 1.25rem 1.25rem;
+  }
+}

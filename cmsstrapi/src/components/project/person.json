@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_project_people",
+  "info": {
+    "displayName": "Persoană (dirijor / membru)",
+    "icon": "user",
+    "description": "Un nume (ex. dirijor al corului). Se afișează în ordine aleatoare."
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

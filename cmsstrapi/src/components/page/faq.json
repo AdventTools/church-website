@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_page_faqs",
+  "info": {
+    "displayName": "Întrebare frecventă",
+    "icon": "question",
+    "description": "Întrebare + răspuns (apare și în Google ca rezultat FAQ)"
+  },
+  "options": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "answer": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

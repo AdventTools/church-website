@@ -1,0 +1,33 @@
+.header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--primary-color);
+  color: #fff;
+  // padding-top include spațiul pentru header-ul fix (peste-hero) + respirație
+  padding: clamp(7rem, 13vw, 9.5rem) 0 clamp(2.75rem, 6vw, 4.25rem);
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.bg :global(img) {
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0, rgba(0, 0, 0, 0.42) 100%),
+    radial-gradient(120% 130% at 85% 100%, color-mix(in srgb, var(--accent-color) 40%, transparent), transparent 55%);
+}
+
+.title {
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}

@@ -1,0 +1,54 @@
+.day {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem;
+}
+
+.name {
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem;
+  color: var(--primary-color);
+}
+
+.sunset {
+  margin: 0 0 0.9rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.list li {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent-color);
+  min-width: 3.2rem;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.live {
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}

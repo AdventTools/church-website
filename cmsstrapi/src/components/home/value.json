@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_home_values",
+  "info": {
+    "displayName": "Valoare",
+    "icon": "star",
+    "description": "O valoare a bisericii: iconiță + titlu + text scurt (secțiunea „Ce ne definește”)"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "enumeration",
+      "enum": ["bible", "community", "hope", "health", "prayer", "love", "service", "music"],
+      "default": "hope",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

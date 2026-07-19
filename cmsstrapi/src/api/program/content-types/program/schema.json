@@ -1,0 +1,78 @@
+{
+  "kind": "collectionType",
+  "collectionName": "programs",
+  "info": {
+    "singularName": "program",
+    "pluralName": "programs",
+    "displayName": "Program",
+    "description": "Programul săptămânal (ex. Școala de Sabat, Serviciul Divin): nume, zi, oră. Bifează „live” dacă se transmite online. „Data expirării” ascunde automat un program după acea dată (lasă gol pentru programe permanente)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "live": {
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "day": {
+      "type": "enumeration",
+      "enum": [
+        "Duminica",
+        "Luni",
+        "Marti",
+        "Miercuri",
+        "Joi",
+        "Vineri",
+        "Sambata"
+      ],
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "expirationDate": {
+      "type": "date",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "time": {
+      "type": "string",
+      "regex": "^([0-1][0-9]|2[0-3]):[0-5][0-9]$",
+      "required": true,
+      "default": "10:00",
+      "minLength": 5,
+      "maxLength": 5,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    }
+  }
+}

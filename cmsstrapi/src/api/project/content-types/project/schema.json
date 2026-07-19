@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Proiect",
+    "description": "Proiecte ale bisericii (ex. „Din grijă pentru tine”). Pot avea pagină proprie sau link către un site extern."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "slug": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "oldSlugs": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "summary": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "content": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "externalUrl": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "ensembles": {
+      "type": "component",
+      "repeatable": true,
+      "component": "project.ensemble",
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

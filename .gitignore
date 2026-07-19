@@ -1,0 +1,32 @@
+# dependencies / build output
+**/node_modules
+**/build
+**/.next
+**/out
+**/.yarn
+**/yarn-error.log
+**/*.tsbuildinfo
+
+# environment & secrets — NEVER commit real values. Publish only *.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/.debug.env
+*.secret
+*.secrets.env
+
+# Strapi runtime
+cmsstrapi/.tmp
+cmsstrapi/.cache
+cmsstrapi/.strapi
+cmsstrapi/.strapi-updater.json
+cmsstrapi/exports
+cmsstrapi/src/extensions/documentation/documentation/1.0.0/full_documentation.json
+
+# editor / OS
+.idea/
+.vscode/
+.DS_Store
+
+# internal working docs — kept locally, never published
+tpm/
