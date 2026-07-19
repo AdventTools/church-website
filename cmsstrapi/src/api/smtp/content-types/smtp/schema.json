@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "smtp_settings",
+  "info": {
+    "singularName": "smtp",
+    "pluralName": "smtps",
+    "displayName": "E-mail (SMTP)",
+    "description": "Setările serverului de e-mail pentru formularul de contact. IMPORTANT: parola NU se ține aici — e păstrată pe server (variabila SMTP_PASSWORD), niciodată vizibilă în panou/API/bază de date. Ca s-o schimbi, cere administratorului tehnic. Port 465 = SSL, port 587 = STARTTLS (se alege automat după port)."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "host": {
+      "type": "string",
+      "default": "smtp.gmail.com"
+    },
+    "port": {
+      "type": "integer",
+      "default": 587,
+      "min": 1,
+      "max": 65535
+    },
+    "secure": {
+      "type": "boolean",
+      "default": false
+    },
+    "username": {
+      "type": "string"
+    },
+    "fromName": {
+      "type": "string"
+    },
+    "fromEmail": {
+      "type": "email"
+    },
+    "toEmail": {
+      "type": "string",
+      "regex": "^\\s*[^@\\s,]+@[^@\\s,]+\\.[^@\\s,]+(\\s*,\\s*[^@\\s,]+@[^@\\s,]+\\.[^@\\s,]+)*\\s*$"
+    }
+  }
+}

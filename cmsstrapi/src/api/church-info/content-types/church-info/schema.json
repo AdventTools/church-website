@@ -1,0 +1,73 @@
+{
+  "kind": "singleType",
+  "collectionName": "church_infos",
+  "info": {
+    "singularName": "church-info",
+    "pluralName": "church-infos",
+    "displayName": "Date biserică",
+    "description": "Identitatea bisericii: nume, logo, favicon, adresă, titlu în browser și linkurile de social media (Facebook, YouTube, Instagram)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "address": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "instagramLink": {
+      "type": "string",
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "facebookLink": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "youtubeLink": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "nameLogo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "youtubeChannelName": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "tabTitle": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "churchName": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "locationMapLink": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "description": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "favicon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.text {
+  white-space: pre-line;
+  max-width: 70ch;
+}
+
+.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.toggle {
+  margin-top: 0.5rem;
+  background: none;
+  border: 0;
+  color: var(--primary-color);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.toggle:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,24 @@
+.section {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+}
+
+.title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+.title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--second-primary-color));
+  border-radius: 3px;
+}
+
+.cta {
+  margin-top: 1.75rem;
+}

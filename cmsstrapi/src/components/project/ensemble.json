@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_project_ensembles",
+  "info": {
+    "displayName": "Secțiune",
+    "icon": "layer",
+    "description": "O subsecțiune a proiectului: titlu + descriere + (opțional) persoane, videouri și galerie foto. Ex: „Corul bisericii”, „Galerie foto”, „Filmări”."
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "peopleLabel": {
+      "type": "string"
+    },
+    "conductors": {
+      "type": "component",
+      "repeatable": true,
+      "component": "project.person"
+    },
+    "videos": {
+      "type": "component",
+      "repeatable": true,
+      "component": "project.video"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articles",
+  "info": {
+    "singularName": "article",
+    "pluralName": "articles",
+    "displayName": "Articol (Blog)",
+    "description": "Articole de blog. Scrii textul cu editorul (titluri, îngroșat, liste, poze din bibliotecă) — designul îl face site-ul automat."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "slug": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "oldSlugs": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "excerpt": {
+      "type": "text",
+      "maxLength": 300,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "content": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "author": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "date": {
+      "type": "date",
+      "pluginOptions": { "i18n": { "localized": false } }
+    }
+  }
+}

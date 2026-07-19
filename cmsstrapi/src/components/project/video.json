@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_project_videos",
+  "info": {
+    "displayName": "Video (YouTube)",
+    "icon": "play",
+    "description": "Un video YouTube al formației. Se redă direct din pagină, în ordine aleatoare. Titlul e opțional (doar pentru tine, în admin)."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "event_templates",
+  "info": {
+    "singularName": "event-template",
+    "pluralName": "event-templates",
+    "displayName": "Șablon eveniment",
+    "description": "Șabloane pentru evenimente (ex. Sfânta Cină, Invitat, Botez, AMiCUS). Când creezi/editezi un eveniment, îl alegi din listă și îți precompletează câmpurile. Câmpurile lăsate goale aici NU se completează. După aplicare, poți edita orice."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "intro": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "content": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "locationName": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "locationAddress": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "locationMapLink": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "facebookLink": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    }
+  }
+}

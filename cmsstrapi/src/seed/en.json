@@ -1,0 +1,160 @@
+{
+  "church": {
+    "churchName": "Speranța (Hope) Seventh-day Adventist Church, Cluj-Napoca",
+    "tabTitle": "Speranța Church, Cluj-Napoca",
+    "address": "Moților Street 47, Cluj-Napoca | Romania",
+    "description": "Speranța Seventh-day Adventist Church in Cluj-Napoca welcomes you to Sabbath worship, warm fellowship, and a community rooted in faith and hope."
+  },
+  "home": {
+    "title": "Live Beautifully and Purely",
+    "description": "Choose to take part in the programs offered by the Speranța (Hope) Seventh-day Adventist Church in Cluj-Napoca.",
+    "aboutUs": "Before it was a church, \"Speranța\" was a state of the spirit: people who lived the experience of being set apart — with ebbs and flows, with questions, with restlessness and hopes, with prayer. Through their cry, through courage, through involvement, through the beauty of their thoughts, through the human harmonies of a journey's beginning, through deep faith and sacrifice — through all of these together — the lives of these people slowly, yet ever more indelibly, took on the pearl-like face of \"Speranța.\" And so it was with all the forerunners of this community: through the way they believed, encouraged one another, hoped, and drew close to each other — that is, through their very way of being — they carved the steadfastness of faith into the soul of this church. In the end, this was the bittersweet experience of a great love — \"Speranța\"!\n\nWe are all only passing through — in our callings and in life. Yet until the moment we finish the race, we bear the responsibility to fight for this Church — just as she is — but above all for her nobility and her beauty. And if her nobility rests in the mandate God entrusted to her, her beauty is born of the gifts received from God, projected into our own responsibilities.\n\nAs those who wait for and serve Jesus Christ, we are duty-bound to defend not only the values of \"Speranța,\" but also the climate in which she lives. Depending on how I take responsibility for this calling, my community — and, by extension, my city — can be a field of wheat or a garden of cacti. This is why the Lord says through the prophet Isaiah (62:10,11): \"Prepare the way, clear away the stones! Lift up a banner! Behold, the Savior comes! His reward is with Him, and His recompense goes before Him!\"\n\nWhen your soul is weary, when your heart longs for a moment of rest, when you feel alone or discouraged, do not forget that up above there is Someone to whom you can draw near. He is Jesus Christ — unconditional Love. Live through Him and in Him, with the \"Speranța\" of an incomparable Reunion! For He is the same yesterday and today and forever!"
+  },
+  "contact": {
+    "pastor": "Romeo Asanache",
+    "address": "Moților Street 47, Cluj-Napoca"
+  },
+  "first_visit": {
+    "title": "Your First Visit",
+    "subtitle": "Everything you need to know before you walk through the door — short and friendly.",
+    "intro": "We're so glad you're thinking of visiting us! There's no special way to prepare, and you don't need to know anyone beforehand. Come just as you are — we'll give you a warm welcome. Below you'll find answers to the questions most first-time visitors ask.",
+    "closingTitle": "We look forward to meeting you",
+    "closingText": "If you have any other questions before your first visit, write to us — we'll be glad to answer. We look forward to seeing you!",
+    "highlights": [
+      {
+        "icon": "clock",
+        "title": "When we meet",
+        "text": "Sabbath (Saturday): Sabbath School at 10:00 and the Divine Service (the main message) at 11:30. You're welcome to come to either one, or to both."
+      },
+      {
+        "icon": "parking",
+        "title": "Getting here and parking",
+        "text": "We're at Moților Street 47, Cluj-Napoca. We don't have our own parking lot — the nearest is the City Hall parking at Moților no. 1. The easiest way to reach us is by public transport: the “Spitalul de Copii” stop is less than a minute from the church."
+      },
+      {
+        "icon": "kids",
+        "title": "Coming with children",
+        "text": "Wonderful! Between 10:00 and 11:00 the children have their own Sabbath School, grouped by age, with lessons made just for them."
+      },
+      {
+        "icon": "dress",
+        "title": "What to wear",
+        "text": "Comfortable and neat. We don't have a strict dress code — come dressed however you feel at ease."
+      },
+      {
+        "icon": "language",
+        "title": "Speak another language?",
+        "text": "We also have a Sabbath School in English, and if you need translation we'd be glad to help. The main sermons are in Romanian."
+      },
+      {
+        "icon": "welcome",
+        "title": "What to expect",
+        "text": "Singing, prayer, a message from the Bible, and warm people. You don't have to do anything special — just be here."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What time do the Saturday services start?",
+        "answer": "Sabbath School starts around 10:00, and the Divine Service (the main message) at 11:30. You're welcome to come to either one."
+      },
+      {
+        "question": "Where can I park?",
+        "answer": "We don't have our own parking lot. The nearest is the City Hall parking on Moților Street no. 1. Alternatively, the “Spitalul de Copii” public transport stop is less than a minute's walk from the church."
+      },
+      {
+        "question": "How should I dress?",
+        "answer": "Comfortable and neat. There's no strict dress code; we welcome you exactly as you are."
+      },
+      {
+        "question": "Can I bring my children?",
+        "answer": "Yes, gladly. Between 10:00 and 11:00 the children have their own Sabbath School, organized by age group."
+      },
+      {
+        "question": "Do I have to be an Adventist to take part?",
+        "answer": "No. Our doors are open to everyone, whatever your denomination or experience with church. You're welcome as our guest."
+      },
+      {
+        "question": "Are the services held in English too?",
+        "answer": "We have a Sabbath School in English, and if needed we can offer personal translation. The main sermons are given in Romanian."
+      },
+      {
+        "question": "How long does the Divine Service last?",
+        "answer": "The Divine Service generally lasts about an hour and a half."
+      }
+    ]
+  },
+  "histories": [
+    {
+      "id": 1,
+      "period": "19th Century",
+      "description": "A century and a half ago, one of the greatest missionaries of the 19th century arrived on the soil of Transylvania — Mihail Belinda Czechowski, followed a few years later by another Christian missionary, Ludwig Conradi. Carrying at the heart of their message the central proclamation of Christianity — the return of the Lord Jesus Christ — these two pioneers of the Advent work kindled and established in Cluj the flame of longing for the Savior. Around 1870 they founded a small Bible study group whose ideal was to live out the Truth and to cherish the hope of meeting Jesus Christ as the Redeemer of humanity and King of the Universe."
+    },
+    {
+      "id": 2,
+      "period": "20th Century",
+      "description": "Blessed by God's providence and holding at the center of its spiritual life the keeping of the Law of the Ten Commandments and the faith of Jesus, the group of believers in Cluj grew stronger, so that in the early years of the 20th century the light of biblical truth had gathered more than a hundred believers around it. As a result, in 1930 the first Adventist church in the city was built in Cluj, at 12 Cuza Vodă Street — a place of worship for a Christian body whose distinctive mark was the keeping of the seventh day, Saturday, as a day of rest and worship. Made up of Romanians and Hungarians alike, united in faith by the transforming power of the Holy Spirit and granted ecclesiastical and administrative recognition by the state authorities, the Adventist community of Cluj grew steadily, reaching 350 members and 150 adherents by 1989 — about a hundred of them Romanian, the rest Hungarian and German. The roughly 60 years that believers of these three ethnicities spent together in the house of prayer on Cuza Vodă Street show that Jesus Christ is the same for everyone, in every time and every place, yesterday and today and forever."
+    },
+    {
+      "id": 3,
+      "period": "1990-1995",
+      "description": "In 1990, with the arrival of democracy and freedom in the country, a change was about to take place in the life of the Adventist community in Cluj. Amid the wealth of opportunities opened up by the freedom to exercise conscience, sensing an ever-growing interest in God, and weighing the spiritual benefits of preaching and receiving the message of Scripture in one's own language, the Adventist Christians of Cluj-Napoca decided to establish a new, Romanian-language Adventist community. Its first aim would be to sow the Word of God, to embrace it as a way of life and supreme moral authority, and to present Scripture as a force for peace and harmony in the city. The idea of having a new place of worship began to take shape a year later, in October 1991, when — after preparations prompted by these spiritual needs — the Romanian believers formed the nucleus of the second Adventist community in Cluj-Napoca, made up of 90 souls. Yet with no place of worship of their own and no immediate means to build one, the two sister communities, Romanian and Hungarian, held their services for another four years, until 1995, before the same altar on Cuza Vodă Street, following programs held at different hours, but with the hope of resolving the matter of a new place of worship as soon as possible. The compelling reason was the ever-growing number of people attending the worship services held on the Sabbath (Saturday)."
+    },
+    {
+      "id": 4,
+      "period": "1995-2000",
+      "description": "Through the prayers lifted up to our good God, and through the remarkable material efforts of the Adventist believers in Cluj-Napoca and of those in the diaspora, 1995 would become the \"foundation year\" of the new Seventh-day Adventist church. It numbered 90 members. It was the year in which — by the grace of the Lord — work began on building the new place of worship. And because for five years the flame of longing for a new house of prayer had never for a moment gone out, and because God fulfilled the hope of His children as a crowning of His grace and care, the new community was named Speranța (Hope). It was a dream fulfilled through toil, sacrifice, tears — and yet also through... hope. The nucleus from which the new community took shape consisted of brothers Alexandru Delea — a retired pastor and former president of the North Transylvania Conference; Aron Mureșan — a lawyer; and Ioan Țapu — an elder in the mixed Romanian-Hungarian community. Later, through an elective process, this founding committee was expanded with other officers, thus forming the first governing body of the Speranța Church — the community committee. It is worth emphasizing that from the very beginning the Romanian community had, in its worship life, all the structures and departments needed to ensure faithful, honest, and effective service: deaconry, Sabbath School for seniors and children, youth ministry, choir, personal ministry and mission, and more. The community's first pastor was brother Gyéresi Ernö, who also shepherded the Hungarian community. He led both the founding of the Speranța Church as a newly formed religious body and the church's first elective process. This was the first \"breath\" of the Speranța Church — that embryonic moment, that \"point of motion\" from which a church was born and grew. Because the Divine Services of the two communities, Romanian and Hungarian, took place in the same place of worship, they were held under the pressure of time, and the inconvenience was plain to see. As a result, the members of the Speranța community redoubled their efforts to have a worship space of their own. Every member was willing to make material sacrifices to see this dream come true. After a sustained search in various parts of the city, alongside countless conversations with the leadership of the North Transylvania Conference — led at that time by pastor Alexandru Timiș — it was jointly concluded that the most suitable site for the new building would be at Moților Street 47, Cluj-Napoca, in the heart of the city, where the Adventist Church owned two parish houses and a plot of land well suited to the new construction. Once this process was officially completed, work on the new church began in the summer of 1995. Despite the financial help offered both by the brethren in the diaspora and by the Conference (whose new president was pastor Iosif Suciu), the work advanced in fits and starts, and for the Romanian community in Cluj-Napoca the effort was substantial, at the very edge of sacrifice. Meanwhile, the pastoral care of the Speranța community passed from pastor Gyéresi Ernö, for a short time, to pastor Emil Chețan, and then to pastors Sorin Petreacă and Romeo Asanache."
+    },
+    {
+      "id": 5,
+      "period": "21st Century",
+      "description": "With God's help and through remarkable physical and material efforts on the part of the Adventist fellowship, January 2000 would be recorded in the community's book of remembrance as the month in which the first Divine Service of worship was celebrated under the new roof. For the Adventist believers of Cluj-Napoca, 2000 was a year of thanksgiving, of mercy, and of full joy in the Lord Christ. Between 1995 and 2000, the members' intense missionary spirit, the flame of those early days, and their solidarity brought about a remarkable growth in membership, so that by the end of the millennium the Speranța Church numbered 320 members, along with 100 students, 50 children, and 80 to 100 friends drawn to the message of the return of the Lord Christ. Because Cluj-Napoca has been the capital of Transylvania, a strong university center (around 80,000 students) and cultural hub, as well as a major medical and IT center — a highly attractive crossroads — the Speranța Adventist community continued to grow, reaching 400 members by 2022, with young families (ages 25 to 50) forming the largest share. The Cluj community is attended by about 70 young families and 60 people over the age of 50, along with roughly 150 students (members and non-members) and 80 children. It should also be noted that this includes the Florești Group, made up of 25 people, based in the Cluj metropolitan area."
+    },
+    {
+      "id": 6,
+      "period": "Present",
+      "description": "Today, the community's activity is coordinated by pastor Iosif Pașca, former president of the North Transylvania Conference. Over the years, Speranța has also been shepherded by brothers Emil Chețan, Iosif Suciu, Ioan Pârcălab, Ioan Orbán, Sorin Petreacă, Romeo Asanache, Ștefan Tomoiagă, Ionel Luca, and Beniamin Anca. The Adventist community of Cluj-Napoca as a whole is made up of the members and adherents of the Speranța, Florești, and Central (Hungarian-speaking) churches, the Dinamys church, and the Maranatha Adventist Theological High School, with the total number of believers being around 1,000."
+    }
+  ],
+  "gallery": {
+    "description": "Discover a selection of photographs capturing special moments of worship, events, and activities of the Speranța (Hope) Adventist community in Cluj-Napoca. These authentic images offer a small glimpse into our life and values."
+  },
+  "programs": [
+    {
+      "id": 1,
+      "name": "Divine Service"
+    },
+    {
+      "id": 2,
+      "name": "Prayer Minutes"
+    },
+    {
+      "id": 3,
+      "name": "Sabbath School"
+    },
+    {
+      "id": 4,
+      "name": "AMiCUS Meeting"
+    },
+    {
+      "id": 5,
+      "name": "Church Prayer Hour"
+    },
+    {
+      "id": 6,
+      "name": "Divine Service"
+    },
+    {
+      "id": 7,
+      "name": "Divine Service"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "title": "Revelations from a Book",
+      "type": "",
+      "intro": "A new edition of the “Masks of Europe” conference series begins on 27 February, in the conference hall of USAMV.\nTimely, thought-provoking, and profound messages, delivered by Pastor Lucian Cristescu.\nMasks of Europe – truths worth discovering.",
+      "content": "A new edition of the “Masks of Europe” conference series opens its doors starting 27 February, in the elegant conference hall of USAMV Cluj-Napoca. The event promises a captivating intellectual journey, where the questions that trouble contemporary society find well-reasoned answers — profound and grounded in reality.\nThe series of presentations is delivered by Pastor Lucian Cristescu, a speaker appreciated for the clarity of his message, for the direct way in which he addresses sensitive topics, and for his ability to prompt personal reflection. With vast experience in cultural and spiritual dialogue, he offers a balanced perspective on the challenges facing modern Europe: identity, values, ideological currents, moral crises, and the dilemmas of contemporary humanity.\n“Masks of Europe – truths worth discovering” is not merely a title, but an invitation to explore. Each meeting unveils one of the “masks” of European society — those appearances, notions, or ideas which, though often accepted as truths, conceal essential questions about who we are and where we are heading. The messages are timely, thought-provoking, and deeply relevant for anyone interested in European culture, in the meaning of faith, and in the dynamics of the world we live in.\nParticipants are invited to dialogue, introspection, and the rediscovery of fundamental values, in a setting free of formality yet rich in substance and meaning.\nThis edition promises to be a memorable one — a space where every idea carries weight, every question matters, and every “mask” lifted reveals something important about the spiritual and cultural fabric of today’s European society."
+    }
+  ]
+}

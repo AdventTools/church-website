@@ -1,0 +1,33 @@
+{
+  "kind": "singleType",
+  "collectionName": "beliefs",
+  "info": {
+    "singularName": "beliefs",
+    "pluralName": "beliefs-plural",
+    "displayName": "Ce credem",
+    "description": "Pagina detaliată despre ce credem. Scrii cu editorul (titluri, text, poze), designul îl face site-ul."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Ce credem",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "intro": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "content": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

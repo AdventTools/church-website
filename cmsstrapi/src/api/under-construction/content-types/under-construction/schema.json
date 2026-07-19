@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "under_constructions",
+  "info": {
+    "singularName": "under-construction",
+    "pluralName": "under-constructions",
+    "displayName": "Mentenanță (în construcție)",
+    "description": "Când e activat, vizitatorii văd pagina „în construcție” în loc de site. Lasă-l dezactivat în mod normal."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Enabled": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

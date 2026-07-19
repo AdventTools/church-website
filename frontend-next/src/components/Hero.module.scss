@@ -1,0 +1,122 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--primary-color);
+  color: #fff;
+  text-align: center;
+  min-height: min(86vh, 720px);
+  display: flex;
+  align-items: center;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.img {
+  object-fit: cover;
+  animation: kenburns 28s ease-in-out infinite alternate;
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.15) translate3d(0, -1.5%, 0);
+  }
+}
+
+// Peste fotografie: întunecare pentru lizibilitate + un gradient de brand care „respiră".
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.28) 22%, rgba(0, 0, 0, 0.62) 100%),
+    radial-gradient(120% 120% at 12% 8%, color-mix(in srgb, var(--primary-color) 42%, transparent), transparent 55%),
+    radial-gradient(120% 120% at 88% 92%, color-mix(in srgb, var(--accent-color) 40%, transparent), transparent 55%);
+  background-size:
+    100% 100%,
+    200% 200%,
+    200% 200%;
+  animation: drift 20s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  from {
+    background-position:
+      0 0,
+      0% 0%,
+      100% 100%;
+  }
+  to {
+    background-position:
+      0 0,
+      100% 50%,
+      0% 50%;
+  }
+}
+
+.inner {
+  padding: 6rem 1.25rem;
+  width: 100%;
+}
+
+.title {
+  font-size: clamp(2.3rem, 5.2vw, 3.8rem);
+  color: #fff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
+
+.description {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  opacity: 0.96;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+
+.cta {
+  font-size: 1.05rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.scroll {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(4px);
+  animation: bob 2.2s ease-in-out infinite;
+}
+.scroll:hover {
+  background: rgba(255, 255, 255, 0.26);
+  text-decoration: none;
+  color: #fff;
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img,
+  .overlay,
+  .scroll {
+    animation: none;
+  }
+}

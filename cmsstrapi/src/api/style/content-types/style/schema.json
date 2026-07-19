@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "styles",
+  "info": {
+    "singularName": "style",
+    "pluralName": "styles",
+    "displayName": "Culori (temă)",
+    "description": "Culorile temei site-ului. Se scriu în format hex, cu # (ex: #C0351B)."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "primaryColor": {
+      "type": "string",
+      "required": true,
+      "default": "#C0351B",
+      "regex": "^#([0-9a-fA-F]{6})$"
+    },
+    "secondPrimaryColor": {
+      "type": "string",
+      "required": true,
+      "default": "#F78A58",
+      "regex": "^#([0-9a-fA-F]{6})$"
+    },
+    "accentColor": {
+      "type": "string",
+      "required": true,
+      "default": "#245AA6",
+      "regex": "^#([0-9a-fA-F]{6})$"
+    },
+    "secondAccentColor": {
+      "type": "string",
+      "required": true,
+      "default": "#739BD2",
+      "regex": "^#([0-9a-fA-F]{6})$"
+    }
+  }
+}

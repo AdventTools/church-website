@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_page_highlights",
+  "info": {
+    "displayName": "Highlight",
+    "icon": "bulletList",
+    "description": "Card scurt: iconiță + titlu + text"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "enumeration",
+      "enum": ["welcome", "clock", "location", "parking", "kids", "dress", "language", "music", "book"],
+      "default": "welcome",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

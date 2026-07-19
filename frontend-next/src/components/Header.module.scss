@@ -1,0 +1,737 @@
+.header {
+  --row-top: 72px;
+  --row-scrolled: 64px;
+  --util-h: 30px;
+  --logo-top: 46px;
+  --logo-scrolled: 38px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-base: 240ms;
+  --dur-micro: 160ms;
+  --dur-enter: 380ms;
+  --ink: #17222e;
+  --glass: rgba(255, 255, 255, 0.85);
+  --glass-solid: rgba(255, 255, 255, 0.94);
+  --glass-border: rgba(23, 34, 46, 0.09);
+  --hd-shadow: 0 6px 24px -12px rgba(23, 34, 46, 0.3);
+  --magic: linear-gradient(90deg, var(--primary-color), var(--second-primary-color));
+  --nav-top: rgba(255, 255, 255, 0.94);
+
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  color: #fff;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  animation: headerIn 0.5s var(--ease) both;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease-smooth);
+}
+
+.shadowLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: var(--hd-shadow);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.mainRow {
+  height: var(--row-top);
+  transition: height var(--dur-base) var(--ease);
+}
+
+.utilRow {
+  height: var(--util-h);
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    height var(--dur-base) var(--ease),
+    opacity var(--dur-base) var(--ease);
+
+  .inner {
+    justify-content: space-between;
+  }
+}
+.uLeft,
+.uRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.uItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  white-space: nowrap;
+}
+a.uItem:hover {
+  text-decoration: none;
+  opacity: 0.85;
+}
+.uLive {
+  font-weight: 700;
+  color: #ff6a5d;
+}
+.uLive:hover {
+  color: #ff8578;
+  opacity: 1;
+}
+.uLiveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f52929;
+  animation: dotBlink 1.4s var(--ease-smooth) infinite;
+}
+
+/* Brand + logo */
+.brand {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  margin-right: auto;
+  min-height: 48px;
+  line-height: 1;
+  transition: transform 0.2s var(--ease);
+}
+.brand:hover {
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.brandName {
+  font-weight: 800;
+  font-size: clamp(15px, 1.7vw, 19px);
+  letter-spacing: -0.01em;
+  color: #fff;
+  transition: color var(--dur-base) var(--ease-smooth);
+}
+.brandPill {
+  background: #bf3827;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3.5px 8px;
+  border-radius: 5px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Nav desktop */
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    color: inherit;
+    transition:
+      color var(--dur-micro) var(--ease),
+      background-color var(--dur-micro) var(--ease),
+      transform var(--dur-micro) var(--ease);
+    opacity: 0;
+    transform: translateY(-6px);
+    animation: navIn var(--dur-enter) var(--ease) forwards;
+    animation-delay: calc(var(--i) * 40ms);
+  }
+  a:hover {
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+  a[aria-current='page'] {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+.magic {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 100px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--magic);
+  transform-origin: left center;
+  transform: translateX(var(--mx, 0)) scaleX(var(--ms, 0));
+  opacity: var(--mo, 0);
+  transition:
+    transform var(--dur-base) var(--ease),
+    opacity var(--dur-micro) var(--ease);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+}
+
+/* Comutator de limbă RO / EN */
+.lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+.langItem,
+.langActive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: inherit;
+  transition:
+    background-color var(--dur-micro) var(--ease),
+    color var(--dur-micro) var(--ease);
+}
+.langItem {
+  opacity: 0.7;
+}
+.langItem:hover {
+  opacity: 1;
+  text-decoration: none;
+  color: inherit;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.langActive {
+  background: var(--primary-color);
+  color: #fff;
+}
+.langActive:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Buton LIVE (folosit și de LiveButton.tsx) */
+.liveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background-color 0.25s var(--ease-smooth),
+    color 0.25s,
+    border-color 0.25s,
+    transform 0.2s var(--ease),
+    box-shadow 0.25s;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--second-primary-color);
+  }
+}
+.liveBtn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.14);
+  text-decoration: none;
+  color: #fff;
+}
+.liveBtn[data-live='true'] {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+
+  .dot {
+    background: #fff;
+    animation: dotBlink 1.4s var(--ease-smooth) infinite;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--primary-color);
+    z-index: -1;
+    animation: liveRing 1.8s ease-out infinite;
+  }
+}
+.liveBtn[data-live='true']:hover {
+  color: #fff;
+  box-shadow: 0 6px 18px -6px rgba(192, 53, 27, 0.6);
+}
+
+.burger {
+  display: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  padding: 0.25rem;
+  line-height: 0;
+}
+
+/* ---------- STATE: TOP (peste hero) ---------- */
+.header[data-state='top'] {
+  .brandName {
+    color: #fff;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+  }
+  .uItem {
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+  }
+  .nav a {
+    color: var(--nav-top);
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  }
+  .nav a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .nav a[aria-current='page'] {
+    color: #fff;
+  }
+}
+
+/* ---------- STATE: SCROLLED (frosted) ---------- */
+.header[data-state='scrolled'] {
+  color: var(--ink);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom-color: var(--glass-border);
+
+  .shadowLayer {
+    opacity: 1;
+  }
+  .mainRow {
+    height: var(--row-scrolled);
+  }
+  .utilRow {
+    height: 0;
+    opacity: 0;
+  }
+  .brandName {
+    color: var(--ink);
+    text-shadow: none;
+  }
+  .nav a {
+    color: var(--ink);
+    text-shadow: none;
+  }
+  .nav a:hover {
+    color: var(--primary-color);
+    background: rgba(192, 53, 27, 0.06);
+  }
+  .nav a[aria-current='page'] {
+    color: var(--primary-color);
+  }
+  .liveBtn:not([data-live='true']) {
+    border-color: rgba(192, 53, 27, 0.35);
+    color: var(--primary-color);
+
+    .dot {
+      background: var(--primary-color);
+    }
+  }
+  .liveBtn:not([data-live='true']):hover {
+    background: rgba(192, 53, 27, 0.08);
+    border-color: var(--primary-color);
+  }
+}
+
+.menuOpen {
+  background: var(--glass-solid);
+  color: var(--ink);
+}
+
+/* Skip link */
+.skip {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 1100;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+.skip:focus-visible {
+  top: 0.8rem;
+}
+
+/* Meniu mobil full-screen */
+.mobileMenu {
+  // Tokenurile de mai jos sunt definite pe .header, dar meniul mobil e un FRATE al lui
+  // <header> (nu descendent), deci nu le moștenește. Fără ele, var(--ease-spring)
+  // invalidează animația „mobileIn" → linkurile rămân opacity:0 → overlay alb, gol.
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ink: #17222e;
+  --row-scrolled: 64px;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding: calc(var(--row-scrolled) + 1rem) 1.5rem 2rem;
+  background:
+    radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--second-accent-color) 8%, transparent), transparent 60%),
+    rgba(255, 255, 255, 0.97);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.02);
+  transition:
+    opacity 0.28s var(--ease),
+    transform 0.28s var(--ease),
+    visibility 0.28s;
+}
+.mobileOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 18px 8px;
+    border-bottom: 1px solid rgba(23, 34, 46, 0.06);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  a[aria-current='page'] {
+    color: var(--primary-color);
+  }
+}
+.mobileOpen .mobileNav a {
+  animation: mobileIn 0.32s var(--ease-spring) forwards;
+  animation-delay: calc(var(--i) * 55ms + 80ms);
+}
+.mobileFoot {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0 8px;
+
+  a {
+    color: var(--ink);
+    opacity: 0.75;
+    transition:
+      opacity 0.2s,
+      transform 0.2s var(--ease);
+  }
+  a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    color: var(--primary-color);
+  }
+}
+
+@keyframes headerIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes navIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mobileIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes liveRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes dotBlink {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (max-width: 1180px) {
+  .header {
+    --row-top: 64px;
+    --row-scrolled: 56px;
+    --logo-top: 36px;
+    --logo-scrolled: 34px;
+  }
+  .nav {
+    display: none;
+  }
+  .burger {
+    display: inline-flex;
+  }
+  .city {
+    display: none;
+  }
+  .liveBtn {
+    display: none;
+  }
+  .actions {
+    margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .mainRow,
+  .utilRow,
+  .logoWrap,
+  .logo,
+  .nav a,
+  .magic,
+  .liveBtn,
+  .mobileMenu {
+    transition-duration: 0.01ms;
+    animation: none !important;
+  }
+  .nav a {
+    opacity: 1;
+    transform: none;
+  }
+  .mobileNav a {
+    opacity: 1;
+    transform: none;
+  }
+  .liveBtn[data-live='true'] .dot,
+  .liveBtn[data-live='true']::after {
+    animation: none;
+  }
+}
+
+/* ---------- Dropdown „Despre noi ▾" ---------- */
+.dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(-6px);
+  animation: navIn var(--dur-enter) var(--ease) forwards;
+  animation-delay: calc(var(--i) * 40ms);
+}
+.dropTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    color var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease),
+    transform var(--dur-micro) var(--ease);
+}
+.dropTrigger:hover {
+  transform: translateY(-1px);
+}
+.dropChevron {
+  transition: transform 0.25s var(--ease);
+}
+.dropdown:hover .dropChevron,
+.dropTrigger[aria-expanded='true'] .dropChevron {
+  transform: rotate(180deg);
+}
+.dropPanel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 210px;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  box-shadow: 0 18px 50px -14px rgba(23, 34, 46, 0.55);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    visibility 0.2s;
+  z-index: 1001;
+
+  li {
+    margin: 0;
+  }
+  a {
+    display: block;
+    padding: 0.6rem 0.85rem;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-micro) var(--ease),
+      color var(--dur-micro) var(--ease);
+  }
+  a:hover {
+    background: rgba(192, 53, 27, 0.07);
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  a[aria-current='page'] {
+    color: var(--primary-color);
+  }
+}
+.dropShown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+/* Culoarea declanșatorului urmează starea header-ului, ca linkurile din nav */
+.header[data-state='top'] .dropTrigger {
+  color: var(--nav-top);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+.header[data-state='top'] .dropTrigger:hover,
+.header[data-state='top'] .dropTrigger[aria-current='page'] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.header[data-state='scrolled'] .dropTrigger {
+  color: var(--ink);
+  text-shadow: none;
+}
+.header[data-state='scrolled'] .dropTrigger:hover,
+.header[data-state='scrolled'] .dropTrigger[aria-current='page'] {
+  color: var(--primary-color);
+  background: rgba(192, 53, 27, 0.06);
+}
+
+/* Linkurile din panoul dropdown rămân mereu închise pe fundal alb — altfel, când panoul
+   se deschidea peste o poză (starea „top”), regula .nav a le colora alb → alb pe alb. */
+.header[data-state='top'] .dropPanel a,
+.header[data-state='scrolled'] .dropPanel a {
+  color: var(--ink);
+  text-shadow: none;
+}
+.header[data-state='top'] .dropPanel a:hover,
+.header[data-state='scrolled'] .dropPanel a:hover,
+.header[data-state='top'] .dropPanel a[aria-current='page'],
+.header[data-state='scrolled'] .dropPanel a[aria-current='page'] {
+  color: var(--primary-color);
+  background: rgba(192, 53, 27, 0.07);
+}
+
+/* ---------- Grup mobil (Despre noi + sub-linkuri) ---------- */
+.mobileGroup {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(16px);
+  border-bottom: 1px solid rgba(23, 34, 46, 0.06);
+}
+.mobileOpen .mobileGroup {
+  animation: mobileIn 0.32s var(--ease-spring) forwards;
+  animation-delay: calc(var(--i) * 55ms + 80ms);
+}
+.mobileGroupLabel {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted, #6b7280);
+  padding: 18px 8px 4px;
+}
+.mobileGroup a {
+  font-size: 19px !important;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 11px 8px 11px 20px !important;
+  border-bottom: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+.mobileGroup a[aria-current='page'] {
+  color: var(--primary-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown,
+  .dropPanel,
+  .dropChevron {
+    animation: none !important;
+    transition: none;
+  }
+}
