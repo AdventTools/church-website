@@ -1,55 +1,59 @@
-# Church Website — a bilingual Next.js + Strapi stack
+> **Limbă:** 🇷🇴 Română (aici) · 🇬🇧 [English](README.en.md)
 
-A production-ready, **bilingual (RO/EN)** website stack for a local church: a fast,
-SEO/AEO-optimized [Next.js 15](https://nextjs.org) front end driven entirely by a
-self-hosted [Strapi 4](https://strapi.io) CMS, so non-technical editors manage all
-content from a friendly admin panel.
+# Site de biserică — un stack bilingv Next.js + Strapi
 
-Built for and running in production at **[adventistcluj.ro](https://adventistcluj.ro)**
-(Biserica Adventistă „Speranța" Cluj-Napoca), and designed so **any church can reuse it
-as a stack** — copy it, set a few environment variables, fill in the CMS, and edit one
-config file to rebrand.
+Un stack complet, gata de producție, **bilingv (RO/EN)** pentru site-ul unei biserici locale:
+un front end rapid, optimizat SEO/AEO, pe [Next.js 15](https://nextjs.org), alimentat integral
+de un CMS [Strapi 4](https://strapi.io) self-hosted — astfel încât editori fără cunoștințe tehnice
+gestionează tot conținutul dintr-un panou de administrare prietenos.
 
-> **🌐 Live example:** **[adventistcluj.ro](https://adventistcluj.ro)** — a complete church
-> website running on this exact stack. See how it looks and works in the real world.
+Construit pentru și rulând în producție la **[adventistcluj.ro](https://adventistcluj.ro)**
+(Biserica Adventistă „Speranța" Cluj-Napoca) și gândit ca **orice biserică să-l poată refolosi
+ca stack** — îl copiezi, setezi câteva variabile de mediu, completezi CMS-ul și editezi un
+singur fișier de configurare pentru rebranding.
 
----
-
-## Features
-
-- **Bilingual by design** — Romanian at the root, English under `/en`, with per-item
-  fallback so content entered in one language still shows in the other. `hreflang`,
-  localized Open Graph, bilingual sitemap.
-- **Everything editable from the CMS** — pages, events, projects, blog, beliefs, gallery,
-  program/schedule, contact info, brand colors, SMTP — all Strapi single/collection types.
-- **SEO & AEO first** — rich JSON-LD (`Church`/`PlaceOfWorship`, `WebSite`, `Event`,
-  `VideoObject`, `FAQPage`, `BreadcrumbList`), canonical + hreflang per page, `sitemap.xml`,
-  `robots.txt`, Speakable, Open Graph/Twitter.
-- **Events** — upcoming vs. archive, clean slug URLs with 301 redirects for old links,
-  reusable **event templates** (apply a template to pre-fill a new event), per-day duplicate
-  warnings, and granular editor roles (per-project + own-events collaborators).
-- **Blog** — rich text + images from the CMS, auto-rendered with typographic styling.
-- **Gallery** — masonry layout with lightbox (zoom, swipe, keyboard).
-- **YouTube integration** — live banner + embedded player when the church is streaming,
-  plus a recent-sermons section (via public RSS; live detection optional via the Data API).
-- **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives
-  only on the server, never in the CMS/DB/API/browser.
-- **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
-- **Friendly admin** — church branding, Romanian field labels + help text, logical grouping,
-  compact locale column.
+> **🌐 Exemplu live:** **[adventistcluj.ro](https://adventistcluj.ro)** — un site complet de
+> biserică, rulând exact pe acest stack. Vezi cum arată și cum funcționează în realitate.
 
 ---
 
-## Tech stack
+## Funcționalități
 
-| Layer     | Technology |
+- **Bilingv din construcție** — româna la rădăcină, engleza sub `/en`, cu fallback per element
+  (conținutul introdus într-o limbă apare și în cealaltă). `hreflang`, Open Graph localizat,
+  sitemap bilingv.
+- **Totul editabil din CMS** — pagini, evenimente, proiecte, blog, „ce credem", galerie,
+  program, date de contact, culori de brand, SMTP — toate ca tipuri de conținut Strapi.
+- **SEO & AEO în prim-plan** — JSON-LD bogat (`Church`/`PlaceOfWorship`, `WebSite`, `Event`,
+  `VideoObject`, `FAQPage`, `BreadcrumbList`), canonical + hreflang pe fiecare pagină,
+  `sitemap.xml`, `robots.txt`, Speakable, Open Graph/Twitter.
+- **Evenimente** — viitoare vs. arhivă, URL-uri curate cu slug și redirect 301 de pe linkurile
+  vechi, **șabloane de evenimente** refolosibile (aplici un șablon și precompletezi un eveniment),
+  avertisment de duplicat în aceeași zi și roluri de editor granulare (colaboratori per proiect +
+  pe propriile evenimente).
+- **Blog** — text formatat + imagini din CMS, randat automat cu tipografie îngrijită.
+- **Galerie** — layout masonry cu lightbox (zoom, swipe, tastatură).
+- **Integrare YouTube** — banner live + player încorporat când biserica transmite, plus o secțiune
+  de predici recente (via RSS public; detecția live e opțională, prin Data API).
+- **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar
+  pe server, niciodată în CMS/DB/API/browser.
+- **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar
+  după accept.
+- **Administrare prietenoasă** — brandul bisericii, etichete în română + text de ajutor, grupare
+  logică, coloană de limbă compactă.
+
+---
+
+## Stack tehnic
+
+| Nivel     | Tehnologie |
 |-----------|------------|
-| Front end | Next.js 15 (App Router, React 19), TypeScript, SCSS modules |
-| CMS       | Strapi 4.26, MySQL/MariaDB, i18n plugin |
-| Runtime   | Node.js, self-hosted behind nginx + PM2 |
-| Email     | Nodemailer (SMTP), proxied through Strapi |
+| Front end | Next.js 15 (App Router, React 19), TypeScript, module SCSS |
+| CMS       | Strapi 4.26, MySQL/MariaDB, plugin i18n |
+| Rulare    | Node.js, self-hosted în spatele nginx + PM2 |
+| E-mail    | Nodemailer (SMTP), proxat prin Strapi |
 
-### Architecture
+### Arhitectură
 
 ```
 Browser
@@ -57,110 +61,111 @@ Browser
    ▼
 nginx (TLS, reverse proxy)
    │
-   ├─────────────► Next.js 15  (frontend-next)  ── SSR/SSG, ISR revalidation
-   │                     │  server-side fetch
+   ├─────────────► Next.js 15  (frontend-next)  ── SSR/SSG, revalidare ISR
+   │                     │  fetch server-side
    │                     ▼
-   └─────────────► Strapi 4   (cmsstrapi)  ── REST API + admin panel
+   └─────────────► Strapi 4   (cmsstrapi)  ── API REST + panou de administrare
                          │
                          ▼
                    MySQL / MariaDB
 ```
 
-The browser only ever talks to Next.js. Next.js fetches content from Strapi server-side;
-the contact form is proxied through Strapi so SMTP credentials never reach the client.
+Browserul comunică doar cu Next.js. Next.js aduce conținutul din Strapi pe server; formularul de
+contact e proxat prin Strapi, așa că datele SMTP nu ajung niciodată la client.
 
 ---
 
-## Repository structure
+## Structura proiectului
 
 ```
-frontend-next/      Next.js 15 front end
-  src/config/site.ts   ← single church-identity config (edit to rebrand)
-  src/app/             App Router pages ([lang]/…), sitemap, robots, manifest
-  src/lib/             Strapi data layer, SEO/JSON-LD helpers, i18n dictionary
-  src/components/      UI components
-  .env.example         front-end environment template
-cmsstrapi/          Strapi 4 CMS
-  src/api/             content types (event, project, article, smtp, …)
-  src/admin/           admin panel customizations (branding, extensions)
-  src/index.js         idempotent bootstrap (roles, permissions, seed data)
-  src/seed/            example seed content (a church overwrites it from the admin)
-  config/              server / database / plugins / middlewares
-  .env.example         CMS environment template
+frontend-next/      front end Next.js 15
+  src/config/site.ts   ← configurarea unică de identitate a bisericii (editează pentru rebrand)
+  src/app/             pagini App Router ([lang]/…), sitemap, robots, manifest
+  src/lib/             stratul de date Strapi, helperi SEO/JSON-LD, dicționarul i18n
+  src/components/      componente UI
+  .env.example         șablon de variabile de mediu pentru front end
+cmsstrapi/          CMS Strapi 4
+  src/api/             tipuri de conținut (event, project, article, smtp, …)
+  src/admin/           personalizări ale panoului (branding, extensii)
+  src/index.js         bootstrap idempotent (roluri, permisiuni, date de seed)
+  src/seed/            conținut de exemplu (o biserică îl suprascrie din admin)
+  config/              server / bază de date / plugin-uri / middlewares
+  .env.example         șablon de variabile de mediu pentru CMS
 ```
 
 ---
 
-## Prerequisites
+## Cerințe
 
-- **Node.js** 18–20 and **Yarn**
-- **MySQL 8** or **MariaDB 10.5+**
+- **Node.js** 18–20 și **Yarn**
+- **MySQL 8** sau **MariaDB 10.5+**
 
 ---
 
-## Quick start (local development)
+## Pornire rapidă (dezvoltare locală)
 
 ### 1. CMS (Strapi)
 
 ```bash
 cd cmsstrapi
-cp .env.example .env          # then fill in secrets + DB credentials
+cp .env.example .env          # apoi completează secretele + datele de acces la DB
 yarn install
 yarn develop                  # http://localhost:1337/admin
 ```
 
-Generate the required secrets (`APP_KEYS`, `*_SALT`, `*_SECRET`) with `openssl rand -base64 32`.
-On first boot the bootstrap seeds example content and configures roles/permissions.
-Create your admin account, then edit the content to match your church.
+Generează secretele necesare (`APP_KEYS`, `*_SALT`, `*_SECRET`) cu `openssl rand -base64 32`.
+La prima pornire, bootstrap-ul populează conținut de exemplu și configurează rolurile/permisiunile.
+Creează-ți contul de admin, apoi editează conținutul ca să se potrivească bisericii tale.
 
 ### 2. Front end (Next.js)
 
 ```bash
 cd frontend-next
-cp .env.example .env.local     # set STRAPI_URL + NEXT_PUBLIC_SITE_URL
+cp .env.example .env.local     # setează STRAPI_URL + NEXT_PUBLIC_SITE_URL
 yarn install
 yarn dev                       # http://localhost:3000
 ```
 
 ---
 
-## Configuration — three clear layers
+## Configurare — trei straturi clare
 
-Nothing church-specific is scattered through the code. To make this stack your own, you only
-touch three places:
+Nimic specific unei anumite biserici nu e împrăștiat prin cod. Ca să faci stack-ul al tău, atingi
+doar trei locuri:
 
-**1. `.env` — secrets & per-deployment settings** (never committed; see the two `.env.example`
-files). Database, Strapi security keys, `SMTP_PASSWORD`, `MAIL_PROXY_TOKEN`, your public site
-URL, Google Analytics ID, and YouTube keys.
+**1. `.env` — secrete & setări per deployment** (nu se comite niciodată; vezi cele două fișiere
+`.env.example`). Baza de date, cheile de securitate Strapi, `SMTP_PASSWORD`, `MAIL_PROXY_TOKEN`,
+URL-ul public al site-ului, ID-ul Google Analytics și cheile YouTube.
 
-**2. The Strapi admin — live content.** Church name, address, phone, email, pastor, social
-links, brand colors, the program/schedule, pages, events, projects, blog, gallery — all edited
-from the panel. This is where a reusing church spends most of its time.
+**2. Panoul Strapi — conținutul live.** Numele bisericii, adresa, telefonul, emailul, pastorul,
+linkurile de social media, culorile de brand, programul, paginile, evenimentele, proiectele,
+blogul, galeria — toate se editează din panou. Aici petrece cel mai mult timp o biserică ce
+refolosește stack-ul.
 
-**3. `frontend-next/src/config/site.ts` — identity & SEO fallbacks.** One well-commented file
-holding the values that are neither secret nor day-to-day content: GPS coordinates (used for
-JSON-LD and the sunset/Sabbath time), structured postal address, founding year, SEO keywords,
-denominational footer links, slogan. These are the fallbacks used when the matching CMS field
-is empty.
+**3. `frontend-next/src/config/site.ts` — identitate & fallback-uri SEO.** Un singur fișier bine
+comentat cu valorile care nu sunt nici secrete, nici conținut de zi cu zi: coordonatele GPS
+(folosite la JSON-LD și la ora apusului/începutul Sabatului), adresa poștală structurată, anul
+înființării, cuvinte-cheie SEO, linkurile denominaționale din footer, sloganul. Sunt folosite ca
+rezervă (fallback) când câmpul corespunzător din CMS e gol.
 
-### Rebrand checklist
+### Listă pentru rebranding
 
-- [ ] `cp .env.example .env` in **both** apps and fill in real values
-- [ ] Set `NEXT_PUBLIC_SITE_URL` to your domain
-- [ ] Edit `frontend-next/src/config/site.ts` (name, coordinates, address, links, slogan)
-- [ ] Replace logo/favicon assets in `frontend-next/public/` and `cmsstrapi/src/admin/extensions/`
-- [ ] In the Strapi admin, fill in **church-info**, **contact**, **style** (colors), **program**,
-      and the **E-mail (SMTP)** settings (recipient address included)
-- [ ] Adjust the editorial meta/description strings in `frontend-next/src/lib/i18n.ts`
-      (per-page marketing copy) and the beliefs/gallery fallback text if desired
-- [ ] Replace the seed content (events, projects, articles, beliefs) from the admin
+- [ ] `cp .env.example .env` în **ambele** aplicații și completează valorile reale
+- [ ] Setează `NEXT_PUBLIC_SITE_URL` cu domeniul tău
+- [ ] Editează `frontend-next/src/config/site.ts` (nume, coordonate, adresă, linkuri, slogan)
+- [ ] Înlocuiește logo-ul/favicon-ul în `frontend-next/public/` și `cmsstrapi/src/admin/extensions/`
+- [ ] În panoul Strapi, completează **church-info**, **contact**, **style** (culori), **program**
+      și setările **E-mail (SMTP)** (inclusiv adresa destinatarului)
+- [ ] Ajustează textele meta/descriptive editoriale din `frontend-next/src/lib/i18n.ts`
+      (copywriting per pagină) și textele de rezervă pentru „ce credem"/galerie, dacă vrei
+- [ ] Înlocuiește conținutul de seed (evenimente, proiecte, articole, „ce credem") din admin
 
 ---
 
-## Deployment
+## Deploy
 
-The reference deployment runs behind **nginx** (TLS termination + reverse proxy) with both
-apps managed by **PM2**:
+Deployment-ul de referință rulează în spatele **nginx** (terminare TLS + reverse proxy), cu ambele
+aplicații gestionate de **PM2**:
 
 ```bash
 # CMS
@@ -172,60 +177,62 @@ cd frontend-next && yarn install && yarn build
 pm2 start "yarn start" --name church-web
 ```
 
-nginx proxies your public domain to the Next.js port and a `cms.` subdomain to Strapi.
-Any Node host works (a VPS, or platforms like Vercel for the front end + a managed Strapi).
+nginx proxează domeniul public către portul Next.js și un subdomeniu `cms.` către Strapi.
+Merge pe orice host Node (un VPS, sau platforme precum Vercel pentru front end + un Strapi găzduit).
 
 ---
 
-## Contributing
+## Contribuții
 
-Issues and pull requests are welcome. Code is in English; commit messages use the
-`feat:` / `fix:` / `chore:` / `refactor:` / `docs:` convention.
-
----
-
-## Contributors
-
-This project has two chapters. From **2020 to 2025** a small team built and ran the original
-church website — a React + Express + Strapi application on Azure. In **2026** it was rebuilt from
-the ground up into the current self-hosted Next.js 15 + Strapi 4 stack; every line of code in
-this repository belongs to that rebuild. The credits below reflect the git history at the time
-of open-sourcing (551 commits, Nov 2020 – Jul 2026), weighted by the code each person actually
-wrote — setting aside brought-in framework code, dependencies and generated files.
-
-**Toma Becea** — founder and lead developer, and by far the largest contributor (~359 commits
-over more than four years). He started the project and carried it almost single-handedly: the
-Azure infrastructure-as-code (Terraform for App Service, MySQL, container registry, DNS, TLS and
-storage), the GitHub Actions CI/CD pipelines, the Strapi CMS setup and its long chain of version
-upgrades, and the React front end together with the Express reverse-proxy layer and the YouTube
-live integration. A very large body of sustained work.
-
-**Melania Bartha** (Betty Melania) — core front-end developer (~95 commits). She built the
-React/TypeScript foundation (router, components, API and utility layers, lint tooling),
-Google/Facebook authentication, the navigation and layout (menu, footer, mobile sidebar), the
-home-page event carousel, the program/schedule feature, and the About, gallery and contact
-pages, along with a good deal of the Strapi content types.
-
-**Samy Balasa** — architect and sole developer of the current stack (~51 commits). He rebuilt
-the site as the application in this repository: the complete Next.js 15 front end (typed Strapi
-data layer, SSR/SSG, and every page), the self-hosted Strapi 4 CMS and its full church content
-model, the bilingual RO/EN system with per-item fallback, the SEO/AEO layer (JSON-LD, canonical,
-sitemap), the events subsystem (reusable templates, editor roles, archive logic and clean-slug
-redirects), the blog, gallery and music modules, and the contact form with SMTP hardening and
-cookie-consent privacy. The earlier React/Express app was retired during the migration, so this
-is a full ground-up rebuild rather than an extension of the previous code.
-
-**Victor Greavu** — front-end contributor (~39 commits, most of them small). Mobile-menu scroll
-behaviour, CSS/SCSS visual polish, and the SVG header logo and favicon.
-
-**Also contributed:** Flaviu Cimpan (side-navigation refactor), Zanfir Ovidius Stefan (Storybook
-and linting setup), Eugen Mihai and Andreea Ghiurcuta (early project setup) — a few commits each.
-
-> Maintainers: please keep this section up to date — see the note in the project's internal docs.
+Issue-urile și pull request-urile sunt binevenite. Codul e în engleză; mesajele de commit folosesc
+convenția `feat:` / `fix:` / `chore:` / `refactor:` / `docs:`.
 
 ---
 
-## License
+## Contribuitori
 
-[MIT](LICENSE) © 2026 AdventTools and contributors. Free to use, modify and deploy for your
-own church.
+Proiectul are două capitole. Între **2020 și 2025**, o echipă mică a construit și a întreținut
+site-ul original al bisericii — o aplicație React + Express + Strapi pe Azure. În **2026** a fost
+reconstruit de la zero în stack-ul actual, self-hosted, Next.js 15 + Strapi 4; fiecare linie de cod
+din acest repository aparține acelui rebuild. Creditele de mai jos reflectă istoricul git la momentul
+publicării open-source (551 de commituri, nov. 2020 – iul. 2026), ponderate după codul scris efectiv
+de fiecare — lăsând deoparte codul adus gata făcut (framework-uri, dependințe, fișiere generate).
+
+**Toma Becea** — fondator și dezvoltator principal, de departe cel mai mare contribuitor (~359 de
+commituri pe parcursul a peste patru ani). A pornit proiectul și l-a dus aproape de unul singur:
+infrastructura ca cod pe Azure (Terraform pentru App Service, MySQL, container registry, DNS, TLS și
+storage), pipeline-urile CI/CD pe GitHub Actions, configurarea CMS-ului Strapi și lungul șir de
+upgrade-uri de versiune, plus front end-ul React împreună cu stratul de reverse-proxy pe Express și
+integrarea YouTube live. O muncă susținută, foarte amplă.
+
+**Melania Bartha** (Betty Melania) — dezvoltatoare front-end de bază (~95 de commituri). A construit
+fundația React/TypeScript (router, componente, straturile de API și utilitare, tooling de lint),
+autentificarea Google/Facebook, navigația și layout-ul (meniu, footer, sidebar mobil), caruselul de
+evenimente de pe prima pagină, funcționalitatea de program și paginile Despre, galerie și contact,
+împreună cu o bună parte din tipurile de conținut Strapi.
+
+**Samy Balasa** — arhitect și unic dezvoltator al stack-ului actual (~51 de commituri). A reconstruit
+site-ul ca aplicația din acest repository: întregul front end Next.js 15 (strat de date Strapi tipizat,
+SSR/SSG și fiecare pagină), CMS-ul Strapi 4 self-hosted cu întregul model de conținut al bisericii,
+sistemul bilingv RO/EN cu fallback per element, stratul SEO/AEO (JSON-LD, canonical, sitemap),
+subsistemul de evenimente (șabloane refolosibile, roluri de editor, logica de arhivă și redirecturi
+pe slug curat), modulele de blog, galerie și muzică, plus formularul de contact cu hardening SMTP și
+confidențialitate prin consimțământ cookie. Aplicația React/Express anterioară a fost retrasă în
+timpul migrării, deci acesta e un rebuild complet de la zero, nu o extensie a codului precedent.
+
+**Victor Greavu** — contribuitor front-end (~39 de commituri, majoritatea mici). Comportamentul de
+scroll al meniului mobil, finisaje vizuale CSS/SCSS și logo-ul SVG din antet + favicon-ul.
+
+**Au mai contribuit:** Flaviu Cimpan (refactor la navigația laterală), Zanfir Ovidius Stefan (Storybook
+și configurarea de lint), Eugen Mihai și Andreea Ghiurcuta (setup inițial de proiect) — câteva
+commituri fiecare.
+
+> Pentru mentenanți: vă rog țineți această secțiune actualizată — vezi nota din documentația internă
+> a proiectului.
+
+---
+
+## Licență
+
+[MIT](LICENSE) © 2026 AdventTools and contributors. Liber de folosit, modificat și deployat pentru
+propria ta biserică.
