@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (4)
+- feat(roles): cine poate scrie/edita poate acum și PUBLICA ce e al lui — nu mai depinde totul de editori. Author publică conținutul propriu (`is-creator`); Colaborator evenimente publică evenimentele proprii; Responsabil proiect publică propriile evenimente + proiectul pe care îl gestionează. Editor publică orice (neschimbat). Fiecare publish e restrâns la ce are dreptul să editeze.
+
 ## 2026-07-25 (3)
 - feat(roles): revizuire integrală a drepturilor. Editor și Author au acum drepturi pe TOT conținutul, pe AMBELE limbi (RO+EN — adăugat `locales` la permisiuni), DAR fără design și setări: excluse „Imagini de fundal", „Culori (temă)", „Mentenanță (în construcție)" și „E-mail (SMTP)". Media Library rămâne accesibilă (editorii pot pune poze la conținut). Author = doar conținut propriu (`is-creator`), fără publicare. Rolurile delegate (colaborator/responsabil) au primit și ele ambele limbi. Permisiunile de content-manager se rescriu la bootstrap, deci excluderile vechi sunt eliminate curat, iar upload-ul e păstrat.
 - chore(cms): favicon-ul panoului de administrare = același ca pe site (color), în locul variantei alb-negru.

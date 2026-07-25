@@ -38,6 +38,7 @@ function eventPerms(fields, loc, canDelete = true) {
     { action: CM('read'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: [] }, // vede toate
     { action: CM('create'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: [] },
     { action: CM('update'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: ['admin::is-creator'] }, // doar ale lui
+    { action: CM('publish'), subject: 'api::event.event', properties: { ...loc }, conditions: ['admin::is-creator'] }, // publică ale lui
   ];
   if (canDelete) p.push({ action: CM('delete'), subject: 'api::event.event', properties: { ...loc }, conditions: ['admin::is-creator'] });
   return p;
@@ -121,6 +122,7 @@ module.exports = async function configureDelegateRoles(strapi) {
         [
           { action: CM('read'), subject: 'api::project.project', properties: { fields: projectFields, ...loc }, conditions: [] },
           { action: CM('update'), subject: 'api::project.project', properties: { fields: projectFields, ...loc }, conditions: projectUpdateCond },
+          { action: CM('publish'), subject: 'api::project.project', properties: { ...loc }, conditions: projectUpdateCond }, // publică proiectul lui
           ...eventPerms(eventFields, loc),
           templateRead,
           ...UPLOAD,

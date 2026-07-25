@@ -216,8 +216,10 @@ async function configureContentRoles(strapi) {
     };
 
     const roles = [
+      // Editor: publică orice. Author: publică DOAR conținutul propriu (is-creator) — ca să-și
+      // poată pune singur pe site ce scrie, fără să aștepte un editor.
       { code: 'strapi-editor', conditions: [], withPublish: true },
-      { code: 'strapi-author', conditions: ['admin::is-creator'], withPublish: false },
+      { code: 'strapi-author', conditions: ['admin::is-creator'], withPublish: true },
     ];
 
     const isCM = (action) => action.startsWith('plugin::content-manager.explorer.');
