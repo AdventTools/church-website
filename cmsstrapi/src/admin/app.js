@@ -4,6 +4,7 @@ import SmtpTestButton from './extensions/SmtpTestButton';
 import EventDuplicateWarning from './extensions/EventDuplicateWarning';
 import EventTemplatePicker from './extensions/EventTemplatePicker';
 import { registerCompactLocaleColumn } from './extensions/LocaleCodesCell';
+import { initMobileAdmin } from './extensions/mobileAdmin';
 
 export default {
   config: {
@@ -39,6 +40,8 @@ export default {
     },
   },
   bootstrap(app) {
+    // Panou utilizabil pe telefon (sertar pentru bara principală, conținut full-width).
+    initMobileAdmin();
     // Coloana i18n din listă: antet „Limba” + doar codul limbii (RO, EN) — economisește spațiu în grid.
     registerCompactLocaleColumn(app);
     // Buton „Trimite e-mail de test” în ecranul setărilor SMTP.
