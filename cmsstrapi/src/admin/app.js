@@ -1,5 +1,5 @@
 import churchLogo from './extensions/church-logo.png';
-import faviconBw from './extensions/favicon-bw.png';
+import favicon from './extensions/favicon.png';
 import SmtpTestButton from './extensions/SmtpTestButton';
 import EventDuplicateWarning from './extensions/EventDuplicateWarning';
 import EventTemplatePicker from './extensions/EventTemplatePicker';
@@ -12,7 +12,7 @@ export default {
     auth: { logo: churchLogo },
     menu: { logo: churchLogo },
     // Favicon = emblema site-ului, în alb-negru (același simbol ca pe adventistcluj.ro).
-    head: { favicon: faviconBw, title: 'Speranța · Administrare' },
+    head: { favicon, title: 'Speranța · Administrare' },
     locales: [],
     tutorials: false,
     notifications: { releases: false },

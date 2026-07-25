@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-25 (3)
+- feat(roles): revizuire integrală a drepturilor. Editor și Author au acum drepturi pe TOT conținutul, pe AMBELE limbi (RO+EN — adăugat `locales` la permisiuni), DAR fără design și setări: excluse „Imagini de fundal", „Culori (temă)", „Mentenanță (în construcție)" și „E-mail (SMTP)". Media Library rămâne accesibilă (editorii pot pune poze la conținut). Author = doar conținut propriu (`is-creator`), fără publicare. Rolurile delegate (colaborator/responsabil) au primit și ele ambele limbi. Permisiunile de content-manager se rescriu la bootstrap, deci excluderile vechi sunt eliminate curat, iar upload-ul e păstrat.
+- chore(cms): favicon-ul panoului de administrare = același ca pe site (color), în locul variantei alb-negru.
+
 ## 2026-07-25 (2)
 - feat(admin-mobile): panoul Strapi devine utilizabil pe telefon — UN singur buton ☰ deschide un sertar care conține ambele meniuri Strapi stivuite (meniul principal sus + lista de tipuri de conținut jos); conținutul devine full-width și lizibil, tabelele late scrollează în containerul lor, bara de acțiuni (Save/Unpublish) se înfășoară ca să rămână accesibilă. Strapi 4 e desktop-first — e un strat CSS+JS injectat (`src/admin/extensions/mobileAdmin.js`), robust prin marcare structurală (clasele Strapi sunt hashuite), fără mutarea nodurilor din DOM-ul React. Verificat cu render real pe iPhone.
 

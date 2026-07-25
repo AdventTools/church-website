@@ -147,13 +147,38 @@ async function ensureRomanianDefault(strapi) {
 // Editor: creare/citire/editare/ștergere/publicare pe toate content-type-urile; fără acces la Setări.
 // Author: la fel, DAR doar pe conținutul propriu (is-creator) și fără publicare.
 // Rulează la fiecare boot: adaugă doar ce lipsește (idempotent) — acoperă și tipurile viitoare.
+// Editor & Author: drepturi pe TOT conținutul, pe AMBELE limbi, DAR fără setări și design.
+// Exclus (doar Super Admin): E-mail (SMTP), Imagini de fundal, Culori (temă), Mentenanță.
+// „Content" (texte, program, evenimente, articole, pagini) da; media pentru conținut da (Media
+// Library rămâne neatinsă); design + comutatorul de mentenanță nu.
+const ROLE_EXCLUDED_UIDS = new Set([
+  'api::smtp.smtp',
+  'api::background.background',
+  'api::style.style',
+  'api::under-construction.under-construction',
+]);
+
 async function configureContentRoles(strapi) {
   try {
     const permSvc = strapi.service('admin::permission');
     const roleSvc = strapi.service('admin::role');
     if (!permSvc || !roleSvc || typeof roleSvc.assignPermissions !== 'function') return;
 
-    const uids = Object.keys(strapi.contentTypes).filter((uid) => uid.startsWith('api::') && uid !== 'api::smtp.smtp');
+    const uids = Object.keys(strapi.contentTypes).filter((uid) => uid.startsWith('api::') && !ROLE_EXCLUDED_UIDS.has(uid));
+
+    // Limbile active — pentru drepturi pe toate limbile la tipurile localizate.
+    let localeCodes = ['ro'];
+    try {
+      const locs = await strapi.plugin('i18n').service('locales').find();
+      if (Array.isArray(locs) && locs.length) localeCodes = locs.map((l) => l.code);
+    } catch (e) {
+      /* i18n indisponibil la boot — rămâne ['ro'] */
+    }
+
+    const isLocalized = (uid) => {
+      const po = strapi.contentType(uid).pluginOptions;
+      return !!(po && po.i18n && po.i18n.localized);
+    };
 
     const fieldsFor = (uid) => {
       const out = [];
@@ -177,13 +202,14 @@ async function configureContentRoles(strapi) {
       const perms = [];
       for (const uid of uids) {
         const ct = strapi.contentType(uid);
-        const fields = fieldsFor(uid);
-        perms.push({ action: CM('create'), subject: uid, properties: { fields }, conditions });
-        perms.push({ action: CM('read'), subject: uid, properties: { fields }, conditions });
-        perms.push({ action: CM('update'), subject: uid, properties: { fields }, conditions });
-        if (ct.kind === 'collectionType') perms.push({ action: CM('delete'), subject: uid, properties: {}, conditions });
+        const loc = isLocalized(uid) ? { locales: localeCodes } : {};
+        const withFields = { fields: fieldsFor(uid), ...loc };
+        perms.push({ action: CM('create'), subject: uid, properties: withFields, conditions });
+        perms.push({ action: CM('read'), subject: uid, properties: withFields, conditions });
+        perms.push({ action: CM('update'), subject: uid, properties: withFields, conditions });
+        if (ct.kind === 'collectionType') perms.push({ action: CM('delete'), subject: uid, properties: { ...loc }, conditions });
         if (ct.options && ct.options.draftAndPublish && withPublish) {
-          perms.push({ action: CM('publish'), subject: uid, properties: {}, conditions });
+          perms.push({ action: CM('publish'), subject: uid, properties: { ...loc }, conditions });
         }
       }
       return perms;
@@ -194,31 +220,24 @@ async function configureContentRoles(strapi) {
       { code: 'strapi-author', conditions: ['admin::is-creator'], withPublish: false },
     ];
 
+    const isCM = (action) => action.startsWith('plugin::content-manager.explorer.');
     for (const { code, conditions, withPublish } of roles) {
       const role = await strapi.db.query('admin::role').findOne({ where: { code } });
       if (!role) continue;
       const existing = await permSvc.findMany({ where: { role: { id: role.id } } });
-      const key = (p) => `${p.action}|${p.subject}`;
-      const seen = new Set(existing.map(key));
-      const merged = existing.map((p) => ({
-        action: p.action,
-        subject: p.subject,
-        properties: p.properties || {},
-        conditions: p.conditions || [],
-        actionParameters: p.actionParameters || {},
-      }));
-      let added = 0;
-      for (const d of desiredFor(conditions, withPublish)) {
-        if (!seen.has(key(d))) {
-          merged.push(d);
-          seen.add(key(d));
-          added += 1;
-        }
-      }
-      if (added > 0) {
-        await roleSvc.assignPermissions(role.id, merged);
-        strapi.log.info(`Roles: ${code} +${added} permisiuni de conținut (toate content-type-urile, mai puțin SMTP).`);
-      }
+      // Păstrează TOT ce nu e content-manager (Media Library/upload etc.); rescrie complet
+      // permisiunile de content-manager → astfel dispar cele pe tipurile acum excluse (design/setări).
+      const keep = existing
+        .filter((p) => !isCM(p.action))
+        .map((p) => ({
+          action: p.action,
+          subject: p.subject || null,
+          properties: p.properties || {},
+          conditions: p.conditions || [],
+          actionParameters: p.actionParameters || {},
+        }));
+      await roleSvc.assignPermissions(role.id, [...keep, ...desiredFor(conditions, withPublish)]);
+      strapi.log.info(`Roles: ${code} — conținut rescris pe ambele limbi (fără SMTP/fundal/culori/mentenanță; Media Library păstrată).`);
     }
   } catch (err) {
     strapi.log.error(`configureContentRoles: ${err.message}`);

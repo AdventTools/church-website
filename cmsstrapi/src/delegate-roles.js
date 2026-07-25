@@ -33,13 +33,13 @@ const UPLOAD = [
   { action: 'plugin::upload.configure-view', conditions: [] },
 ];
 
-function eventPerms(fields, canDelete = true) {
+function eventPerms(fields, loc, canDelete = true) {
   const p = [
-    { action: CM('read'), subject: 'api::event.event', properties: { fields }, conditions: [] }, // vede toate
-    { action: CM('create'), subject: 'api::event.event', properties: { fields }, conditions: [] },
-    { action: CM('update'), subject: 'api::event.event', properties: { fields }, conditions: ['admin::is-creator'] }, // doar ale lui
+    { action: CM('read'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: [] }, // vede toate
+    { action: CM('create'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: [] },
+    { action: CM('update'), subject: 'api::event.event', properties: { fields, ...loc }, conditions: ['admin::is-creator'] }, // doar ale lui
   ];
-  if (canDelete) p.push({ action: CM('delete'), subject: 'api::event.event', properties: {}, conditions: ['admin::is-creator'] });
+  if (canDelete) p.push({ action: CM('delete'), subject: 'api::event.event', properties: { ...loc }, conditions: ['admin::is-creator'] });
   return p;
 }
 
@@ -55,13 +55,23 @@ async function ensureRole(strapi, code, name, description, permissions) {
 
 module.exports = async function configureDelegateRoles(strapi) {
   try {
+    // Limbile active — colaboratorii editează conținut pe ambele limbi (event/project/șablon sunt localizate).
+    let localeCodes = ['ro'];
+    try {
+      const locs = await strapi.plugin('i18n').service('locales').find();
+      if (Array.isArray(locs) && locs.length) localeCodes = locs.map((l) => l.code);
+    } catch (e) {
+      /* i18n indisponibil la boot */
+    }
+    const loc = { locales: localeCodes };
+
     const eventFields = fieldsFor(strapi, 'api::event.event');
     const projectFields = fieldsFor(strapi, 'api::project.project');
     // Ca să funcționeze dropdown-ul „Aplică un șablon", rolul trebuie să poată CITI șabloanele.
     const templateFields = strapi.contentType('api::event-template.event-template')
       ? fieldsFor(strapi, 'api::event-template.event-template')
       : [];
-    const templateRead = { action: CM('read'), subject: 'api::event-template.event-template', properties: { fields: templateFields }, conditions: [] };
+    const templateRead = { action: CM('read'), subject: 'api::event-template.event-template', properties: { fields: templateFields, ...loc }, conditions: [] };
 
     // 1) Colaborator evenimente
     await ensureRole(
@@ -69,7 +79,7 @@ module.exports = async function configureDelegateRoles(strapi) {
       'colaborator-evenimente',
       'Colaborator evenimente',
       'Vede toate evenimentele, adaugă evenimente și editează/șterge doar propriile evenimente.',
-      [...eventPerms(eventFields), templateRead, ...UPLOAD],
+      [...eventPerms(eventFields, loc), templateRead, ...UPLOAD],
     );
 
     // 2) Responsabil <Proiect> — câte unul per proiect, cu condiție per-proiect.
@@ -109,9 +119,9 @@ module.exports = async function configureDelegateRoles(strapi) {
         `Responsabil: ${p.title}`,
         `Editează doar proiectul „${p.title}” și poate adăuga/edita propriile evenimente.`,
         [
-          { action: CM('read'), subject: 'api::project.project', properties: { fields: projectFields }, conditions: [] },
-          { action: CM('update'), subject: 'api::project.project', properties: { fields: projectFields }, conditions: projectUpdateCond },
-          ...eventPerms(eventFields),
+          { action: CM('read'), subject: 'api::project.project', properties: { fields: projectFields, ...loc }, conditions: [] },
+          { action: CM('update'), subject: 'api::project.project', properties: { fields: projectFields, ...loc }, conditions: projectUpdateCond },
+          ...eventPerms(eventFields, loc),
           templateRead,
           ...UPLOAD,
         ],
