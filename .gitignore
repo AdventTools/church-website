@@ -30,3 +30,10 @@ cmsstrapi/src/extensions/documentation/documentation/1.0.0/full_documentation.js
 
 # internal working docs — kept locally, never published
 tpm/
+
+# AI tooling — kept local, never published (a public repo would expose them permanently)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+copilot-instructions.md
+COPILOT-INSTRUCTIONS.md

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-25 (8)
+- chore(security): formularul de contact — verificare de timp (respinge tăcut trimiterile sub 3s = boți) pe lângă honeypot-ul existent, plus rate-limiting pe Redis (5 cereri / 10 min / IP, fail-open dacă Redis cade). `frontend-next/src/lib/ratelimit.ts` nou; `REDIS_URL` documentat în `.env.example`.
+- chore(repo): `.gitignore` primește blocul de igienă AI (`.claude/`, `CLAUDE.md`, `CLAUDE.local.md`, `copilot-instructions.md`) — repo public, fișierele de unealtă nu trebuie să ajungă vizibile.
+
 ## 2026-07-25 (7)
 - feat(projects): două proiecte noi, bilingv (RO+EN), publicate — „Grădinița creștină Kinderfreude" (pagină construită din materialele primite: de ce, ce învățăm, valori, misiune, comunicare cu părinții; link extern către pagina de Facebook, cu mențiune că site-ul oficial revine curând) și „Clasa de botez" (studiu biblic în fiecare după-amiază de sabat, coordonator Beniamin Pascu). Adăugate în seed (sursă unică) și inserate în DB-ul live. La bootstrap, `delegate-roles.js` a creat automat rolurile „Responsabil" pentru fiecare.
 

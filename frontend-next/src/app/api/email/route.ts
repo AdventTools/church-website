@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
+import { rateLimit } from '@/lib/ratelimit';
 
 export const runtime = 'nodejs';
 
 const STRAPI_URL = process.env.STRAPI_URL ?? 'http://127.0.0.1:1337';
+// Timp minim de completare umană (ms) — sub atât e aproape sigur bot.
+const MIN_FILL_MS = 3000;
 
 export async function POST(req: Request) {
   const token = process.env.MAIL_PROXY_TOKEN;
@@ -10,17 +13,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Trimiterea de e-mail nu este configurată.' }, { status: 503 });
   }
 
-  let body: Record<string, string> | null = null;
+  // Rate-limit per IP (5 cereri / 10 min) — nginx pune IP-ul real în x-forwarded-for.
+  const ip = (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'unknown';
+  if (!(await rateLimit(`email:${ip}`, 5, 600))) {
+    return NextResponse.json({ error: 'Prea multe încercări. Încearcă din nou mai târziu.' }, { status: 429 });
+  }
+
+  let body: Record<string, unknown> | null = null;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Cerere invalidă.' }, { status: 400 });
   }
 
-  const { firstName, lastName, email, phone, text, website } = body ?? {};
+  const { firstName, lastName, email, phone, text, website, elapsed } = (body ?? {}) as Record<string, string> & {
+    elapsed?: number;
+  };
 
   // Honeypot: boții completează câmpul ascuns „website”. Răspundem cu succes fără să trimitem.
   if (website) return NextResponse.json({ ok: true });
+
+  // Verificare de timp: formularul trimite `elapsed` (ms de la afișare). Prea rapid = bot.
+  if (typeof elapsed !== 'number' || elapsed < MIN_FILL_MS) return NextResponse.json({ ok: true });
 
   if (!firstName || !lastName || !email || !text) {
     return NextResponse.json({ error: 'Câmpuri obligatorii lipsă.' }, { status: 400 });

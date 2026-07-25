@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { t } from '@/lib/i18n';
 import type { Locale } from '@/lib/types';
@@ -18,6 +18,11 @@ export default function ContactForm({ locale = 'ro' }: { locale?: Locale }) {
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState('');
+  // Momentul afișării formularului — pentru verificarea de timp anti-bot (setat pe client).
+  const mountedAt = useRef(0);
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
 
   const set =
     (k: keyof Msg) =>
@@ -39,7 +44,7 @@ export default function ContactForm({ locale = 'ro' }: { locale?: Locale }) {
       const res = await fetch('/api/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(msg),
+        body: JSON.stringify({ ...msg, elapsed: Date.now() - mountedAt.current }),
       });
       if (!res.ok) throw new Error();
       setMsg(EMPTY);
