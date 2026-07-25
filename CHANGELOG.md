@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (5)
+- fix(content): „Prima vizită" — reformulat textul despre limbă. „Predicile principale sunt în română" sugera că ar exista predici secundare în alte limbi; corectat în „Toate serviciile și predicile sunt în limba română", engleza rămânând doar la Școala de Sabat + traducere la nevoie. Aplicat în seed (RO+EN) și în conținutul live din DB.
+
 ## 2026-07-25 (4)
 - feat(roles): cine poate scrie/edita poate acum și PUBLICA ce e al lui — nu mai depinde totul de editori. Author publică conținutul propriu (`is-creator`); Colaborator evenimente publică evenimentele proprii; Responsabil proiect publică propriile evenimente + proiectul pe care îl gestionează. Editor publică orice (neschimbat). Fiecare publish e restrâns la ce are dreptul să editeze.
 

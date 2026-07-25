@@ -75,7 +75,7 @@ async function seedFirstVisit(strapi) {
         {
           icon: 'language',
           title: 'Vorbești altă limbă?',
-          text: 'Avem Școală de Sabat și în limba engleză, iar dacă ai nevoie de traducere te putem ajuta cu drag. Predicile principale sunt în română.',
+          text: 'Toate serviciile și predicile sunt în limba română. Avem și o grupă de Școală de Sabat în engleză, iar dacă ai nevoie de traducere te putem ajuta cu drag.',
         },
         {
           icon: 'welcome',
@@ -111,7 +111,7 @@ async function seedFirstVisit(strapi) {
         {
           question: 'Serviciile se țin și în engleză?',
           answer:
-            'Avem Școală de Sabat în limba engleză, iar la nevoie putem oferi traducere personală. Predicile principale sunt susținute în română.',
+            'Serviciile divine și predicile se țin în limba română. Avem însă o grupă de Școală de Sabat în engleză, iar la nevoie putem oferi traducere personală.',
         },
         {
           question: 'Cât durează serviciul divin?',
