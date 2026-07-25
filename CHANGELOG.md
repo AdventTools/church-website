@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2026-07-25 (2)
-- feat(admin-mobile): panoul Strapi devine utilizabil pe telefon — bara principală și sub-meniul (tipuri de conținut) devin sertare (butoane ☰ stânga / ▤ dreapta), conținutul devine full-width și lizibil, tabelele late scrollează în containerul lor, bara de acțiuni (Save/Unpublish) se înfășoară ca să rămână accesibilă. Strapi 4 e desktop-first — e un strat CSS+JS injectat (`src/admin/extensions/mobileAdmin.js`), robust prin marcare structurală (clasele Strapi sunt hashuite). Verificat cu render real pe iPhone.
+- feat(admin-mobile): panoul Strapi devine utilizabil pe telefon — UN singur buton ☰ deschide un sertar care conține ambele meniuri Strapi stivuite (meniul principal sus + lista de tipuri de conținut jos); conținutul devine full-width și lizibil, tabelele late scrollează în containerul lor, bara de acțiuni (Save/Unpublish) se înfășoară ca să rămână accesibilă. Strapi 4 e desktop-first — e un strat CSS+JS injectat (`src/admin/extensions/mobileAdmin.js`), robust prin marcare structurală (clasele Strapi sunt hashuite), fără mutarea nodurilor din DOM-ul React. Verificat cu render real pe iPhone.
 
 ## 2026-07-25
 - fix(email): invitațiile pentru administratori noi (și resetările de parolă) nu se trimiteau — Strapi folosea providerul implicit `sendmail`, neconfigurat pe server. Adăugat providerul `nodemailer` + `config/plugins.js`, legat la contul SMTP prin env (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_FROM` + `SMTP_PASSWORD` existent). Setat `PUBLIC_URL` pentru linkul corect de înregistrare. Retrimisă invitația pentru Marius Gocica; e-mailul de sistem testat și confirmat.
