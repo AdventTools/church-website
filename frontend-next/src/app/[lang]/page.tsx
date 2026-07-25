@@ -14,7 +14,7 @@ import Sermons from '@/components/Sermons';
 import Reveal from '@/components/Reveal';
 import JsonLd from '@/components/JsonLd';
 import { getHomePage, getBackgroundImages, getPrograms, getUpcomingEvents, getArchivedEvents, getProjects, getArticles, getBeliefs } from '@/lib/strapi';
-import { getLatestVideos } from '@/lib/youtube';
+import { getLatestVideos, channelUrl } from '@/lib/youtube';
 import { videoListJsonLd, webPageJsonLd } from '@/lib/jsonld';
 import { summarize } from '@/lib/utils';
 import { t, localePath, isLocale } from '@/lib/i18n';
@@ -144,7 +144,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <Section
           id="predici"
           title={dict.home.sermons}
-          cta={{ href: localePath(locale, '/evenimente'), label: dict.home.sermonsCta }}
+          cta={channelUrl() ? { href: channelUrl() as string, label: dict.home.sermonsCta } : undefined}
           className="section--surface"
         >
           <Sermons videos={videos} locale={locale} />

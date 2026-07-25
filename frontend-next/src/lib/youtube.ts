@@ -10,6 +10,11 @@ export function hasYoutube(): boolean {
   return !!CHANNEL_ID;
 }
 
+// Pagina cu toate transmisiunile = fila „Videoclipuri" a canalului.
+export function channelUrl(): string | null {
+  return CHANNEL_ID ? `https://www.youtube.com/channel/${CHANNEL_ID}/videos` : null;
+}
+
 function decodeEntities(s: string): string {
   return s
     .replace(/&amp;/g, '&')

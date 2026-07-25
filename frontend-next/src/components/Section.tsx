@@ -18,11 +18,16 @@ export default function Section({ title, children, cta, className, id }: Props) 
         <Reveal>
           {title && <h2 className={styles.title}>{title}</h2>}
           {children}
-          {cta && (
-            <Link href={cta.href} className={`btn ${styles.cta}`}>
-              {cta.label}
-            </Link>
-          )}
+          {cta &&
+            (/^https?:\/\//.test(cta.href) ? (
+              <a href={cta.href} target="_blank" rel="noopener noreferrer" className={`btn ${styles.cta}`}>
+                {cta.label}
+              </a>
+            ) : (
+              <Link href={cta.href} className={`btn ${styles.cta}`}>
+                {cta.label}
+              </Link>
+            ))}
         </Reveal>
       </div>
     </section>

@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (6)
+- fix(home): butonul de sub „Transmisiuni recente" ducea spre `/evenimente` cu textul „Vezi evenimentele" — fără legătură cu predicile. Acum duce spre canalul YouTube al bisericii (fila Videoclipuri) cu textul „Vezi toate transmisiunile" / „See all broadcasts", deschis în tab nou. `Section` suportă acum CTA extern (target=_blank, rel noopener); URL-ul canalului derivă din `YT_CHANNEL_ID` (`channelUrl()`), deci CTA dispare dacă nu e configurat YouTube.
+
 ## 2026-07-25 (5)
 - fix(content): „Prima vizită" — reformulat textul despre limbă. „Predicile principale sunt în română" sugera că ar exista predici secundare în alte limbi; corectat în „Toate serviciile și predicile sunt în limba română", engleza rămânând doar la Școala de Sabat + traducere la nevoie. Aplicat în seed (RO+EN) și în conținutul live din DB.
 
