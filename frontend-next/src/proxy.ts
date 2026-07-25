@@ -7,7 +7,8 @@ const DEFAULT = 'ro';
 // neatinse (previne bucla). Forțăm protocolul http pe ținta de rewrite: în spatele proxy-ului
 // (X-Forwarded-Proto: https) Next ar reconstrui o țintă https și ar încerca un fetch TLS către
 // serverul HTTP intern (:3006) → eroare SSL / 500.
-export function middleware(req: NextRequest) {
+// (Next 16: fostul „middleware" — redenumit `proxy`, rulează pe runtime-ul nodejs.)
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hasLocale = LOCALES.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
   if (hasLocale) return NextResponse.next();

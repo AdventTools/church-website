@@ -126,7 +126,7 @@ export default async function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang={HTML_LANG[locale]} className={font.variable} style={theme}>
+    <html lang={HTML_LANG[locale]} className={font.variable} style={theme} data-scroll-behavior="smooth">
       <body>
         {underConstruction ? (
           <main className="container section">

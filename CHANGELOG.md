@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (9)
+- chore(deps): Next.js 15→16 + React 19.1→19.2. Turbopack devine build-ul implicit (fără webpack custom, fără flag). Breaking changes tratate: `middleware.ts`→`proxy.ts` (funcția `middleware`→`proxy`, runtime nodejs); `scroll-behavior: smooth` păstrat prin `data-scroll-behavior="smooth"` pe `<html>` (Next 16 nu mai suprascrie implicit la navigare); `images.dangerouslyAllowLocalIP: true` fiindcă optimizatorul preia `/uploads` de la Strapi pe 127.0.0.1 (Next 16 blochează implicit IP-uri locale). Verificat live: pagini, imagini /uploads optimizate, rutare i18n, API contact.
+
 ## 2026-07-25 (8)
 - chore(security): formularul de contact — verificare de timp (respinge tăcut trimiterile sub 3s = boți) pe lângă honeypot-ul existent, plus rate-limiting pe Redis (5 cereri / 10 min / IP, fail-open dacă Redis cade). `frontend-next/src/lib/ratelimit.ts` nou; `REDIS_URL` documentat în `.env.example`.
 - chore(repo): `.gitignore` primește blocul de igienă AI (`.claude/`, `CLAUDE.md`, `CLAUDE.local.md`, `copilot-instructions.md`) — repo public, fișierele de unealtă nu trebuie să ajungă vizibile.
