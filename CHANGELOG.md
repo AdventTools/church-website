@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (11)
+- fix(seo): JSON-LD-ul paginilor de proiect folosea `@type: "Project"` — tip inexistent în schema.org (marcat invalid de validatoare). Înlocuit cu `Service` (valid; proiectele sunt inițiative/servicii oferite comunității), `parentOrganization`→`provider` (legat de entitatea Church prin @id) + `areaServed: Cluj-Napoca`. Mai corect și mai puternic pentru AEO. (Găsit de un audit adversarial post-migrare.)
+
 ## 2026-07-25 (10)
 - chore(deps)!: **migrare majoră Strapi 4.26 → 5.51 + Node 20 → 22** (rezolvă Node 20 EOL). Efectuată pe copie izolată întâi (DB de test + port temporar), apoi cutover pe producție cu backup + rollback pregătit. Modificări: `entityService` → Document Service API (codemod, în `index.js` + seed-uri); `config/database.js` client `mysql2`→`mysql`; i18n devine parte din core (dependință scoasă); `config/admin.js` primește `transfer.token.salt`. Admin: cele 3 comodități (test SMTP, avertisment eveniment-duplicat, „Aplică un șablon") re-implementate ca **edit-view side panels** v5 (`editViewPanels.jsx`, API `content-manager.apis.addEditViewSidePanel`) — `@strapi/helper-plugin` a fost eliminat în v5; coloana „Limba" compactă din listă nu are echivalent v5 (afișare nativă). Appurile adventist rulează pe Node 22 (via nvm + interpreter PM2); celelalte proiecte de pe server rămân neatinse pe Node 20.
 - feat(frontend): `strapi.ts` primește un normalizator v5→v4 **idempotent** — reconstituie forma cu `attributes`/`{data:...}` din răspunsul v5 flattened, dar lasă neatinsă forma deja-v4. Astfel un singur data-layer merge pe ambele versiuni (deploy-safe la cutover). Verificat 17/17 pe date live + 8/8 unit.

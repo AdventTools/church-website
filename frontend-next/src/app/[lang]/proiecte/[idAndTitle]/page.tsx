@@ -8,6 +8,7 @@ import ProjectSections from '@/components/ProjectSections';
 import { getProjectBySlug, getProjectByOldSlug, getProject, getAllProjects } from '@/lib/strapi';
 import { detailSeg, legacyId } from '@/lib/utils';
 import { pageMetadata, absoluteUrl, SITE_URL, SITE_NAME } from '@/lib/seo';
+import { site } from '@/config/site';
 import { breadcrumbJsonLd } from '@/lib/jsonld';
 import { t, localePath, isLocale } from '@/lib/i18n';
 import { BLUR } from '@/lib/blur';
@@ -79,14 +80,18 @@ export default async function ProjectDetail({ params }: { params: Promise<{ lang
   const cover = project.coverLarge || project.coverSmall;
   const backText = locale === 'en' ? 'Back to projects' : 'Înapoi la proiecte';
 
+  // schema.org NU are tipul „Project". Proiectele sunt inițiative/servicii oferite de biserică
+  // comunității → `Service`, cu `provider` = entitatea Church (legată prin @id). Valid + puternic
+  // pentru AEO („ce oferă biserica?").
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Project',
+    '@type': 'Service',
     name: project.title,
     description: (project.summary || project.content).replace(/\s+/g, ' ').trim().slice(0, 500),
     ...(cover ? { image: absoluteUrl(cover) } : {}),
     ...(project.externalUrl ? { url: project.externalUrl } : {}),
-    parentOrganization: { '@type': 'Church', '@id': `${SITE_URL}/#church`, name: SITE_NAME },
+    areaServed: { '@type': 'City', name: site.areaServed },
+    provider: { '@type': 'Church', '@id': `${SITE_URL}/#church`, name: SITE_NAME },
   };
 
   return (
