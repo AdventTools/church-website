@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25 (7)
+- feat(projects): două proiecte noi, bilingv (RO+EN), publicate — „Grădinița creștină Kinderfreude" (pagină construită din materialele primite: de ce, ce învățăm, valori, misiune, comunicare cu părinții; link extern către pagina de Facebook, cu mențiune că site-ul oficial revine curând) și „Clasa de botez" (studiu biblic în fiecare după-amiază de sabat, coordonator Beniamin Pascu). Adăugate în seed (sursă unică) și inserate în DB-ul live. La bootstrap, `delegate-roles.js` a creat automat rolurile „Responsabil" pentru fiecare.
+
 ## 2026-07-25 (6)
 - fix(home): butonul de sub „Transmisiuni recente" ducea spre `/evenimente` cu textul „Vezi evenimentele" — fără legătură cu predicile. Acum duce spre canalul YouTube al bisericii (fila Videoclipuri) cu textul „Vezi toate transmisiunile" / „See all broadcasts", deschis în tab nou. `Section` suportă acum CTA extern (target=_blank, rel noopener); URL-ul canalului derivă din `YT_CHANNEL_ID` (`channelUrl()`), deci CTA dispare dacă nu e configurat YouTube.
 

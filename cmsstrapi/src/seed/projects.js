@@ -155,6 +155,46 @@ const PROJECTS = [
       ensembles: EN_ENSEMBLES,
     },
   },
+  {
+    slug: 'gradinita-crestina',
+    ro: {
+      title: 'Grădinița creștină Kinderfreude',
+      summary:
+        'Grădiniță creștină în centrul Cluj-Napoca — atmosferă de familie, educatoare calificate, meniu ovo-lacto-vegetarian, germană și engleză, grupe mici.',
+      content:
+        'Grădinița Kinderfreude este o grădiniță creștină din inima Cluj-Napoca, unde fiecare copil este înconjurat de căldură, dragoste și grijă. Îl îndrumăm și îl supraveghem permanent prin cadre didactice calificate, capabile să răspundă nevoilor lui educaționale, sociale și emoționale.\n\nDeviza noastră: „Învață pe copil calea pe care trebuie să o urmeze și când va fi mare nu se va abate de la ea."\n\nDe ce Kinderfreude?\n• Atmosferă de familie — respectăm și punem preț pe nevoile fiecărui copil.\n• Avem încredere în copii, le ghidăm învățarea și le stimulăm creativitatea.\n• Educatoare calificate.\n• Educație moral-creștină, atât de necesară formării unui caracter frumos.\n• Grupe cu număr mic de copii.\n• Alimentație sănătoasă, printr-un meniu ovo-lacto-vegetarian.\n• Asistență medicală.\n• Comunicare eficientă cu părinții.\n• Sediu în centrul orașului.\n\nCe învățăm\nÎntr-un cadru prietenos, cei mici participă la activități variate:\n• educație timpurie conform curriculumului național — comunicare, socializare, dezvoltare cognitivă, emoțională și fizică;\n• predare în limba germană și engleză;\n• arte plastice și decorative: desen, pictură, modelaj, colaj;\n• educație creștină — povestiri și texte biblice;\n• ateliere diverse: actorie, educație rutieră, bunele maniere, sănătate, muzică, micii bucătari, experimente trăznite;\n• activități ale părinților împreună cu copiii;\n• concursuri, excursii și vizite, iar opțional înot.\n\nValorile în care credem\nDragostea, prietenia, respectul, bucuria, excelența, responsabilitatea, cinstea, toleranța și ocrotirea mediului.\n\nMisiunea noastră\n• să ne asigurăm că fiecare copil se simte prețuit și își valorifică potențialul;\n• să oferim o grădiniță primitoare și sigură;\n• să dăm fiecăruia șansa să învețe;\n• să încurajăm creativitatea;\n• să ne ascultăm unii pe alții;\n• să transmitem valori morale prețioase;\n• să respectăm mediul înconjurător;\n• să promovăm un stil de viață sănătos.\n\nComunicarea cu părinții este strânsă: caietul educatoarei (informare scrisă săptămânală), e-mail (meniu, program, anunțuri), ședințe, discuții directe și evenimente care îi implică pe părinți — activități deschise și serbări.\n\nÎnscrieri și informații actualizate găsiți pe pagina noastră de Facebook (Grădinița Kinderfreude). Site-ul oficial, gradinita-crestina.ro, va fi din nou disponibil în curând.',
+      externalUrl: 'https://www.facebook.com/Kinderfreude',
+      order: 5,
+    },
+    en: {
+      title: 'Kinderfreude Christian Kindergarten',
+      summary:
+        'A Christian kindergarten in central Cluj-Napoca — a family atmosphere, qualified teachers, an ovo-lacto-vegetarian menu, German and English, and small groups.',
+      content:
+        'Kinderfreude is a Christian kindergarten in the heart of Cluj-Napoca, where every child is surrounded by warmth, love, and care. Each child is guided and continually supervised by qualified teachers able to meet their educational, social, and emotional needs.\n\nOur motto: "Train up a child in the way he should go, and when he is old he will not depart from it."\n\nWhy Kinderfreude?\n• A family atmosphere — we respect and value the needs of every child.\n• We trust children, guide their learning, and nurture their creativity.\n• Qualified teachers.\n• Moral and Christian education, so essential to shaping a beautiful character.\n• Small group sizes.\n• Healthy food, through an ovo-lacto-vegetarian menu.\n• Medical care on site.\n• Effective communication with parents.\n• Located in the city center.\n\nWhat we learn\nIn a friendly setting, the little ones take part in a variety of activities:\n• early education following the national curriculum — communication, socialization, and cognitive, emotional, and physical development;\n• teaching in German and English;\n• fine and decorative arts: drawing, painting, modeling, collage;\n• Christian education — Bible stories and verses;\n• various workshops: acting, road safety, good manners, health, music, little cooks, and wacky experiments;\n• activities for parents together with their children;\n• contests, trips and visits, with swimming as an option.\n\nThe values we believe in\nLove, friendship, respect, joy, excellence, responsibility, honesty, tolerance, and care for the environment.\n\nOur mission\n• to make sure every child feels valued and fulfills their potential;\n• to offer a welcoming and safe kindergarten;\n• to give everyone the chance to learn;\n• to encourage creativity;\n• to listen to one another;\n• to pass on precious moral values;\n• to respect the environment;\n• to promote a healthy lifestyle.\n\nCommunication with parents is close: the teacher\'s notebook (a weekly written update), e-mail (menu, schedule, announcements), meetings, direct conversations, and events that involve parents — open activities and celebrations.\n\nFor enrollment and up-to-date information, visit our Facebook page (Grădinița Kinderfreude). The official website, gradinita-crestina.ro, will be back online soon.',
+      externalUrl: 'https://www.facebook.com/Kinderfreude',
+      order: 5,
+    },
+  },
+  {
+    slug: 'clasa-de-botez',
+    ro: {
+      title: 'Clasa de botez',
+      summary:
+        'Studiu biblic pentru cei care vor să-L cunoască mai bine pe Dumnezeu și să se pregătească pentru botez — în fiecare după-amiază de sabat, la Cluj-Napoca.',
+      content:
+        'Dacă dorești să-L urmezi pe Hristos, dacă vrei ca viața ta să fie schimbată, dacă pentru tine mântuirea are un preț și dacă învățătura creștină reprezintă Adevărul — te așteptăm la Clasa de Studiu Biblic.\n\nClasa de botez este un parcurs de studiu al Bibliei pentru cei care doresc să Îl cunoască mai bine pe Dumnezeu și să se pregătească pentru botez. Împreună descoperim, pas cu pas, adevărurile Scripturii și temelia credinței creștine — într-o atmosferă caldă, deschisă întrebărilor și fără nicio obligație.\n\nCând ne întâlnim\nÎn fiecare după-amiază de sabat (sâmbătă), cu o oră înainte de începerea serviciului public de închinare.\n\nPentru cine\nPentru oricine, indiferent de experiența cu biserica. Nu trebuie să știi nimic dinainte — vino cu întrebările tale și cu dorința de a căuta.\n\nCoordonator: Beniamin Pascu — 0733 676 175.\n\nDacă vrei să afli mai multe sau să te alături grupei, sună-l pe coordonator ori scrie-ne. Te așteptăm cu drag.',
+      order: 6,
+    },
+    en: {
+      title: 'Baptismal Class',
+      summary:
+        'A Bible study for those who want to know God better and prepare for baptism — every Sabbath afternoon in Cluj-Napoca.',
+      content:
+        'If you want to follow Christ, if you long for your life to be changed, if salvation means something to you, and if Christian teaching is the Truth — we welcome you to the Bible Study Class.\n\nThe Baptismal Class is a journey through the Bible for those who wish to know God better and prepare for baptism. Together we discover, step by step, the truths of Scripture and the foundation of the Christian faith — in a warm atmosphere, open to questions and with no obligation whatsoever.\n\nWhen we meet\nEvery Sabbath (Saturday) afternoon, one hour before the public worship service begins.\n\nFor whom\nFor anyone, whatever your experience with church. You don\'t need to know anything beforehand — just come with your questions and a desire to seek.\n\nCoordinator: Beniamin Pascu — 0733 676 175.\n\nIf you would like to learn more or join the class, call the coordinator or write to us. We would be glad to welcome you.',
+      order: 6,
+    },
+  },
 ];
 
 module.exports = async function seedProjects(strapi) {
@@ -178,3 +218,7 @@ module.exports = async function seedProjects(strapi) {
     strapi.log.info(`Seed: proiect „${ro.title}" creat (ro #${roEntry.id}, en #${enEntry.id}).`);
   }
 };
+
+// Expus pentru scripturi one-off (ex. adăugarea unui proiect nou pe o instalare existentă,
+// unde seedProjects nu mai rulează pentru că există deja proiecte).
+module.exports.PROJECTS = PROJECTS;
