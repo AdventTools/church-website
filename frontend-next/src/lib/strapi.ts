@@ -30,13 +30,69 @@ function loc(path: string, locale?: Locale): string {
   return `${path}${path.includes('?') ? '&' : '?'}locale=${locale}`;
 }
 
+// --- Adaptor Strapi 5 -> forma v4 ---------------------------------------------
+// Strapi 5 returnează răspuns „flattened": câmpurile stau direct pe entitate (fără wrapper
+// `attributes`), media și relațiile sunt inline (fără `{ data: ... }`). Mapper-ele de mai jos
+// sunt scrise pentru forma v4, așa că reconstituim forma v4 o singură dată, la fetch, în loc
+// să rescriem fiecare funcție. Media = obiect cu `url` + `mime`/`ext`; entitate = are `documentId`;
+// restul obiectelor sunt componente (rămân inline, dar le recursăm câmpurile).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isMedia(o: any): boolean {
+  return !!o && typeof o === 'object' && typeof o.url === 'string' && ('mime' in o || 'ext' in o);
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isEntry(o: any): boolean {
+  return !!o && typeof o === 'object' && 'documentId' in o && !isMedia(o);
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normValue(v: any): any {
+  if (Array.isArray(v)) {
+    if (v.length === 0) return v;
+    const f = v[0];
+    if (isMedia(f)) return { data: v.map((m) => ({ id: m.id, attributes: m })) };
+    if (isEntry(f)) return { data: v.map((e) => wrapEntry(e)) };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return v.map((c: any) => (c && typeof c === 'object' ? normComponent(c) : c));
+  }
+  if (v && typeof v === 'object') {
+    if (isMedia(v)) return { data: { id: v.id, attributes: v } };
+    if (isEntry(v)) return { data: wrapEntry(v) };
+    return normComponent(v);
+  }
+  return v;
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normComponent(o: any): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const out: any = {};
+  for (const [k, val] of Object.entries(o)) out[k] = normValue(val);
+  return out;
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function wrapEntry(e: any): any {
+  // Idempotent: dacă e deja forma v4 (`{ id, attributes }` fără `documentId`), nu o reîmpacheta.
+  // Astfel frontend-ul funcționează pe backend v4 SAU v5 — cheie pentru un cutover sigur.
+  if (e && typeof e === 'object' && 'attributes' in e && !('documentId' in e)) return e;
+  const { id, documentId, ...rest } = e;
+  return { id, documentId, attributes: normComponent(rest) };
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toV4(data: any): any {
+  if (Array.isArray(data)) return data.map((e) => wrapEntry(e));
+  if (data && typeof data === 'object') return wrapEntry(data);
+  return data;
+}
+
 async function api<T>(path: string, opts?: { revalidate?: number; noStore?: boolean }): Promise<T | null> {
   try {
     const res = await fetch(`${STRAPI_URL}/api${path}`, {
       ...(opts?.noStore ? { cache: 'no-store' } : { next: { revalidate: opts?.revalidate ?? 60 } }),
     });
     if (!res.ok) return null;
-    return (await res.json()) as T;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const json = (await res.json()) as any;
+    if (json && typeof json === 'object' && 'data' in json) json.data = toV4(json.data);
+    return json as T;
   } catch {
     return null;
   }

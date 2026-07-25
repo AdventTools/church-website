@@ -1,10 +1,7 @@
 import churchLogo from './extensions/church-logo.png';
 import favicon from './extensions/favicon.png';
-import SmtpTestButton from './extensions/SmtpTestButton';
-import EventDuplicateWarning from './extensions/EventDuplicateWarning';
-import EventTemplatePicker from './extensions/EventTemplatePicker';
-import { registerCompactLocaleColumn } from './extensions/LocaleCodesCell';
 import { initMobileAdmin } from './extensions/mobileAdmin';
+import { registerEditViewPanels } from './extensions/editViewPanels.jsx';
 
 export default {
   config: {
@@ -42,22 +39,9 @@ export default {
   bootstrap(app) {
     // Panou utilizabil pe telefon (sertar pentru bara principală, conținut full-width).
     initMobileAdmin();
-    // Coloana i18n din listă: antet „Limba” + doar codul limbii (RO, EN) — economisește spațiu în grid.
-    registerCompactLocaleColumn(app);
-    // Buton „Trimite e-mail de test” în ecranul setărilor SMTP.
-    app.injectContentManagerComponent('editView', 'right-links', {
-      name: 'smtp-test-button',
-      Component: SmtpTestButton,
-    });
-    // Avertisment „eveniment duplicat în aceeași zi” în bara laterală a evenimentului.
-    app.injectContentManagerComponent('editView', 'informations', {
-      name: 'event-duplicate-warning',
-      Component: EventDuplicateWarning,
-    });
-    // Dropdown „Aplică un șablon" — în bara de sus a evenimentului (lângă Salvează), vizibil imediat.
-    app.injectContentManagerComponent('editView', 'right-links', {
-      name: 'event-template-picker',
-      Component: EventTemplatePicker,
-    });
+    // Panouri în bara laterală a ecranului de editare (Strapi 5): test SMTP, avertisment
+    // eveniment-duplicat, „Aplică un șablon". (Coloana „Limba” compactă din v4 nu are
+    // echivalent în v5 — Content Manager afișează nativ limbile disponibile.)
+    registerEditViewPanels(app);
   },
 };

@@ -101,8 +101,8 @@ module.exports = async function seedEventTemplates(strapi) {
 
   for (const { ro, en, image } of TEMPLATES) {
     const coverId = await uploadCover(strapi, image);
-    const roEntry = await strapi.entityService.create(uid, { data: { ...ro, ...(coverId ? { cover: coverId } : {}), locale: 'ro' } });
-    const enEntry = await strapi.entityService.create(uid, {
+    const roEntry = await strapi.documents(uid).create({ data: { ...ro, ...(coverId ? { cover: coverId } : {}), locale: 'ro' } });
+    const enEntry = await strapi.documents(uid).create({
       data: { ...en, ...(coverId ? { cover: coverId } : {}), locale: 'en', localizations: [roEntry.id] },
       populate: ['localizations'],
     });

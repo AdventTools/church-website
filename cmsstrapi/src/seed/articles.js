@@ -36,10 +36,10 @@ module.exports = async function seedArticles(strapi) {
     const exists = await strapi.db.query(uid).findOne({ where: { title: ro.title, locale: 'ro' } });
     if (exists) continue;
 
-    const roEntry = await strapi.entityService.create(uid, {
+    const roEntry = await strapi.documents(uid).create({
       data: { ...ro, slug, date: today, locale: 'ro', publishedAt: new Date() },
     });
-    const enEntry = await strapi.entityService.create(uid, {
+    const enEntry = await strapi.documents(uid).create({
       data: { ...en, slug, author: en.author, date: today, locale: 'en', publishedAt: new Date(), localizations: [roEntry.id] },
       populate: ['localizations'],
     });

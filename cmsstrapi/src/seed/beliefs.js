@@ -23,8 +23,8 @@ module.exports = async function seedBeliefs(strapi) {
   const roExisting = await strapi.db.query(uid).findOne({ where: { locale: 'ro' } });
   if (roExisting) return;
 
-  const ro = await strapi.entityService.create(uid, { data: { ...RO, locale: 'ro', publishedAt: new Date() } });
-  const en = await strapi.entityService.create(uid, {
+  const ro = await strapi.documents(uid).create({ data: { ...RO, locale: 'ro', publishedAt: new Date() } });
+  const en = await strapi.documents(uid).create({
     data: { ...EN, locale: 'en', publishedAt: new Date(), localizations: [ro.id] },
     populate: ['localizations'],
   });

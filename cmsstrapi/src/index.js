@@ -44,7 +44,7 @@ async function seedFirstVisit(strapi) {
   const existing = await strapi.db.query('api::first-visit.first-visit').findOne({});
   if (existing) return;
 
-  await strapi.entityService.create('api::first-visit.first-visit', {
+  await strapi.documents('api::first-visit.first-visit').create({
     data: {
       title: 'Prima ta vizită',
       subtitle: 'Tot ce trebuie să știi înainte să treci pragul — pe scurt și prietenos.',

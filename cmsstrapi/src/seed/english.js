@@ -36,7 +36,7 @@ async function addLocalization(strapi, uid, roEntry, enData) {
   body.localizations = [roEntry.id, ...(roEntry.localizations || []).map((l) => l.id)];
   if (strapi.getModel(uid).options?.draftAndPublish !== false) body.publishedAt = new Date();
 
-  const created = await strapi.entityService.create(uid, { data: body, populate: ['localizations'] });
+  const created = await strapi.documents(uid).create({ data: body, populate: ['localizations'] });
   await locSvc.syncLocalizations(created, { model });
   return `created:${created.id}`;
 }
@@ -45,7 +45,7 @@ async function getRoSingle(strapi, uid) {
   const model = strapi.getModel(uid);
   const populate = { localizations: true };
   for (const f of mediaFields(model)) populate[f] = true;
-  const rows = await strapi.entityService.findMany(uid, { populate, locale: 'ro' });
+  const rows = await strapi.documents(uid).findMany({ populate, locale: 'ro' });
   return Array.isArray(rows) ? rows[0] : rows;
 }
 
@@ -53,7 +53,7 @@ async function getRoCollection(strapi, uid) {
   const model = strapi.getModel(uid);
   const populate = { localizations: true };
   for (const f of mediaFields(model)) populate[f] = true;
-  return strapi.entityService.findMany(uid, { populate, locale: 'ro', pagination: { limit: 200 } });
+  return strapi.documents(uid).findMany({ populate, locale: 'ro', pagination: { limit: 200 } });
 }
 
 module.exports = async function seedEnglish(strapi) {

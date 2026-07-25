@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-25 (10)
+- chore(deps)!: **migrare majoră Strapi 4.26 → 5.51 + Node 20 → 22** (rezolvă Node 20 EOL). Efectuată pe copie izolată întâi (DB de test + port temporar), apoi cutover pe producție cu backup + rollback pregătit. Modificări: `entityService` → Document Service API (codemod, în `index.js` + seed-uri); `config/database.js` client `mysql2`→`mysql`; i18n devine parte din core (dependință scoasă); `config/admin.js` primește `transfer.token.salt`. Admin: cele 3 comodități (test SMTP, avertisment eveniment-duplicat, „Aplică un șablon") re-implementate ca **edit-view side panels** v5 (`editViewPanels.jsx`, API `content-manager.apis.addEditViewSidePanel`) — `@strapi/helper-plugin` a fost eliminat în v5; coloana „Limba" compactă din listă nu are echivalent v5 (afișare nativă). Appurile adventist rulează pe Node 22 (via nvm + interpreter PM2); celelalte proiecte de pe server rămân neatinse pe Node 20.
+- feat(frontend): `strapi.ts` primește un normalizator v5→v4 **idempotent** — reconstituie forma cu `attributes`/`{data:...}` din răspunsul v5 flattened, dar lasă neatinsă forma deja-v4. Astfel un singur data-layer merge pe ambele versiuni (deploy-safe la cutover). Verificat 17/17 pe date live + 8/8 unit.
+
 ## 2026-07-25 (9)
 - chore(deps): Next.js 15→16 + React 19.1→19.2. Turbopack devine build-ul implicit (fără webpack custom, fără flag). Breaking changes tratate: `middleware.ts`→`proxy.ts` (funcția `middleware`→`proxy`, runtime nodejs); `scroll-behavior: smooth` păstrat prin `data-scroll-behavior="smooth"` pe `<html>` (Next 16 nu mai suprascrie implicit la navigare); `images.dangerouslyAllowLocalIP: true` fiindcă optimizatorul preia `/uploads` de la Strapi pe 127.0.0.1 (Next 16 blochează implicit IP-uri locale). Verificat live: pagini, imagini /uploads optimizate, rutare i18n, API contact.
 
