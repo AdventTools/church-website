@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-25
+- fix(email): invitațiile pentru administratori noi (și resetările de parolă) nu se trimiteau — Strapi folosea providerul implicit `sendmail`, neconfigurat pe server. Adăugat providerul `nodemailer` + `config/plugins.js`, legat la contul SMTP prin env (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_FROM` + `SMTP_PASSWORD` existent). Setat `PUBLIC_URL` pentru linkul corect de înregistrare. Retrimisă invitația pentru Marius Gocica; e-mailul de sistem testat și confirmat.
+
 ## 2026-07-19 (9)
 - fix(reveal): „Ce credem" apărea complet goală — animația scroll-reveal folosea `threshold: 0.12` (12% din element vizibil), imposibil de atins când tot conținutul (28 de credințe, ~12.000px) e într-un singur bloc mai înalt decât ecranul → nu se afișa niciodată. Prag schimbat la `0` (se afișează cum intră în ecran, la orice înălțime). Verificat pe toate paginile.
 
