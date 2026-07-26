@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-26 (1)
+- feat(smtp)!: **un singur loc pentru e-mail**. Setările din CMS („E-mail (SMTP)") alimentează acum ȘI e-mailurile de sistem ale panoului (resetare parolă, invitații de administrator), nu doar formularul de contact — ruta se face în `src/index.js` peste serviciul plugin-ului de email, cu revenire elegantă la providerul din `config/plugins.js` dacă setările CMS lipsesc (instalare nouă).
+- feat(smtp): **parola se administrează din panou fără a fi vreodată vizibilă**. Panou nou în bara laterală („Parolă & test e-mail"): arată doar dacă e configurată și când a fost schimbată, permite înlocuirea, niciodată citirea. Se păstrează criptată AES-256-GCM în core-store, cu cheie derivată din `ADMIN_JWT_SECRET` — un dump de bază de date nu o dezvăluie. Nu există nicio rută care să întoarcă valoarea. (Câmpurile `type: password` din content-types nu se puteau folosi: Strapi 5 le hash-uiește bcrypt, deci sunt irecuperabile pentru autentificare SMTP — verificat experimental.)
+- fix(smtp): bifa „secure" era pe „da" cu portul 587 (unde corect e STARTTLS). Corectată în date; codul oricum deducea modul din port.
+
 ## 2026-07-25 (11)
 - fix(seo): JSON-LD-ul paginilor de proiect folosea `@type: "Project"` — tip inexistent în schema.org (marcat invalid de validatoare). Înlocuit cu `Service` (valid; proiectele sunt inițiative/servicii oferite comunității), `parentOrganization`→`provider` (legat de entitatea Church prin @id) + `areaServed: Cluj-Napoca`. Mai corect și mai puternic pentru AEO. (Găsit de un audit adversarial post-migrare.)
 

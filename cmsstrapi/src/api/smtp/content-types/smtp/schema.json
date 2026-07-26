@@ -5,7 +5,7 @@
     "singularName": "smtp",
     "pluralName": "smtps",
     "displayName": "E-mail (SMTP)",
-    "description": "Setările serverului de e-mail pentru formularul de contact. IMPORTANT: parola NU se ține aici — e păstrată pe server (variabila SMTP_PASSWORD), niciodată vizibilă în panou/API/bază de date. Ca s-o schimbi, cere administratorului tehnic. Port 465 = SSL, port 587 = STARTTLS (se alege automat după port)."
+    "description": "Singurul loc de unde se administrează e-mailul: formularul de contact ȘI e-mailurile trimise de panou (resetare parolă, invitații). Parola se setează din bara laterală („Parolă & test e-mail\") — din motive de siguranță nu se afișează niciodată, se poate doar înlocui; se păstrează criptată. Port 465 = SSL, port 587 = STARTTLS (se alege automat după port, indiferent de bifa „secure\")."
   },
   "options": {
     "draftAndPublish": false

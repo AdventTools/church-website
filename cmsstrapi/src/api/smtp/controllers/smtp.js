@@ -43,6 +43,29 @@ module.exports = {
     }
   },
 
+  // Salvează parola SMTP din panou. Nu întoarce NICIODATĂ valoarea — doar confirmarea.
+  async setPassword(ctx) {
+    if (!isAdmin(strapi, ctx)) return ctx.unauthorized();
+    const { password } = ctx.request.body || {};
+    if (password !== '' && (typeof password !== 'string' || !password.trim())) {
+      return ctx.badRequest('Parolă invalidă.');
+    }
+    try {
+      const res = await strapi.service('api::smtp.smtp').setPassword(password.trim());
+      strapi.log.info(`smtp: parola ${res.configured ? 'actualizată' : 'ștearsă'} din panou.`);
+      ctx.body = { ok: true, ...res };
+    } catch (err) {
+      strapi.log.error(`smtp.setPassword: ${err.message}`);
+      ctx.body = { ok: false, error: err.message };
+    }
+  },
+
+  // Starea parolei pentru panou: configurată sau nu (+ când) — niciodată valoarea.
+  async passwordStatus(ctx) {
+    if (!isAdmin(strapi, ctx)) return ctx.unauthorized();
+    ctx.body = await strapi.service('api::smtp.smtp').passwordStatus();
+  },
+
   // Buton „Trimite e-mail de test” din CMS — trimite o probă la adresa configurată (toEmail).
   async test(ctx) {
     if (!isAdmin(strapi, ctx)) return ctx.unauthorized();

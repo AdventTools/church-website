@@ -270,9 +270,44 @@ const seedEventTemplates = require('./seed/event-templates');
 const seedHomeValues = require('./seed/home-values');
 const seedBeliefs = require('./seed/beliefs');
 
+// E-mailurile de SISTEM ale Strapi (resetare parolă, invitații de administrator) folosesc
+// ACELEAȘI setări ca formularul de contact — cele din CMS („E-mail (SMTP)"), nu o a doua
+// configurare în `config/plugins.js`. Un singur loc de administrat. Dacă setările din CMS
+// lipsesc, cade elegant înapoi pe providerul din plugins.js (env).
+function useCmsSmtpForSystemEmails(strapi) {
+  const emailPlugin = strapi.plugin('email');
+  if (!emailPlugin) return;
+  const emailService = emailPlugin.service('email');
+  const fallbackSend = emailService.send.bind(emailService);
+
+  emailService.send = async (options = {}) => {
+    try {
+      const smtp = strapi.service('api::smtp.smtp');
+      const cfg = await smtp.config();
+      if (!cfg || !cfg.host) return fallbackSend(options);
+
+      const fromAddr = cfg.fromEmail || cfg.username;
+      const from = options.from || (cfg.fromName ? `"${cfg.fromName}" <${fromAddr}>` : fromAddr);
+      return await smtp.send({
+        to: options.to,
+        from,
+        replyTo: options.replyTo || fromAddr,
+        subject: options.subject,
+        text: options.text,
+        html: options.html,
+      });
+    } catch (err) {
+      strapi.log.error(`email de sistem prin setările CMS a eșuat (${err.message}); încerc providerul din plugins.js`);
+      return fallbackSend(options);
+    }
+  };
+  strapi.log.info('E-mailurile de sistem folosesc setările SMTP din CMS.');
+}
+
 module.exports = {
   register() {},
   async bootstrap({ strapi }) {
+    useCmsSmtpForSystemEmails(strapi);
     await ensureRomanianDefault(strapi);
     await grantPublicRead(strapi);
     await configureContentRoles(strapi);

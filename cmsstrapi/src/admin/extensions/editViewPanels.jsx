@@ -14,14 +14,44 @@ import {
 // `content-manager.apis.addEditViewSidePanel([...])`. Fiecare panou întoarce `{ title, content }`
 // sau `null` când nu se aplică tipului de conținut curent.
 
-// 1) „Trimite e-mail de test" — doar pe setările „E-mail (SMTP)".
+// 1) „Trimite e-mail de test" + parola SMTP — doar pe setările „E-mail (SMTP)".
 function SmtpTestPanel() {
   const { model } = useContentManagerContext();
   const { toggleNotification } = useNotification();
-  const { post } = useFetchClient();
+  const { post, get } = useFetchClient();
   const [loading, setLoading] = useState(false);
+  const [pw, setPw] = useState('');
+  const [savingPw, setSavingPw] = useState(false);
+  const [status, setStatus] = useState(null);
 
-  if (model !== 'api::smtp.smtp') return null;
+  const isSmtp = model === 'api::smtp.smtp';
+
+  useEffect(() => {
+    if (!isSmtp) return;
+    get('/api/smtp/password-status')
+      .then((res) => setStatus(res.data))
+      .catch(() => {});
+  }, [isSmtp, get]);
+
+  if (!isSmtp) return null;
+
+  const savePassword = async () => {
+    setSavingPw(true);
+    try {
+      const { data } = await post('/api/smtp/password', { password: pw });
+      if (data && data.ok) {
+        setPw('');
+        setStatus({ configured: data.configured, source: 'cms', updatedAt: new Date().toISOString() });
+        toggleNotification({ type: 'success', message: 'Parola SMTP a fost salvată. Apasă „Trimite e-mail de test" ca s-o verifici.' });
+      } else {
+        toggleNotification({ type: 'warning', message: (data && data.error) || 'Salvarea a eșuat.' });
+      }
+    } catch (err) {
+      toggleNotification({ type: 'warning', message: 'Salvarea parolei a eșuat.' });
+    } finally {
+      setSavingPw(false);
+    }
+  };
 
   const onTest = async () => {
     setLoading(true);
@@ -40,15 +70,53 @@ function SmtpTestPanel() {
   };
 
   return {
-    title: 'Test e-mail',
+    title: 'Parolă & test e-mail',
     content: (
-      <Flex direction="column" alignItems="stretch" gap={2}>
-        <Button variant="secondary" startIcon={<Mail />} loading={loading} onClick={onTest} fullWidth>
-          Trimite e-mail de test
-        </Button>
-        <Typography variant="pi" textColor="neutral600">
-          Testează configurarea SALVATĂ, trimițând un e-mail către adresa destinatar.
-        </Typography>
+      <Flex direction="column" alignItems="stretch" gap={3}>
+        <Flex direction="column" alignItems="stretch" gap={1}>
+          <Typography variant="pi" fontWeight="bold" textColor="neutral700">
+            Parola contului de e-mail
+          </Typography>
+          <Typography variant="pi" textColor={status && status.configured ? 'success600' : 'danger600'}>
+            {status === null
+              ? '…'
+              : status.configured
+                ? `✔ Configurată${status.source === 'env' ? ' (pe server)' : ''}`
+                : '✕ Neconfigurată — e-mailurile nu vor pleca'}
+          </Typography>
+          <input
+            type="password"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            placeholder="Introdu parola nouă…"
+            autoComplete="new-password"
+            style={{
+              height: 36,
+              padding: '0 10px',
+              borderRadius: 4,
+              border: '1px solid #dcdce4',
+              fontSize: 14,
+              width: '100%',
+            }}
+          />
+          <Button variant="secondary" disabled={!pw || savingPw} loading={savingPw} onClick={savePassword} fullWidth>
+            Salvează parola
+          </Button>
+          <Typography variant="pi" textColor="neutral600">
+            Din motive de siguranță parola nu se afișează niciodată — o poți doar înlocui. Se
+            păstrează criptată și e folosită atât de formularul de contact, cât și de e-mailurile
+            trimise de panou (resetare parolă, invitații).
+          </Typography>
+        </Flex>
+
+        <Flex direction="column" alignItems="stretch" gap={2}>
+          <Button variant="secondary" startIcon={<Mail />} loading={loading} onClick={onTest} fullWidth>
+            Trimite e-mail de test
+          </Button>
+          <Typography variant="pi" textColor="neutral600">
+            Testează configurarea SALVATĂ, trimițând un e-mail către adresa destinatar.
+          </Typography>
+        </Flex>
       </Flex>
     ),
   };

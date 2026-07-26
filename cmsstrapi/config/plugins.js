@@ -1,7 +1,10 @@
 module.exports = ({ env }) => ({
-  // E-mailurile de SISTEM ale Strapi (invitații pentru administratori, resetare parolă) trec
-  // prin SMTP. Formularul de contact folosește serviciul custom `api::smtp` (setări din CMS);
-  // acesta e pentru plugin-ul de email. Parola stă doar în env (`SMTP_PASSWORD`).
+  // SMTP-ul se administrează ÎNTR-UN SINGUR LOC: panoul CMS → „E-mail (SMTP)" (inclusiv parola,
+  // care se poate doar înlocui, niciodată citi). E-mailurile de sistem ale Strapi (resetare
+  // parolă, invitații de administrator) sunt rutate către acele setări în `src/index.js`.
+  //
+  // Ce urmează rămâne DOAR ca plasă de siguranță: se folosește dacă setările din CMS lipsesc
+  // (ex. instalare nouă, înainte de prima completare a panoului).
   email: {
     config: {
       provider: 'nodemailer',
