@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-26 (2)
+- fix(security)!: rutele custom SMTP verificau doar semnătura JWT-ului de panou — nu și dacă acel cont mai există, e activ sau ce rol are. Practic orice utilizator al panoului (inclusiv un „Colaborator evenimente") putea schimba parola serverului de mail. Acum contul e încărcat din bază și validat (activ, neblocat), iar operațiunile pe parolă cer rol de **Super Admin**; trimiterea unui e-mail de test rămâne accesibilă oricărui administrator activ.
+
 ## 2026-07-26 (1)
 - feat(smtp)!: **un singur loc pentru e-mail**. Setările din CMS („E-mail (SMTP)") alimentează acum ȘI e-mailurile de sistem ale panoului (resetare parolă, invitații de administrator), nu doar formularul de contact — ruta se face în `src/index.js` peste serviciul plugin-ului de email, cu revenire elegantă la providerul din `config/plugins.js` dacă setările CMS lipsesc (instalare nouă).
 - feat(smtp): **parola se administrează din panou fără a fi vreodată vizibilă**. Panou nou în bara laterală („Parolă & test e-mail"): arată doar dacă e configurată și când a fost schimbată, permite înlocuirea, niciodată citirea. Se păstrează criptată AES-256-GCM în core-store, cu cheie derivată din `ADMIN_JWT_SECRET` — un dump de bază de date nu o dezvăluie. Nu există nicio rută care să întoarcă valoarea. (Câmpurile `type: password` din content-types nu se puteau folosi: Strapi 5 le hash-uiește bcrypt, deci sunt irecuperabile pentru autentificare SMTP — verificat experimental.)

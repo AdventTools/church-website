@@ -2,17 +2,30 @@
 
 const jwt = require('jsonwebtoken');
 
-// Verifică că cererea vine de la un admin autentificat în panou (JWT admin în header).
-function isAdmin(strapi, ctx) {
+// Identifică administratorul din JWT-ul panoului. NU e suficient să validăm semnătura: tokenul
+// poate aparține unui cont șters, dezactivat sau cu drepturi minime. Încărcăm userul și rolurile.
+async function adminUser(strapi, ctx) {
   const header = ctx.request.header.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return false;
+  if (!token) return null;
+  let payload;
   try {
-    jwt.verify(token, strapi.config.get('admin.auth.secret'));
-    return true;
+    payload = jwt.verify(token, strapi.config.get('admin.auth.secret'));
   } catch {
-    return false;
+    return null;
   }
+  if (!payload || !payload.id) return null;
+  const user = await strapi.db.query('admin::user').findOne({ where: { id: payload.id }, populate: ['roles'] });
+  if (!user || !user.isActive || user.blocked) return null;
+  return user;
+}
+
+const hasRole = (user, code) => (user.roles || []).some((r) => r.code === code);
+
+// Operațiuni sensibile (parola serverului de mail) — doar Super Admin.
+async function requireSuperAdmin(strapi, ctx) {
+  const user = await adminUser(strapi, ctx);
+  return user && hasRole(user, 'strapi-super-admin') ? user : null;
 }
 
 module.exports = {
@@ -45,7 +58,7 @@ module.exports = {
 
   // Salvează parola SMTP din panou. Nu întoarce NICIODATĂ valoarea — doar confirmarea.
   async setPassword(ctx) {
-    if (!isAdmin(strapi, ctx)) return ctx.unauthorized();
+    if (!(await requireSuperAdmin(strapi, ctx))) return ctx.forbidden('Doar Super Admin poate schimba parola de e-mail.');
     const { password } = ctx.request.body || {};
     if (password !== '' && (typeof password !== 'string' || !password.trim())) {
       return ctx.badRequest('Parolă invalidă.');
@@ -62,13 +75,13 @@ module.exports = {
 
   // Starea parolei pentru panou: configurată sau nu (+ când) — niciodată valoarea.
   async passwordStatus(ctx) {
-    if (!isAdmin(strapi, ctx)) return ctx.unauthorized();
+    if (!(await requireSuperAdmin(strapi, ctx))) return ctx.forbidden();
     ctx.body = await strapi.service('api::smtp.smtp').passwordStatus();
   },
 
   // Buton „Trimite e-mail de test” din CMS — trimite o probă la adresa configurată (toEmail).
   async test(ctx) {
-    if (!isAdmin(strapi, ctx)) return ctx.unauthorized();
+    if (!(await adminUser(strapi, ctx))) return ctx.unauthorized();
 
     const svc = strapi.service('api::smtp.smtp');
     try {
