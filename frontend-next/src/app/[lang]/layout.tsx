@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode, CSSProperties } from 'react';
-import { Source_Sans_3 } from 'next/font/google';
+import { Noto_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import './globals.scss';
 import Header from '@/components/Header';
@@ -8,13 +8,14 @@ import Footer from '@/components/Footer';
 import AnalyticsConsent from '@/components/AnalyticsConsent';
 import JsonLd from '@/components/JsonLd';
 import { getChurchInfo, getStyle, getUnderConstruction, getContact, getPrograms } from '@/lib/strapi';
-import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, absoluteUrl } from '@/lib/seo';
+import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, absoluteUrl, DEFAULT_OG_IMAGE, OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT } from '@/lib/seo';
 import { churchJsonLd, websiteJsonLd } from '@/lib/jsonld';
 import { site } from '@/config/site';
 import { t, HTML_LANG, OG_LOCALE, isLocale, localePath, INTL_TAG } from '@/lib/i18n';
 import type { Locale } from '@/lib/types';
 
-const font = Source_Sans_3({ subsets: ['latin', 'latin-ext'], display: 'swap', variable: '--font-body' });
+// Noto Sans — fontul recomandat de ghidul de identitate al bisericii pentru textul de pagină.
+const font = Noto_Sans({ subsets: ['latin', 'latin-ext'], display: 'swap', variable: '--font-body' });
 
 const FALLBACK_STYLE = {
   primaryColor: site.colors.primary,
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const [info, underConstruction] = await Promise.all([getChurchInfo(locale), getUnderConstruction()]);
   const title = info?.tabTitle || info?.churchName || SITE_NAME;
   const description = info?.description || DEFAULT_DESCRIPTION;
-  const ogImage = absoluteUrl('/icon.png');
+  const ogImage = absoluteUrl(DEFAULT_OG_IMAGE);
   const home = localePath(locale, '/');
   return {
     metadataBase: new URL(SITE_URL),
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       url: absoluteUrl(home),
       title,
       description,
-      images: [{ url: ogImage }],
+      images: [{ url: ogImage, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT }],
     },
     twitter: { card: 'summary_large_image', title, description, images: [ogImage] },
     icons: {

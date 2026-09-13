@@ -1,4 +1,8 @@
 module.exports = ({ env }) => ({
+  // Swagger UI publica harta completă a API-ului la /documentation, fără autentificare.
+  // Pentru dezvoltare se poate reactiva cu ENABLE_API_DOCS=true în .env.
+  documentation: { enabled: env.bool('ENABLE_API_DOCS', false) },
+
   // SMTP-ul se administrează ÎNTR-UN SINGUR LOC: panoul CMS → „E-mail (SMTP)" (inclusiv parola,
   // care se poate doar înlocui, niciodată citi). E-mailurile de sistem ale Strapi (resetare
   // parolă, invitații de administrator) sunt rutate către acele setări în `src/index.js`.

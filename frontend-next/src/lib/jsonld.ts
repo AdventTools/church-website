@@ -1,5 +1,5 @@
 import type { ChurchInfo, Contact, Program, ChurchEvent } from './types';
-import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, GEO, STREET, LOCALITY, absoluteUrl } from './seo';
+import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, GEO, STREET, LOCALITY, absoluteUrl, DEFAULT_OG_IMAGE, LOGO_IMAGE } from './seo';
 import { site, siteSlogan } from '@/config/site';
 
 const clean = (s: string) => (s || '').replace(/\s+/g, ' ').trim();
@@ -45,8 +45,8 @@ export function churchJsonLd(info: ChurchInfo | null, contact: Contact | null, p
     url: SITE_URL,
     description: info?.description || DEFAULT_DESCRIPTION,
     slogan: siteSlogan(locale),
-    logo: absoluteUrl(info?.nameLogoUrl || '/icon.png'),
-    image: absoluteUrl('/icon.png'),
+    logo: absoluteUrl(LOGO_IMAGE),
+    image: absoluteUrl(DEFAULT_OG_IMAGE),
     address: POSTAL,
     geo: { '@type': 'GeoCoordinates', latitude: GEO.lat, longitude: GEO.lng },
     hasMap: info?.locationMapLink || undefined,

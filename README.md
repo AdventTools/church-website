@@ -3,8 +3,8 @@
 # Site de biserică — un stack bilingv Next.js + Strapi
 
 Un stack complet, gata de producție, **bilingv (RO/EN)** pentru site-ul unei biserici locale:
-un front end rapid, optimizat SEO/AEO, pe [Next.js 15](https://nextjs.org), alimentat integral
-de un CMS [Strapi 4](https://strapi.io) self-hosted — astfel încât editori fără cunoștințe tehnice
+un front end rapid, optimizat SEO/AEO, pe [Next.js 16](https://nextjs.org), alimentat integral
+de un CMS [Strapi 5](https://strapi.io) self-hosted — astfel încât editori fără cunoștințe tehnice
 gestionează tot conținutul dintr-un panou de administrare prietenos.
 
 Construit pentru și rulând în producție la **[adventistcluj.ro](https://adventistcluj.ro)**
@@ -40,7 +40,8 @@ singur fișier de configurare pentru rebranding.
 - **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar
   după accept.
 - **Administrare prietenoasă** — brandul bisericii, etichete în română + text de ajutor, grupare
-  logică, coloană de limbă compactă.
+  logică, panouri laterale în editor (test SMTP, avertisment de eveniment duplicat, „Aplică un
+  șablon") și panou utilizabil de pe telefon.
 
 ---
 
@@ -48,8 +49,8 @@ singur fișier de configurare pentru rebranding.
 
 | Nivel     | Tehnologie |
 |-----------|------------|
-| Front end | Next.js 15 (App Router, React 19), TypeScript, module SCSS |
-| CMS       | Strapi 4.26, MySQL/MariaDB, plugin i18n |
+| Front end | Next.js 16 (App Router, React 19), TypeScript, module SCSS |
+| CMS       | Strapi 5.51 (i18n în nucleu), MySQL/MariaDB |
 | Rulare    | Node.js, self-hosted în spatele nginx + PM2 |
 | E-mail    | Nodemailer (SMTP), proxat prin Strapi |
 
@@ -61,10 +62,10 @@ Browser
    ▼
 nginx (TLS, reverse proxy)
    │
-   ├─────────────► Next.js 15  (frontend-next)  ── SSR/SSG, revalidare ISR
+   ├─────────────► Next.js 16  (frontend-next)  ── SSR/SSG, revalidare ISR
    │                     │  fetch server-side
    │                     ▼
-   └─────────────► Strapi 4   (cmsstrapi)  ── API REST + panou de administrare
+   └─────────────► Strapi 5   (cmsstrapi)  ── API REST + panou de administrare
                          │
                          ▼
                    MySQL / MariaDB
@@ -78,16 +79,22 @@ contact e proxat prin Strapi, așa că datele SMTP nu ajung niciodată la client
 ## Structura proiectului
 
 ```
-frontend-next/      front end Next.js 15
+frontend-next/      front end Next.js 16
   src/config/site.ts   ← configurarea unică de identitate a bisericii (editează pentru rebrand)
   src/app/             pagini App Router ([lang]/…), sitemap, robots, manifest
+  src/app/api/         rute proxy (formular de contact, detecție live YouTube)
+  src/proxy.ts         rutarea bilingvă RO/EN
   src/lib/             stratul de date Strapi, helperi SEO/JSON-LD, dicționarul i18n
   src/components/      componente UI
+  next.config.ts       configurare Next.js
   .env.example         șablon de variabile de mediu pentru front end
-cmsstrapi/          CMS Strapi 4
+cmsstrapi/          CMS Strapi 5
   src/api/             tipuri de conținut (event, project, article, smtp, …)
   src/admin/           personalizări ale panoului (branding, extensii)
+  src/components/      componente de conținut reutilizabile
   src/index.js         bootstrap idempotent (roluri, permisiuni, date de seed)
+  src/admin-views.js   etichete + grupare + ascundere de câmpuri în panou
+  src/delegate-roles.js roluri delegate (colaborator eveniment, responsabil proiect)
   src/seed/            conținut de exemplu (o biserică îl suprascrie din admin)
   config/              server / bază de date / plugin-uri / middlewares
   .env.example         șablon de variabile de mediu pentru CMS
@@ -97,8 +104,9 @@ cmsstrapi/          CMS Strapi 4
 
 ## Cerințe
 
-- **Node.js** 18–20 și **Yarn**
-- **MySQL 8** sau **MariaDB 10.5+**
+- **Node.js 22 LTS** (Next.js 16 cere minimum 20.9; Strapi 5 e suportat oficial doar pe Node 22/24/26). Producția rulează Node 22.23.1.
+- **npm** pentru `frontend-next` (`package-lock.json`) și **Yarn** pentru `cmsstrapi` (`yarn.lock`)
+- **MySQL 8.0+** sau **MariaDB 10.3+** (minimul documentat de Strapi 5; recomandat MariaDB 11.4; producția rulează 10.11)
 
 ---
 
@@ -117,13 +125,15 @@ Generează secretele necesare (`APP_KEYS`, `*_SALT`, `*_SECRET`) cu `openssl ran
 La prima pornire, bootstrap-ul populează conținut de exemplu și configurează rolurile/permisiunile.
 Creează-ți contul de admin, apoi editează conținutul ca să se potrivească bisericii tale.
 
+Portul vine din `PORT` în `.env` (exemplul îl setează pe 1337). Fără el, Strapi încearcă portul 80.
+
 ### 2. Front end (Next.js)
 
 ```bash
 cd frontend-next
 cp .env.example .env.local     # setează STRAPI_URL + NEXT_PUBLIC_SITE_URL
-yarn install
-yarn dev                       # http://localhost:3000
+npm ci
+npm run dev                    # http://localhost:3000
 ```
 
 ---
@@ -150,7 +160,7 @@ rezervă (fallback) când câmpul corespunzător din CMS e gol.
 
 ### Listă pentru rebranding
 
-- [ ] `cp .env.example .env` în **ambele** aplicații și completează valorile reale
+- [ ] `cp .env.example .env` în `cmsstrapi` și `cp .env.example .env.local` în `frontend-next`, apoi completează valorile reale
 - [ ] Setează `NEXT_PUBLIC_SITE_URL` cu domeniul tău
 - [ ] Editează `frontend-next/src/config/site.ts` (nume, coordonate, adresă, linkuri, slogan)
 - [ ] Înlocuiește logo-ul/favicon-ul în `frontend-next/public/` și `cmsstrapi/src/admin/extensions/`
@@ -173,19 +183,20 @@ cd cmsstrapi && yarn install && NODE_ENV=production yarn build
 pm2 start "yarn start" --name church-strapi
 
 # Front end
-cd frontend-next && yarn install && yarn build
-pm2 start "yarn start" --name church-web
+cd frontend-next && npm ci && npm run build
+pm2 start ./node_modules/next/dist/bin/next --name church-web -- start -H 127.0.0.1 -p 3000
 ```
 
 nginx proxează domeniul public către portul Next.js și un subdomeniu `cms.` către Strapi.
-Merge pe orice host Node (un VPS, sau platforme precum Vercel pentru front end + un Strapi găzduit).
+Merge pe orice host Node (un VPS).
 
 ---
 
 ## Contribuții
 
-Issue-urile și pull request-urile sunt binevenite. Codul e în engleză; mesajele de commit folosesc
-convenția `feat:` / `fix:` / `chore:` / `refactor:` / `docs:`.
+Issue-urile și pull request-urile sunt binevenite. Identificatorii sunt în engleză; comentariile
+sunt în mare parte în română — ambele sunt acceptate. Mesajele de commit folosesc convenția
+`feat:` / `fix:` / `chore:` / `refactor:` / `docs:`.
 
 ---
 
@@ -193,10 +204,14 @@ convenția `feat:` / `fix:` / `chore:` / `refactor:` / `docs:`.
 
 Proiectul are două capitole. Între **2020 și 2025**, o echipă mică a construit și a întreținut
 site-ul original al bisericii — o aplicație React + Express + Strapi pe Azure. În **2026** a fost
-reconstruit de la zero în stack-ul actual, self-hosted, Next.js 15 + Strapi 4; fiecare linie de cod
+reconstruit de la zero în stack-ul actual, self-hosted, Next.js 16 + Strapi 5; fiecare linie de cod
 din acest repository aparține acelui rebuild. Creditele de mai jos reflectă istoricul git la momentul
 publicării open-source (551 de commituri, nov. 2020 – iul. 2026), ponderate după codul scris efectiv
 de fiecare — lăsând deoparte codul adus gata făcut (framework-uri, dependințe, fișiere generate).
+
+Istoricul git complet (2020–2026) nu este publicat în acest repository — istoricul vizibil aici
+începe de la momentul open-source-ării, cu un singur autor. Cifrele de mai jos provin din
+repository-ul privat original.
 
 **Toma Becea** — fondator și dezvoltator principal, de departe cel mai mare contribuitor (~359 de
 commituri pe parcursul a peste patru ani). A pornit proiectul și l-a dus aproape de unul singur:
@@ -212,8 +227,8 @@ evenimente de pe prima pagină, funcționalitatea de program și paginile Despre
 împreună cu o bună parte din tipurile de conținut Strapi.
 
 **Samy Balasa** — arhitect și unic dezvoltator al stack-ului actual (~51 de commituri). A reconstruit
-site-ul ca aplicația din acest repository: întregul front end Next.js 15 (strat de date Strapi tipizat,
-SSR/SSG și fiecare pagină), CMS-ul Strapi 4 self-hosted cu întregul model de conținut al bisericii,
+site-ul ca aplicația din acest repository: întregul front end Next.js 16 (strat de date Strapi tipizat,
+SSR/SSG și fiecare pagină), CMS-ul Strapi 5 self-hosted cu întregul model de conținut al bisericii,
 sistemul bilingv RO/EN cu fallback per element, stratul SEO/AEO (JSON-LD, canonical, sitemap),
 subsistemul de evenimente (șabloane refolosibile, roluri de editor, logica de arhivă și redirecturi
 pe slug curat), modulele de blog, galerie și muzică, plus formularul de contact cu hardening SMTP și

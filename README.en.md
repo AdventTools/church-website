@@ -3,8 +3,8 @@
 # Church Website — a bilingual Next.js + Strapi stack
 
 A production-ready, **bilingual (RO/EN)** website stack for a local church: a fast,
-SEO/AEO-optimized [Next.js 15](https://nextjs.org) front end driven entirely by a
-self-hosted [Strapi 4](https://strapi.io) CMS, so non-technical editors manage all
+SEO/AEO-optimized [Next.js 16](https://nextjs.org) front end driven entirely by a
+self-hosted [Strapi 5](https://strapi.io) CMS, so non-technical editors manage all
 content from a friendly admin panel.
 
 Built for and running in production at **[adventistcluj.ro](https://adventistcluj.ro)**
@@ -38,7 +38,8 @@ config file to rebrand.
   only on the server, never in the CMS/DB/API/browser.
 - **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
 - **Friendly admin** — church branding, Romanian field labels + help text, logical grouping,
-  compact locale column.
+  edit-view side panels (SMTP test, duplicate-event warning, "Apply a template") and a
+  usable mobile admin.
 
 ---
 
@@ -46,8 +47,8 @@ config file to rebrand.
 
 | Layer     | Technology |
 |-----------|------------|
-| Front end | Next.js 15 (App Router, React 19), TypeScript, SCSS modules |
-| CMS       | Strapi 4.26, MySQL/MariaDB, i18n plugin |
+| Front end | Next.js 16 (App Router, React 19), TypeScript, SCSS modules |
+| CMS       | Strapi 5.51 (i18n in core), MySQL/MariaDB |
 | Runtime   | Node.js, self-hosted behind nginx + PM2 |
 | Email     | Nodemailer (SMTP), proxied through Strapi |
 
@@ -59,10 +60,10 @@ Browser
    ▼
 nginx (TLS, reverse proxy)
    │
-   ├─────────────► Next.js 15  (frontend-next)  ── SSR/SSG, ISR revalidation
+   ├─────────────► Next.js 16  (frontend-next)  ── SSR/SSG, ISR revalidation
    │                     │  server-side fetch
    │                     ▼
-   └─────────────► Strapi 4   (cmsstrapi)  ── REST API + admin panel
+   └─────────────► Strapi 5   (cmsstrapi)  ── REST API + admin panel
                          │
                          ▼
                    MySQL / MariaDB
@@ -76,16 +77,22 @@ the contact form is proxied through Strapi so SMTP credentials never reach the c
 ## Repository structure
 
 ```
-frontend-next/      Next.js 15 front end
+frontend-next/      Next.js 16 front end
   src/config/site.ts   ← single church-identity config (edit to rebrand)
   src/app/             App Router pages ([lang]/…), sitemap, robots, manifest
+  src/app/api/         proxy routes (contact form, YouTube live detection)
+  src/proxy.ts         bilingual RO/EN routing
   src/lib/             Strapi data layer, SEO/JSON-LD helpers, i18n dictionary
   src/components/      UI components
+  next.config.ts       Next.js configuration
   .env.example         front-end environment template
-cmsstrapi/          Strapi 4 CMS
+cmsstrapi/          Strapi 5 CMS
   src/api/             content types (event, project, article, smtp, …)
   src/admin/           admin panel customizations (branding, extensions)
+  src/components/      reusable content components
   src/index.js         idempotent bootstrap (roles, permissions, seed data)
+  src/admin-views.js   admin field labels, grouping and hiding
+  src/delegate-roles.js delegated roles (event collaborator, project lead)
   src/seed/            example seed content (a church overwrites it from the admin)
   config/              server / database / plugins / middlewares
   .env.example         CMS environment template
@@ -95,8 +102,9 @@ cmsstrapi/          Strapi 4 CMS
 
 ## Prerequisites
 
-- **Node.js** 18–20 and **Yarn**
-- **MySQL 8** or **MariaDB 10.5+**
+- **Node.js 22 LTS** (Next.js 16 requires at least 20.9; Strapi 5 is officially supported only on Node 22/24/26). Production runs Node 22.23.1.
+- **npm** for `frontend-next` (`package-lock.json`) and **Yarn** for `cmsstrapi` (`yarn.lock`)
+- **MySQL 8.0+** or **MariaDB 10.3+** (Strapi 5's documented minimum; MariaDB 11.4 recommended; production runs 10.11)
 
 ---
 
@@ -115,13 +123,15 @@ Generate the required secrets (`APP_KEYS`, `*_SALT`, `*_SECRET`) with `openssl r
 On first boot the bootstrap seeds example content and configures roles/permissions.
 Create your admin account, then edit the content to match your church.
 
+The port comes from `PORT` in `.env` (the example sets it to 1337). Without it, Strapi tries port 80.
+
 ### 2. Front end (Next.js)
 
 ```bash
 cd frontend-next
 cp .env.example .env.local     # set STRAPI_URL + NEXT_PUBLIC_SITE_URL
-yarn install
-yarn dev                       # http://localhost:3000
+npm ci
+npm run dev                    # http://localhost:3000
 ```
 
 ---
@@ -147,7 +157,7 @@ is empty.
 
 ### Rebrand checklist
 
-- [ ] `cp .env.example .env` in **both** apps and fill in real values
+- [ ] `cp .env.example .env` in `cmsstrapi` and `cp .env.example .env.local` in `frontend-next`, then fill in real values
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to your domain
 - [ ] Edit `frontend-next/src/config/site.ts` (name, coordinates, address, links, slogan)
 - [ ] Replace logo/favicon assets in `frontend-next/public/` and `cmsstrapi/src/admin/extensions/`
@@ -170,19 +180,20 @@ cd cmsstrapi && yarn install && NODE_ENV=production yarn build
 pm2 start "yarn start" --name church-strapi
 
 # Front end
-cd frontend-next && yarn install && yarn build
-pm2 start "yarn start" --name church-web
+cd frontend-next && npm ci && npm run build
+pm2 start ./node_modules/next/dist/bin/next --name church-web -- start -H 127.0.0.1 -p 3000
 ```
 
 nginx proxies your public domain to the Next.js port and a `cms.` subdomain to Strapi.
-Any Node host works (a VPS, or platforms like Vercel for the front end + a managed Strapi).
+Any Node host works (a VPS).
 
 ---
 
 ## Contributing
 
-Issues and pull requests are welcome. Code is in English; commit messages use the
-`feat:` / `fix:` / `chore:` / `refactor:` / `docs:` convention.
+Issues and pull requests are welcome. Identifiers are in English; comments are mostly in
+Romanian — both are accepted. Commit messages use the `feat:` / `fix:` / `chore:` / `refactor:` /
+`docs:` convention.
 
 ---
 
@@ -190,10 +201,14 @@ Issues and pull requests are welcome. Code is in English; commit messages use th
 
 This project has two chapters. From **2020 to 2025** a small team built and ran the original
 church website — a React + Express + Strapi application on Azure. In **2026** it was rebuilt from
-the ground up into the current self-hosted Next.js 15 + Strapi 4 stack; every line of code in
+the ground up into the current self-hosted Next.js 16 + Strapi 5 stack; every line of code in
 this repository belongs to that rebuild. The credits below reflect the git history at the time
 of open-sourcing (551 commits, Nov 2020 – Jul 2026), weighted by the code each person actually
 wrote — setting aside brought-in framework code, dependencies and generated files.
+
+The full git history (2020-2026) is not published in this repository — the history visible here
+starts at the point of open-sourcing, with a single author. The figures below come from the
+original private repository.
 
 **Toma Becea** — founder and lead developer, and by far the largest contributor (~359 commits
 over more than four years). He started the project and carried it almost single-handedly: the
@@ -209,8 +224,8 @@ home-page event carousel, the program/schedule feature, and the About, gallery a
 pages, along with a good deal of the Strapi content types.
 
 **Samy Balasa** — architect and sole developer of the current stack (~51 commits). He rebuilt
-the site as the application in this repository: the complete Next.js 15 front end (typed Strapi
-data layer, SSR/SSG, and every page), the self-hosted Strapi 4 CMS and its full church content
+the site as the application in this repository: the complete Next.js 16 front end (typed Strapi
+data layer, SSR/SSG, and every page), the self-hosted Strapi 5 CMS and its full church content
 model, the bilingual RO/EN system with per-item fallback, the SEO/AEO layer (JSON-LD, canonical,
 sitemap), the events subsystem (reusable templates, editor roles, archive logic and clean-slug
 redirects), the blog, gallery and music modules, and the contact form with SMTP hardening and

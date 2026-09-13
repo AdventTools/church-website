@@ -1,5 +1,21 @@
 # Changelog
 
+> Scris în română.
+
+## 2026-09-13
+- feat(brand): **simbolul bisericii devine vizibil**. Până acum nu apărea nicăieri în pagină — doar în favicon și în datele structurate. Header-ul îl afișează acum lângă numele bisericii (`AdventistSymbol.tsx`), preluat nemodificat din pachetul oficial al Conferinței Generale; conturul include marca ®. O singură culoare solidă, cum cere ghidul: alb peste hero, culoarea primară după derulare.
+- feat(brand): marca ™ după numele bisericii în header, obligatorie oriunde numele e folosit ca siglă text. Sigla completă (simbol + nume + ™ + banda „Speranța Cluj-Napoca") există acum ca vector, în `public/logo.svg`, și alimentează `logo`-ul din JSON-LD; varianta oficială nemodificată stă alături, în `public/logo-adventist-ro.svg`.
+- feat(brand): fontul de pagină trece pe **Noto Sans**, cel recomandat de ghidul de identitate. (Advent Sans e fontul siglei, nu al textului, și are o singură greutate.)
+- fix(brand): `favicon.svg` era un PNG de 512px împachetat într-un `<svg>` — 143 KB, fără avantajele niciunui format. Înlocuit cu simbolul oficial vectorial, 2,7 KB. Iconițele derivate (`favicon.ico`, `apple-touch-icon`, cele două de manifest) regenerate din același vector, cu zona sigură respectată pentru iconițele maskable.
+- fix(seo)!: **fiecare pagină declara ca imagine de partajare `/icon.png`, fișier care nu a existat niciodată** (404). Orice link către site dat pe WhatsApp, Facebook sau LinkedIn apărea fără imagine. Adăugat `public/og-image.png` (1200×630, sigla completă pe fundal alb) plus `width`/`height` în metadate; paginile de eveniment, proiect și articol folosesc în continuare poza proprie.
+- fix(security): limita formularului de contact (5 mesaje / 10 minute) lua IP-ul din `x-forwarded-for`, antet pe care **clientul îl scrie** — deci se ocolea trimițând alt IP la fiecare cerere. Sursa devine `x-real-ip`, pus de nginx din adresa conexiunii, cu rezerva pe ultima poziție din `x-forwarded-for`, cea adăugată de proxy.
+- fix(security): dacă Redis cădea, limitarea **dispărea complet și tăcut** (`return true` pe eroare). Acum se trece pe un contor în memoria procesului: mai slab, dar limita nu se mai poate dezactiva doborând Redis.
+- fix(security): limite de lungime pe câmpurile formularului (nume 100, e-mail 254, telefon 30, mesaj 5000). Până acum plafonul venea accidental de la nginx, la 1 MB.
+- fix(security): CORS-ul CMS-ului reflecta orice origine cu `Allow-Credentials: true`. Restrâns la panoul propriu plus site, configurabil din `CORS_ORIGINS`.
+- fix(security): Swagger UI publica harta completă a API-ului la `/documentation`, fără autentificare. Dezactivat; se reactivează cu `ENABLE_API_DOCS=true` pentru dezvoltare.
+- chore(cleanup): șterse siglele șablon Vercel/Next din `public/` (servite public în fiecare clonă a repo-ului), `page.module.css` (fișier mort), `nodemailer` + tipurile lui din front end (zero importuri), pachetul `mysql` din CMS (relicvă Strapi 4 — `mysql2`, driverul real, rămâne) și ultimele trei artefacte Docker scăpate la curățenia din iulie.
+- docs: documentația publică descria un stack care nu mai există — Next.js 15 și Strapi 4, deși codul migrase pe 16.2 și 5.51. Corectate versiunile peste tot, cerința de Node (22 LTS), managerul de pachete pe fiecare aplicație (npm la front end, yarn la CMS), minimul de bază de date, comenzile PM2 cu port fixat, structura de directoare și nota despre limba comentariilor. Cele două README-uri șablon (`create-next-app`, Strapi 4) înlocuite cu trimiteri scurte. Adăugat `.github/SECURITY.md`.
+
 ## 2026-07-26 (2)
 - fix(security)!: rutele custom SMTP verificau doar semnătura JWT-ului de panou — nu și dacă acel cont mai există, e activ sau ce rol are. Practic orice utilizator al panoului (inclusiv un „Colaborator evenimente") putea schimba parola serverului de mail. Acum contul e încărcat din bază și validat (activ, neblocat), iar operațiunile pe parolă cer rol de **Super Admin**; trimiterea unui e-mail de test rămâne accesibilă oricărui administrator activ.
 

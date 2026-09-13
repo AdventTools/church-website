@@ -10,6 +10,7 @@ import { site } from '@/config/site';
 import LiveButton from './LiveButton';
 import LanguageSwitcher from './LanguageSwitcher';
 import { YoutubeIcon, FacebookIcon, InstagramIcon } from './BrandIcons';
+import AdventistSymbol from './AdventistSymbol';
 import styles from './Header.module.scss';
 
 export type HeaderUtility = { serviceLine?: string; phone?: string };
@@ -175,8 +176,11 @@ export default function Header({
         <div className={styles.mainRow}>
           <div className={`container ${styles.inner}`}>
             <Link href={localePath(locale, '/')} className={styles.brand} aria-label={`${dict.header.homeAria} — ${logoAlt}`}>
-              <span className={styles.brandName}>{site.brand.line1}</span>
-              <span className={styles.brandPill}>{site.brand.line2}</span>
+              <AdventistSymbol className={styles.brandMark} />
+              <span className={styles.brandText}>
+                <span className={styles.brandName}>{site.brand.line1}</span>
+                <span className={styles.brandPill}>{site.brand.line2}</span>
+              </span>
             </Link>
 
             <nav className={styles.nav} aria-label={dict.header.navMain} ref={navRef}>

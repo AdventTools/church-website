@@ -15,7 +15,6 @@
     "@strapi/plugin-users-permissions": "5.51.0",
     "@strapi/provider-email-nodemailer": "5.51.0",
     "@strapi/strapi": "5.51.0",
-    "mysql": "2.18.1",
     "mysql2": "^3.23.0",
     "nodemailer": "^6",
     "react": "^18.0.0",
@@ -30,7 +29,7 @@
     "uuid": "46c768db-7e0f-4eb4-a8b0-bacf54260eca"
   },
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
+    "node": ">=22.0.0 <=26.x.x",
     "npm": ">=6.0.0"
   },
   "license": "MIT"

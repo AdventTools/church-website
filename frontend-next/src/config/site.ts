@@ -31,8 +31,9 @@ export const site = {
       'Worship service takes place on Saturdays. Schedule, events and live streams.',
   },
 
-  // Visible brand text in the header (two lines).
-  brand: { line1: 'Biserica Adventistă', line2: 'Speranța · Cluj-Napoca' },
+  // Visible brand text in the header (two lines). The ™ after the church name is required by the
+  // denominational identity guidelines wherever the name is used as a wordmark.
+  brand: { line1: 'Biserica Adventistă™', line2: 'Speranța · Cluj-Napoca' },
 
   // Motto / slogan (RO / EN).
   slogan: { ro: 'Trăiește frumos și curat', en: 'Live beautifully and purely' },

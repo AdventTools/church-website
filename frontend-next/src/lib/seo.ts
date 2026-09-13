@@ -17,6 +17,12 @@ export function absoluteUrl(path = ''): string {
   return path.startsWith('http') ? path : `${SITE_URL}${path}`;
 }
 
+// Cardul folosit la partajare când pagina nu are imagine proprie, și sigla pentru datele structurate.
+export const DEFAULT_OG_IMAGE = '/og-image.png';
+export const OG_IMAGE_WIDTH = 1200;
+export const OG_IMAGE_HEIGHT = 630;
+export const LOGO_IMAGE = '/logo.svg';
+
 type PageMetaInput = {
   locale?: Locale;
   title?: string;
@@ -46,7 +52,8 @@ export function pageMetadata({
     en: absoluteUrl(localePath('en', path)),
     'x-default': absoluteUrl(path || '/'),
   };
-  const img = absoluteUrl(image || '/icon.png');
+  const img = absoluteUrl(image || DEFAULT_OG_IMAGE);
+  const ownImage = Boolean(image);
   return {
     title,
     description,
@@ -59,7 +66,7 @@ export function pageMetadata({
       siteName: siteName(locale),
       locale: OG_LOCALE[locale],
       alternateLocale: OG_LOCALE[locale === 'en' ? 'ro' : 'en'],
-      images: [{ url: img }],
+      images: [ownImage ? { url: img } : { url: img, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT }],
     },
     twitter: { card: 'summary_large_image', title, description, images: [img] },
     ...(noindex ? { robots: { index: false, follow: false } } : {}),

@@ -13,8 +13,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Trimiterea de e-mail nu este configurată.' }, { status: 503 });
   }
 
-  // Rate-limit per IP (5 cereri / 10 min) — nginx pune IP-ul real în x-forwarded-for.
-  const ip = (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'unknown';
+  // Rate-limit per IP (5 cereri / 10 min). Sursa e x-real-ip, pe care îl scrie nginx din adresa
+  // conexiunii; x-forwarded-for începe cu ce trimite clientul, deci prima poziție e falsificabilă.
+  // Rezerva e ultima poziție din x-forwarded-for, cea adăugată de proxy.
+  const forwarded = (req.headers.get('x-forwarded-for') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+  const ip = req.headers.get('x-real-ip')?.trim() || forwarded[forwarded.length - 1] || 'unknown';
   if (!(await rateLimit(`email:${ip}`, 5, 600))) {
     return NextResponse.json({ error: 'Prea multe încercări. Încearcă din nou mai târziu.' }, { status: 429 });
   }
@@ -38,6 +41,12 @@ export async function POST(req: Request) {
 
   if (!firstName || !lastName || !email || !text) {
     return NextResponse.json({ error: 'Câmpuri obligatorii lipsă.' }, { status: 400 });
+  }
+
+  const tooLong =
+    firstName.length > 100 || lastName.length > 100 || email.length > 254 || (phone?.length ?? 0) > 30 || text.length > 5000;
+  if (tooLong) {
+    return NextResponse.json({ error: 'Câmpuri prea lungi.' }, { status: 400 });
   }
 
   try {
