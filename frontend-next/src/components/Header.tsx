@@ -161,14 +161,15 @@ export default function Header({
                   )
                 )}
               </div>
-              {utility.phone && (
-                <div className={styles.uRight}>
+              <div className={styles.uRight}>
+                {utility.phone && (
                   <a href={`tel:${utility.phone.replace(/\s/g, '')}`} className={styles.uItem}>
                     <Phone size={14} />
                     {utility.phone}
                   </a>
-                </div>
-              )}
+                )}
+                <LanguageSwitcher locale={locale} />
+              </div>
             </div>
           </div>
         )}
@@ -241,7 +242,6 @@ export default function Header({
             </nav>
 
             <div className={styles.actions}>
-              <LanguageSwitcher locale={locale} />
               {churchInfo?.youtubeChannelName && <LiveButton isLive={isLive} locale={locale} />}
               <button
                 className={styles.burger}
@@ -289,6 +289,10 @@ export default function Header({
             ),
           )}
         </nav>
+        {/* Bara de sus se strânge la derulare, deci pe telefon selectorul de limbă trebuie și aici. */}
+        <div className={styles.mobileLang}>
+          <LanguageSwitcher locale={locale} />
+        </div>
         {churchInfo && (
           <div className={styles.mobileFoot}>
             {churchInfo.youtubeLink && (
