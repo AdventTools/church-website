@@ -21,7 +21,9 @@ export default function Footer({ churchInfo, locale }: { churchInfo: ChurchInfo 
     { href: localePath(locale, '/program'), label: dict.nav.schedule },
     { href: localePath(locale, '/evenimente'), label: dict.nav.events },
     { href: localePath(locale, '/proiecte'), label: dict.nav.projects },
+    { href: localePath(locale, '/galerie'), label: dict.nav.gallery },
     { href: localePath(locale, '/blog'), label: dict.nav.blog },
+    { href: localePath(locale, '/gandul-de-dimineata'), label: dict.nav.devotionals },
     { href: localePath(locale, '/contact'), label: dict.nav.contact },
   ];
 

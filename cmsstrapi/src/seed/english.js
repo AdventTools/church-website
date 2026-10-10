@@ -13,7 +13,7 @@ function mediaFields(model) {
     .map(([name]) => name);
 }
 
-// entityService.create acceptă id-uri pentru relații media, nu obiecte populate.
+// Serviciul de documente acceptă id-uri pentru relații media, nu obiecte populate.
 function normalizeMedia(model, body) {
   for (const f of mediaFields(model)) {
     const v = body[f];
@@ -22,23 +22,31 @@ function normalizeMedia(model, body) {
   }
 }
 
+// Câmpurile nelocalizate (media, linkuri, ore) se copiază din RO, ca versiunea EN să fie completă.
+function copyNonLocalized(model, roEntry, body) {
+  for (const [name, attr] of Object.entries(model.attributes)) {
+    if (attr.pluginOptions?.i18n?.localized !== false || name in body || roEntry[name] === undefined) continue;
+    if (attr.type === 'relation') continue;
+    body[name] = roEntry[name];
+  }
+}
+
+// În Strapi 5 o limbă nouă e o versiune a ACELUIAȘI document: `update` cu `locale: 'en'` pe
+// documentId-ul versiunii RO o creează. Legătura veche prin `localizations` (id-uri numerice,
+// Strapi 4) nu mai există și oprea pornirea pe o bază goală.
 async function addLocalization(strapi, uid, roEntry, enData) {
   if (!roEntry) return 'no-ro';
   if ((roEntry.localizations || []).some((l) => l.locale === 'en')) return 'exists';
 
-  const ctSvc = strapi.plugin('i18n').service('content-types');
-  const locSvc = strapi.plugin('i18n').service('localizations');
   const model = strapi.getModel(uid);
-
-  const body = { ...enData, locale: 'en' };
-  ctSvc.fillNonLocalizedAttributes(body, roEntry, { model: uid });
+  const body = { ...enData };
+  copyNonLocalized(model, roEntry, body);
   normalizeMedia(model, body);
-  body.localizations = [roEntry.id, ...(roEntry.localizations || []).map((l) => l.id)];
-  if (strapi.getModel(uid).options?.draftAndPublish !== false) body.publishedAt = new Date();
 
-  const created = await strapi.documents(uid).create({ data: body, populate: ['localizations'] });
-  await locSvc.syncLocalizations(created, { model });
-  return `created:${created.id}`;
+  const docs = strapi.documents(uid);
+  await docs.update({ documentId: roEntry.documentId, locale: 'en', data: body });
+  if (model.options?.draftAndPublish !== false) await docs.publish({ documentId: roEntry.documentId, locale: 'en' });
+  return `created:${roEntry.documentId}/en`;
 }
 
 async function getRoSingle(strapi, uid) {

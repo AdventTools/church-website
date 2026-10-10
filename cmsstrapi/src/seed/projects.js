@@ -202,20 +202,21 @@ module.exports = async function seedProjects(strapi) {
   // Populăm o singură dată. Dacă există DEJA proiecte, nu recreăm (altfel redenumirea unui
   // proiect ar duce la duplicat, pentru că nu s-ar mai potrivi după titlu).
   if ((await strapi.db.query(uid).count()) > 0) return;
-  const locSvc = strapi.plugin('i18n').service('localizations');
-  const model = strapi.getModel(uid);
+  const docs = strapi.documents(uid);
 
   for (const { ro, en, slug } of PROJECTS) {
     const exists = await strapi.db.query(uid).findOne({ where: { title: ro.title, locale: 'ro' } });
     if (exists) continue;
 
-    const roEntry = await strapi.documents(uid).create({ data: { ...ro, slug, locale: 'ro', publishedAt: new Date() } });
-    const enEntry = await strapi.documents(uid).create({
-      data: { ...en, slug, externalUrl: ro.externalUrl, order: ro.order, locale: 'en', publishedAt: new Date(), localizations: [roEntry.id] },
-      populate: ['localizations'],
+    // Strapi 5: EN e o limbă a aceluiași document, adăugată pe documentId-ul versiunii RO.
+    const roEntry = await docs.create({ locale: 'ro', status: 'published', data: { ...ro, slug } });
+    await docs.update({
+      documentId: roEntry.documentId,
+      locale: 'en',
+      data: { ...en, slug, externalUrl: ro.externalUrl, order: ro.order },
     });
-    await locSvc.syncLocalizations(enEntry, { model });
-    strapi.log.info(`Seed: proiect „${ro.title}" creat (ro #${roEntry.id}, en #${enEntry.id}).`);
+    await docs.publish({ documentId: roEntry.documentId, locale: 'en' });
+    strapi.log.info(`Seed: proiect „${ro.title}" creat (ro + en, ${roEntry.documentId}).`);
   }
 };
 

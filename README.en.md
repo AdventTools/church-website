@@ -31,15 +31,30 @@ config file to rebrand.
   reusable **event templates** (apply a template to pre-fill a new event), per-day duplicate
   warnings, and granular editor roles (per-project + own-events collaborators).
 - **Blog** — rich text + images from the CMS, auto-rendered with typographic styling.
-- **Gallery** — masonry layout with lightbox (zoom, swipe, keyboard).
+- **Gallery** — a `/galerie` page with two entries, photos and video. **Photo albums by topic**
+  (Baptisms, Concerts, Camps… — topics are defined in the admin, with RO + EN names), each album
+  with its own page, in justified rows that keep every photo's proportions, with a lightbox
+  (zoom, swipe, keyboard). An album can be linked to an event: the event page then shows "See the
+  photos". **YouTube videos** picked in the admin, grouped by topic, with one featured on top;
+  the player loads only on "play", from the no-cookie domain. The About page keeps 4 photos
+  that lead to the gallery. `ImageGallery` / `VideoObject` JSON-LD, sitemap with images.
 - **YouTube integration** — live banner + embedded player when the church is streaming,
   plus a recent-sermons section (via public RSS; live detection optional via the Data API).
+  The same broadcasts also appear on the gallery's Video page, below the picked videos.
+- **Morning thought** — short devotionals (verse + reflection) written in the admin, RO/EN,
+  with their own pages and a paginated archive. Optionally, **today's thought** from the public
+  Sola Scriptura feed (Romanian) appears above them and on the home page; switch it off in
+  `site.ts` (`dailyThoughts`).
 - **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives
   only on the server, never in the CMS/DB/API/browser.
 - **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
 - **Friendly admin** — church branding, Romanian field labels + help text, logical grouping,
   edit-view side panels (SMTP test, duplicate-event warning, "Apply a template") and a
   usable mobile admin.
+- **E-mail invitations** — Strapi does not e-mail a colleague you invite to the admin (it only
+  shows a link to copy). Here the link goes out automatically, through the admin's SMTP
+  settings, and **Settings → Site → Invitații** lists pending invitations with "Resend" and
+  "Copy link".
 
 ---
 
@@ -93,10 +108,23 @@ cmsstrapi/          Strapi 5 CMS
   src/index.js         idempotent bootstrap (roles, permissions, seed data)
   src/admin-views.js   admin field labels, grouping and hiding
   src/delegate-roles.js delegated roles (event collaborator, project lead)
+  src/invitations.js   automatic e-mailing of admin invitations
   src/seed/            example seed content (a church overwrites it from the admin)
+  scripts/             command-line tools (see below)
   config/              server / database / plugins / middlewares
   .env.example         CMS environment template
 ```
+
+### Scripts (from `cmsstrapi/`)
+
+| Script | What it is for |
+|---|---|
+| `node scripts/set-smtp.js --host … --port 587 --username … --password '…' --from-name '…' --from-email … --to …` | first e-mail setup from the terminal; afterwards it is changed from the admin. The password is stored encrypted, as with the admin button |
+| `node scripts/test-smtp.js [--send address@example.org]` | checks the SMTP connection and login without a browser; with `--send`, sends a test message along the password-reset path |
+| `node scripts/resend-invitation.js [--link\|--send address]` | lists pending invitations, shows a colleague's link or resends it |
+| `node scripts/generate-icons.js --logo emblem.svg --color '#rrggbb' [--wordmark logo.png] [--name '…'] [--tagline '…'] [--out dir]` | regenerates the favicons, app icons and the sharing image (Open Graph) from the church's emblem |
+
+The scripts start Strapi in the background, so they need the same `.env` and the database.
 
 ---
 
@@ -153,19 +181,21 @@ from the panel. This is where a reusing church spends most of its time.
 holding the values that are neither secret nor day-to-day content: GPS coordinates (used for
 JSON-LD and the sunset/Sabbath time), structured postal address, founding year, SEO keywords,
 denominational footer links, slogan. These are the fallbacks used when the matching CMS field
-is empty.
+is empty. Here too, `dailyThoughts` switches today's thought from Sola Scriptura on or off.
 
 ### Rebrand checklist
 
 - [ ] `cp .env.example .env` in `cmsstrapi` and `cp .env.example .env.local` in `frontend-next`, then fill in real values
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to your domain
 - [ ] Edit `frontend-next/src/config/site.ts` (name, coordinates, address, links, slogan)
-- [ ] Replace logo/favicon assets in `frontend-next/public/` and `cmsstrapi/src/admin/extensions/`
+- [ ] Replace the logo in `frontend-next/public/` and `cmsstrapi/src/admin/extensions/`, then
+      regenerate the icons and sharing image with `node scripts/generate-icons.js` (from `cmsstrapi/`)
 - [ ] In the Strapi admin, fill in **church-info**, **contact**, **style** (colors), **program**,
       and the **E-mail (SMTP)** settings (recipient address included)
 - [ ] Adjust the editorial meta/description strings in `frontend-next/src/lib/i18n.ts`
       (per-page marketing copy) and the beliefs/gallery fallback text if desired
-- [ ] Replace the seed content (events, projects, articles, beliefs) from the admin
+- [ ] Replace the seed content (events, projects, articles, beliefs) from the admin and adjust
+      the gallery topics (**Temă galerie**)
 
 ---
 

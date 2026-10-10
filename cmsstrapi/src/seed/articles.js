@@ -28,22 +28,17 @@ module.exports = async function seedArticles(strapi) {
   const uid = 'api::article.article';
   // Populăm o singură dată (rename-proof, ca la proiecte).
   if ((await strapi.db.query(uid).count()) > 0) return;
-  const locSvc = strapi.plugin('i18n').service('localizations');
-  const model = strapi.getModel(uid);
+  const docs = strapi.documents(uid);
   const today = new Date().toISOString().slice(0, 10);
 
   for (const { ro, en, slug } of ARTICLES) {
     const exists = await strapi.db.query(uid).findOne({ where: { title: ro.title, locale: 'ro' } });
     if (exists) continue;
 
-    const roEntry = await strapi.documents(uid).create({
-      data: { ...ro, slug, date: today, locale: 'ro', publishedAt: new Date() },
-    });
-    const enEntry = await strapi.documents(uid).create({
-      data: { ...en, slug, author: en.author, date: today, locale: 'en', publishedAt: new Date(), localizations: [roEntry.id] },
-      populate: ['localizations'],
-    });
-    await locSvc.syncLocalizations(enEntry, { model });
-    strapi.log.info(`Seed: articol „${ro.title}" creat (ro #${roEntry.id}, en #${enEntry.id}).`);
+    // Strapi 5: EN e o limbă a aceluiași document, adăugată pe documentId-ul versiunii RO.
+    const roEntry = await docs.create({ locale: 'ro', status: 'published', data: { ...ro, slug, date: today } });
+    await docs.update({ documentId: roEntry.documentId, locale: 'en', data: { ...en, slug, author: en.author, date: today } });
+    await docs.publish({ documentId: roEntry.documentId, locale: 'en' });
+    strapi.log.info(`Seed: articol „${ro.title}" creat (ro + en, ${roEntry.documentId}).`);
   }
 };

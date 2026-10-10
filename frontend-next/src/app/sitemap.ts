@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
-import { getAllEvents, getAllProjects, getAllArticles } from '@/lib/strapi';
+import { getAllEvents, getAllProjects, getAllArticles, getAlbums, getVideos, getDevotionals } from '@/lib/strapi';
+import { getLatestVideos } from '@/lib/youtube';
 import { detailSeg } from '@/lib/utils';
+import { site } from '@/config/site';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adventistcluj.ro';
 
@@ -95,5 +97,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   ];
 
-  return [...staticPages, ...eventPages, ...projectPages, ...articlePages];
+  // Paginile galeriei intră doar când au conținut; goale, ar fi soft-404 („încă nu e nimic").
+  const [albums, videos, channel] = await Promise.all([getAlbums('ro'), getVideos('ro'), getLatestVideos(1)]);
+  const latest = (dates: string[]) => {
+    const d = dates.filter(Boolean).sort().pop();
+    return d ? new Date(d) : undefined;
+  };
+  const galleryHubs: [string, boolean, Date | undefined][] = [
+    ['/galerie', albums.length > 0 || videos.length > 0 || channel.length > 0, latest([...albums.map((a) => a.date), ...videos.map((v) => v.date)])],
+    ['/galerie/foto', albums.length > 0, latest(albums.map((a) => a.date))],
+    ['/galerie/video', videos.length > 0 || channel.length > 0, latest(videos.map((v) => v.date))],
+  ];
+  const galleryPages: MetadataRoute.Sitemap = galleryHubs
+    .filter(([, has]) => has)
+    .flatMap(([p, , lastModified]) => {
+      const languages = { ro: `${SITE_URL}${p}`, en: `${SITE_URL}/en${p}` };
+      return [
+        { url: languages.ro, lastModified, changeFrequency: 'weekly' as const, priority: 0.6, alternates: { languages } },
+        { url: languages.en, lastModified, changeFrequency: 'weekly' as const, priority: 0.54, alternates: { languages } },
+      ];
+    });
+  // Slug-ul albumului e comun ambelor limbi, deci perechea RO↔EN are același segment.
+  const albumPages: MetadataRoute.Sitemap = albums.flatMap((a) => {
+    const languages = { ro: `${SITE_URL}/galerie/foto/${detailSeg(a)}`, en: `${SITE_URL}/en/galerie/foto/${detailSeg(a)}` };
+    const images = a.photos.slice(0, 30).map((p) => `${SITE_URL}${p.large || p.small}`);
+    return [
+      { url: languages.ro, lastModified: new Date(a.date), changeFrequency: 'yearly' as const, priority: 0.5, alternates: { languages }, images },
+      { url: languages.en, lastModified: new Date(a.date), changeFrequency: 'yearly' as const, priority: 0.45, alternates: { languages }, images },
+    ];
+  });
+
+  // Gândul de dimineață: pagina-hub are conținut dacă există devoționale sau fluxul zilnic e pornit.
+  const [roDevotionals, enDevotionals] = await Promise.all([getDevotionals('ro'), getDevotionals('en')]);
+  const devotionalHub: MetadataRoute.Sitemap =
+    roDevotionals.length > 0 || site.dailyThoughts
+      ? [
+          { url: `${SITE_URL}/gandul-de-dimineata`, changeFrequency: 'daily' as const, priority: 0.6, alternates: { languages: { ro: `${SITE_URL}/gandul-de-dimineata`, en: `${SITE_URL}/en/gandul-de-dimineata` } } },
+          ...(roDevotionals.length || enDevotionals.length
+            ? [{ url: `${SITE_URL}/en/gandul-de-dimineata`, changeFrequency: 'weekly' as const, priority: 0.5, alternates: { languages: { ro: `${SITE_URL}/gandul-de-dimineata`, en: `${SITE_URL}/en/gandul-de-dimineata` } } }]
+            : []),
+        ]
+      : [];
+  const devotionalPages: MetadataRoute.Sitemap = [
+    ...roDevotionals.map((d) => {
+      const languages: Record<string, string> = { ro: `${SITE_URL}/gandul-de-dimineata/${detailSeg(d)}` };
+      if (d.alt?.locale === 'en') languages.en = `${SITE_URL}/en/gandul-de-dimineata/${detailSeg(d.alt)}`;
+      return { url: languages.ro, lastModified: d.date ? new Date(d.date) : undefined, changeFrequency: 'yearly' as const, priority: 0.5, alternates: { languages } };
+    }),
+    ...enDevotionals
+      .filter((d) => d.locale === 'en')
+      .map((d) => {
+        const languages: Record<string, string> = { en: `${SITE_URL}/en/gandul-de-dimineata/${detailSeg(d)}` };
+        if (d.alt?.locale === 'ro') languages.ro = `${SITE_URL}/gandul-de-dimineata/${detailSeg(d.alt)}`;
+        return { url: languages.en, lastModified: d.date ? new Date(d.date) : undefined, changeFrequency: 'yearly' as const, priority: 0.45, alternates: { languages } };
+      }),
+  ];
+
+  return [...staticPages, ...eventPages, ...projectPages, ...articlePages, ...galleryPages, ...albumPages, ...devotionalHub, ...devotionalPages];
 }

@@ -1,6 +1,7 @@
-import type { ChurchInfo, Contact, Program, ChurchEvent } from './types';
+import type { ChurchInfo, Contact, Program, ChurchEvent, PhotoAlbum, GalleryVideo } from './types';
 import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, GEO, STREET, LOCALITY, absoluteUrl, DEFAULT_OG_IMAGE, LOGO_IMAGE } from './seo';
 import { site, siteSlogan } from '@/config/site';
+import { SOURCE_NAME, SOURCE_URL, type DailyThought } from './solascriptura';
 
 const clean = (s: string) => (s || '').replace(/\s+/g, ' ').trim();
 
@@ -198,6 +199,59 @@ export function eventJsonLd(event: ChurchEvent) {
     ...(cover ? { image: [absoluteUrl(cover)] } : {}),
     location: place,
     organizer: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+  };
+}
+
+// Un album: pagina e chiar galeria. Imaginile se plafonează la 30, cât ajunge ca semnal; restul
+// le găsește oricum crawlerul în pagină.
+export function imageGalleryJsonLd(album: PhotoAlbum, path: string, locale: 'ro' | 'en' = 'ro') {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    '@id': `${absoluteUrl(path)}#gallery`,
+    url: absoluteUrl(path),
+    name: album.title,
+    ...(album.description ? { description: clean(album.description) } : {}),
+    datePublished: album.date,
+    inLanguage: locale === 'en' ? 'en-GB' : 'ro-RO',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': `${SITE_URL}/#church` },
+    image: album.photos.slice(0, 30).map((p) => ({
+      '@type': 'ImageObject',
+      contentUrl: absoluteUrl(p.large || p.small),
+      caption: p.alt,
+    })),
+  };
+}
+
+// Google cere pentru un film: nume, miniatură și data încărcării; descrierea lipsă se înlocuiește
+// cu titlul, nu se inventează.
+export function videoJsonLd(v: GalleryVideo, locale: 'ro' | 'en' = 'ro') {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: v.title,
+    description: clean(v.description || v.title),
+    thumbnailUrl: [absoluteUrl(v.thumbnail)],
+    uploadDate: v.date,
+    embedUrl: `https://www.youtube.com/embed/${v.youtubeId}`,
+    inLanguage: locale === 'en' ? 'en-GB' : 'ro-RO',
+    publisher: { '@id': `${SITE_URL}/#church` },
+  };
+}
+
+// Gândul zilei preluat de la Sola Scriptura: operă a lor, cu sursa declarată, nu a bisericii.
+export function dailyThoughtJsonLd(d: DailyThought) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: `Gândul zilei, ${d.date}`,
+    ...(d.reference ? { about: d.reference } : {}),
+    text: clean([d.verse, ...d.paragraphs].join(' ')),
+    datePublished: d.date,
+    inLanguage: 'ro-RO',
+    author: { '@type': 'Organization', name: SOURCE_NAME, url: SOURCE_URL },
+    isBasedOn: d.url,
   };
 }
 

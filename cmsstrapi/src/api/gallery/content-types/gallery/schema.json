@@ -4,8 +4,8 @@
   "info": {
     "singularName": "gallery",
     "pluralName": "galleries",
-    "displayName": "Galerie foto",
-    "description": "Fotografiile din galeria de pe pagina „Despre noi”. Trage pozele în ordinea în care vrei să apară."
+    "displayName": "Poze pe „Despre noi”",
+    "description": "Câteva poze frumoase pe pagina „Despre noi”, care duc spre Galerie. Albumele stau în „Album foto”."
   },
   "options": {
     "draftAndPublish": false

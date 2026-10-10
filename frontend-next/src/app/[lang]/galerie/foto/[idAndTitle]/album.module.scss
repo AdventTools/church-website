@@ -1,0 +1,82 @@
+// Banda de brand sub meniul transparent, ca la pagina unui eveniment: titlul ramane lizibil.
+.head {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #fff;
+  padding: clamp(6.5rem, 13vw, 9rem) 0 clamp(2rem, 5vw, 3rem);
+  background: var(--primary-color);
+  background:
+    radial-gradient(120% 130% at 88% 100%, color-mix(in srgb, var(--accent-color) 22%, transparent), transparent 55%),
+    linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 78%, #000), var(--primary-color));
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  color: #fff;
+  font-weight: 600;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.topic {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.title {
+  margin: 0 0 0.75rem;
+  max-width: 24ch;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.22);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.4rem;
+  margin: 0;
+  font-weight: 600;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+}
+
+.event {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.desc {
+  max-width: 62ch;
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.05rem, 2vw, 1.18rem);
+  white-space: pre-line;
+  opacity: 0.95;
+}
+
+.photos {
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(3rem, 7vw, 5rem);
+}

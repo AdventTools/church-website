@@ -1,0 +1,109 @@
+// Albumul arata ca un teanc de poze: doua foi colorate rotite sub coperta.
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--fg);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+  &:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 6px;
+    border-radius: 18px;
+  }
+}
+
+.cover {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 0.65rem;
+}
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+// Prima culoare e rezerva pentru browserele fara `color-mix` (iOS sub 16.2).
+.sheetA {
+  background: #f3d5cc;
+  background: color-mix(in srgb, var(--primary-color) 22%, #fff);
+  transform: rotate(-3deg) translate(-4px, 3px);
+}
+.sheetB {
+  background: #d3e0f2;
+  background: color-mix(in srgb, var(--accent-color) 22%, #fff);
+  transform: rotate(2.4deg) translate(5px, 2px);
+}
+
+.top {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.45);
+
+  img {
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.card:hover {
+  .sheetA {
+    transform: rotate(-6deg) translate(-10px, 4px);
+  }
+  .sheetB {
+    transform: rotate(5deg) translate(10px, 2px);
+  }
+  .top img {
+    transform: scale(1.05);
+  }
+}
+
+.count {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--fg);
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.card:hover .title {
+  color: var(--primary-color);
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .top img {
+    transition: none;
+  }
+  .card:hover .top img {
+    transform: none;
+  }
+}

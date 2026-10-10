@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { ArrowLeft, MapPin } from 'lucide-react';
+import { ArrowLeft, Images, MapPin } from 'lucide-react';
 import { FacebookIcon } from '@/components/BrandIcons';
 import JsonLd from '@/components/JsonLd';
-import { getEventBySlug, getEventByOldSlug, getEvent, getAllEvents } from '@/lib/strapi';
-import { getFormattedPeriod, detailSeg, legacyId } from '@/lib/utils';
+import { getEventBySlug, getEventByOldSlug, getEvent, getAllEvents, getAlbumsForEvent } from '@/lib/strapi';
+import { getFormattedPeriod, detailSeg, legacyId, albumHref } from '@/lib/utils';
 import { pageMetadata, absoluteUrl } from '@/lib/seo';
 import { eventJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
 import { t, localePath, isLocale } from '@/lib/i18n';
@@ -77,6 +77,7 @@ export default async function EventDetail({ params }: { params: Promise<{ lang: 
   if (redirectTo) permanentRedirect(localePath(locale, redirectTo));
 
   const seg = detailSeg(event);
+  const albums = event.documentId ? await getAlbumsForEvent(event.documentId, locale) : [];
   const cover = event.largeImg || event.smallImg;
   const backText = locale === 'en' ? 'Back to events' : 'Înapoi la evenimente';
   const fbText = locale === 'en' ? "See the event's Facebook page" : 'Vezi pagina de Facebook a evenimentului';
@@ -143,6 +144,12 @@ export default async function EventDetail({ params }: { params: Promise<{ lang: 
       <article className={`container ${styles.article}`}>
         {event.intro && <p className={styles.intro}>{event.intro}</p>}
         {event.content && <div className={styles.content}>{event.content}</div>}
+        {albums.map((a) => (
+          <Link key={a.id} href={albumHref(a, locale)} className={`btn ${styles.album}`}>
+            <Images size={18} aria-hidden /> {dict.gallery.seePhotos}
+            {albums.length > 1 ? `: ${a.title}` : ''} ({a.photos.length})
+          </Link>
+        ))}
         {event.facebookLink && (
           <a href={event.facebookLink} target="_blank" rel="noopener noreferrer" className={styles.fb}>
             <FacebookIcon size={18} /> {fbText}

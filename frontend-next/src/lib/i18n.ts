@@ -26,7 +26,22 @@ export function isLocale(v: string): v is Locale {
 }
 
 type Dict = {
-  nav: { home: string; about: string; whoWeAre: string; beliefs: string; firstVisit: string; projects: string; blog: string; events: string; schedule: string; contact: string };
+  nav: { home: string; about: string; whoWeAre: string; beliefs: string; firstVisit: string; projects: string; blog: string; devotionals: string; events: string; gallery: string; schedule: string; contact: string };
+  devotionals: {
+    title: string;
+    meta: string;
+    intro: string;
+    readMore: string;
+    empty: string;
+    today: string;
+    previous: string;
+    source: string;
+    readAtSource: string;
+    archive: string;
+    homeCta: string;
+    back: string;
+    page: (n: number, total: number) => string;
+  };
   projects: { title: string; meta: string; learnMore: string; visitSite: string; intro: string };
   blog: { title: string; meta: string; readMore: string; by: string; empty: string; intro: string };
   header: {
@@ -66,6 +81,39 @@ type Dict = {
     beliefsMore: string;
   };
   about: { title: string; history: string; gallery: string; meta: string };
+  gallery: {
+    title: string;
+    subtitle: string;
+    intro: string;
+    meta: string;
+    photos: string;
+    videos: string;
+    photosCta: string;
+    videosCta: string;
+    recent: string;
+    album: string;
+    video: string;
+    empty: string;
+    photosMeta: string;
+    photosIntro: string;
+    videosMeta: string;
+    videosIntro: string;
+    featured: string;
+    newest: string;
+    allVideos: string;
+    channel: string;
+    channelCta: string;
+    otherAlbums: string;
+    otherVideos: string;
+    topicsNav: string;
+    back: string;
+    seeEvent: string;
+    seePhotos: string;
+    seeGallery: string;
+    play: string;
+    albumMeta: (title: string, count: string, date: string) => string;
+    count: { albums: (n: number) => string; photos: (n: number) => string; videos: (n: number) => string };
+  };
   schedule: { title: string; empty: string; sunset: string; meta: string };
   events: { title: string; upcoming: string; past: string; empty: string; readMore: string; meta: string; showMore: string; showLess: string; upcomingIntro: string; pastIntro: string };
   contact: {
@@ -105,7 +153,22 @@ type Dict = {
 
 const DICT: Record<Locale, Dict> = {
   ro: {
-    nav: { home: 'Acasă', about: 'Despre noi', whoWeAre: 'Cine suntem', beliefs: 'Ce credem', firstVisit: 'Prima ta vizită', projects: 'Proiecte', blog: 'Blog', events: 'Evenimente', schedule: 'Program', contact: 'Contact' },
+    nav: { home: 'Acasă', about: 'Despre noi', whoWeAre: 'Cine suntem', beliefs: 'Ce credem', firstVisit: 'Prima ta vizită', projects: 'Proiecte', blog: 'Blog', devotionals: 'Gândul de dimineață', events: 'Evenimente', gallery: 'Galerie', schedule: 'Program', contact: 'Contact' },
+    devotionals: {
+      title: 'Gândul de dimineață',
+      meta: 'Gândul de dimineață: un verset și un gând scurt pentru fiecare zi, plus arhiva devoționalelor bisericii.',
+      intro: 'Un gând scurt pentru începutul zilei, pornind de la un verset.',
+      readMore: 'Citește',
+      empty: 'În curând.',
+      today: 'Gândul zilei',
+      previous: 'Zilele trecute',
+      source: 'Sursa',
+      readAtSource: 'Citește pe solascriptura.ro',
+      archive: 'Devoționalele noastre',
+      homeCta: 'Citește tot gândul',
+      back: 'Înapoi la Gândul de dimineață',
+      page: (n, total) => `Pagina ${n} din ${total}`,
+    },
     projects: {
       title: 'Proiecte',
       meta: 'Proiectele Bisericii Adventiste „Speranța” din Cluj-Napoca — inițiative de sănătate, sprijin social și tineret prin care slujim comunitatea clujeană.',
@@ -158,6 +221,43 @@ const DICT: Record<Locale, Dict> = {
       beliefsMore: 'Citește mai mult',
     },
     about: { title: 'Despre noi', history: 'Istoric', gallery: 'Galerie', meta: 'Povestea și valorile Bisericii Adventiste „Speranța” din Cluj-Napoca — istoricul comunității și galerie foto.' },
+    gallery: {
+      title: 'Galerie',
+      subtitle: 'Din viața comunității',
+      intro: 'Momente din viața bisericii: servicii, botezuri, concerte, tabere și zilele obișnuite care ne adună.',
+      meta: 'Galeria foto și video a bisericii — albume pe teme și filme din viața comunității.',
+      photos: 'Fotografii',
+      videos: 'Video',
+      photosCta: 'Vezi albumele',
+      videosCta: 'Vezi filmele',
+      recent: 'Adăugate recent',
+      album: 'Album',
+      video: 'Video',
+      empty: 'Primele albume și filme apar aici în curând.',
+      photosMeta: 'Albumele foto ale bisericii, pe teme: servicii, botezuri, concerte, tabere și alte momente din viața comunității.',
+      photosIntro: 'Albumele bisericii, pe teme. Fiecare album are pozele lui, de la cel mai nou.',
+      videosMeta: 'Filme din viața bisericii: concerte, botezuri, mărturii și momente din comunitate.',
+      videosIntro: 'Filme alese din viața bisericii.',
+      featured: 'Recomandat',
+      newest: 'cel mai nou:',
+      allVideos: 'Toate filmele',
+      channel: 'Transmisiuni recente',
+      channelCta: 'Vezi canalul de YouTube',
+      otherAlbums: 'Alte albume',
+      otherVideos: 'Alte filme',
+      topicsNav: 'Teme',
+      back: 'Înapoi la albume',
+      seeEvent: 'Vezi evenimentul',
+      seePhotos: 'Vezi fotografiile',
+      seeGallery: 'Vezi toată galeria',
+      play: 'Pornește filmul',
+      albumMeta: (title, count, date) => `${title}: ${count}, ${date}.`,
+      count: {
+        albums: (n) => (n === 1 ? '1 album' : `${n} albume`),
+        photos: (n) => (n === 1 ? '1 fotografie' : n % 100 >= 20 || n % 100 === 0 ? `${n} de fotografii` : `${n} fotografii`),
+        videos: (n) => (n === 1 ? '1 film' : n % 100 >= 20 || n % 100 === 0 ? `${n} de filme` : `${n} filme`),
+      },
+    },
     schedule: { title: 'Program', empty: 'Programul va fi disponibil în curând.', sunset: 'Apusul soarelui — ora', meta: 'Programul serviciilor și întâlnirilor Bisericii Adventiste „Speranța” Cluj-Napoca. Serviciul divin are loc sâmbăta, pe Strada Moților 47.' },
     events: {
       title: 'Evenimente',
@@ -222,7 +322,22 @@ const DICT: Record<Locale, Dict> = {
     },
   },
   en: {
-    nav: { home: 'Home', about: 'About us', whoWeAre: 'Who we are', beliefs: 'What we believe', firstVisit: 'Your first visit', projects: 'Projects', blog: 'Blog', events: 'Events', schedule: 'Schedule', contact: 'Contact' },
+    nav: { home: 'Home', about: 'About us', whoWeAre: 'Who we are', beliefs: 'What we believe', firstVisit: 'Your first visit', projects: 'Projects', blog: 'Blog', devotionals: 'Morning thought', events: 'Events', gallery: 'Gallery', schedule: 'Schedule', contact: 'Contact' },
+    devotionals: {
+      title: 'Morning thought',
+      meta: 'Morning thought: a Bible verse and a short reflection for each day, plus the archive of our devotionals.',
+      intro: 'A short thought to start the day, drawn from a Bible verse.',
+      readMore: 'Read',
+      empty: 'Coming soon.',
+      today: "Today's thought",
+      previous: 'Previous days',
+      source: 'Source',
+      readAtSource: 'Read on solascriptura.ro',
+      archive: 'Our devotionals',
+      homeCta: 'Read the whole thought',
+      back: 'Back to Morning thought',
+      page: (n, total) => `Page ${n} of ${total}`,
+    },
     projects: {
       title: 'Projects',
       meta: 'The projects of the Speranța Seventh-day Adventist Church in Cluj-Napoca — health, social-care, and youth initiatives through which we serve the community of Cluj.',
@@ -275,6 +390,43 @@ const DICT: Record<Locale, Dict> = {
       beliefsMore: 'Read more',
     },
     about: { title: 'About us', history: 'Our history', gallery: 'Gallery', meta: 'The story and values of the Speranța (Hope) Seventh-day Adventist Church in Cluj-Napoca — our community history and photo gallery.' },
+    gallery: {
+      title: 'Gallery',
+      subtitle: 'From the life of our community',
+      intro: 'Moments from the life of the church: services, baptisms, concerts, camps, and the ordinary days that bring us together.',
+      meta: 'The church photo and video gallery — albums by topic and films from the life of our community.',
+      photos: 'Photos',
+      videos: 'Video',
+      photosCta: 'See the albums',
+      videosCta: 'See the videos',
+      recent: 'Recently added',
+      album: 'Album',
+      video: 'Video',
+      empty: 'The first albums and videos will appear here soon.',
+      photosMeta: 'The church photo albums, by topic: services, baptisms, concerts, camps, and other moments from community life.',
+      photosIntro: 'Our albums, by topic. Each album has its own photos, newest first.',
+      videosMeta: 'Videos from the life of the church: concerts, baptisms, testimonies, and community moments.',
+      videosIntro: 'Selected videos from the life of the church.',
+      featured: 'Featured',
+      newest: 'newest:',
+      allVideos: 'All videos',
+      channel: 'Recent broadcasts',
+      channelCta: 'Visit our YouTube channel',
+      otherAlbums: 'Other albums',
+      otherVideos: 'Other videos',
+      topicsNav: 'Topics',
+      back: 'Back to albums',
+      seeEvent: 'See the event',
+      seePhotos: 'See the photos',
+      seeGallery: 'See the whole gallery',
+      play: 'Play the video',
+      albumMeta: (title, count, date) => `${title}: ${count}, ${date}.`,
+      count: {
+        albums: (n) => (n === 1 ? '1 album' : `${n} albums`),
+        photos: (n) => (n === 1 ? '1 photo' : `${n} photos`),
+        videos: (n) => (n === 1 ? '1 video' : `${n} videos`),
+      },
+    },
     schedule: { title: 'Schedule', empty: 'The schedule will be available soon.', sunset: 'Sunset —', meta: 'The schedule of services and gatherings of the Speranța Seventh-day Adventist Church in Cluj-Napoca. Divine Service is held on Saturdays, at Moților Street 47.' },
     events: {
       title: 'Events',

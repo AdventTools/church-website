@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
 import PageHeader from '@/components/PageHeader';
 import Section from '@/components/Section';
-import Gallery from '@/components/Gallery';
 import JsonLd from '@/components/JsonLd';
+import { BLUR } from '@/lib/blur';
 import { getHistory, getGallery, getBackgroundImages } from '@/lib/strapi';
 import { pageMetadata } from '@/lib/seo';
 import { breadcrumbJsonLd, webPageJsonLd } from '@/lib/jsonld';
@@ -53,9 +55,19 @@ export default async function DesprePage({ params }: { params: Promise<{ lang: s
       )}
 
       {gallery.images.length > 0 && (
-        <Section title={dict.about.gallery} className="section--surface">
+        <Section
+          title={dict.about.gallery}
+          className="section--surface"
+          cta={{ href: localePath(locale, '/galerie'), label: dict.gallery.seeGallery }}
+        >
           {gallery.description && <p className={styles.galleryDesc}>{gallery.description}</p>}
-          <Gallery images={gallery.images} locale={locale} />
+          <div className={styles.teaser}>
+            {gallery.images.slice(0, 4).map((img) => (
+              <Link key={img.id} href={localePath(locale, '/galerie')} className={styles.teaserTile} tabIndex={-1} aria-hidden>
+                <Image src={img.large || img.small} alt="" fill sizes="(max-width: 640px) 46vw, 280px" placeholder="blur" blurDataURL={BLUR} />
+              </Link>
+            ))}
+          </div>
         </Section>
       )}
     </>

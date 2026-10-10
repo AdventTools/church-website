@@ -17,17 +17,14 @@ const EN = {
 
 module.exports = async function seedBeliefs(strapi) {
   const uid = 'api::beliefs.beliefs';
-  const locSvc = strapi.plugin('i18n').service('localizations');
-  const model = strapi.getModel(uid);
+  const docs = strapi.documents(uid);
 
   const roExisting = await strapi.db.query(uid).findOne({ where: { locale: 'ro' } });
   if (roExisting) return;
 
-  const ro = await strapi.documents(uid).create({ data: { ...RO, locale: 'ro', publishedAt: new Date() } });
-  const en = await strapi.documents(uid).create({
-    data: { ...EN, locale: 'en', publishedAt: new Date(), localizations: [ro.id] },
-    populate: ['localizations'],
-  });
-  await locSvc.syncLocalizations(en, { model });
-  strapi.log.info(`Seed: pagina „Ce credem" creată (ro #${ro.id}, en #${en.id}).`);
+  // Strapi 5: EN e o limbă a aceluiași document, adăugată pe documentId-ul versiunii RO.
+  const ro = await docs.create({ locale: 'ro', status: 'published', data: RO });
+  await docs.update({ documentId: ro.documentId, locale: 'en', data: EN });
+  await docs.publish({ documentId: ro.documentId, locale: 'en' });
+  strapi.log.info(`Seed: pagina „Ce credem" creată (ro + en, ${ro.documentId}).`);
 };

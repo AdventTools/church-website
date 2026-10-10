@@ -9,6 +9,10 @@ const PUBLIC_READ = {
   background: ['find'],
   'under-construction': ['find'],
   gallery: ['find'],
+  'gallery-page': ['find'],
+  'gallery-topic': ['find', 'findOne'],
+  'photo-album': ['find', 'findOne'],
+  video: ['find', 'findOne'],
   'first-visit': ['find'],
   beliefs: ['find'],
   event: ['find', 'findOne'],
@@ -16,6 +20,7 @@ const PUBLIC_READ = {
   program: ['find', 'findOne'],
   project: ['find', 'findOne'],
   article: ['find', 'findOne'],
+  devotional: ['find', 'findOne'],
 };
 
 async function grantPublicRead(strapi) {
@@ -180,11 +185,17 @@ async function configureContentRoles(strapi) {
       return !!(po && po.i18n && po.i18n.localized);
     };
 
+    // Relațiile spre conținut (tema sau evenimentul unui album) intră în drepturi, altfel editorul
+    // nu le poate alege; cele interne (createdBy, localizations) rămân pe dinafară.
     const fieldsFor = (uid) => {
       const out = [];
       const walk = (attributes, prefix) => {
         for (const [name, attr] of Object.entries(attributes || {})) {
-          if (!attr || attr.type === 'relation') continue;
+          if (!attr) continue;
+          if (attr.type === 'relation') {
+            if (!prefix && String(attr.target || '').startsWith('api::')) out.push(name);
+            continue;
+          }
           if (attr.type === 'component') {
             const comp = strapi.components[attr.component];
             if (comp) walk(comp.attributes, `${prefix}${name}.`);
@@ -269,6 +280,8 @@ const seedArticles = require('./seed/articles');
 const seedEventTemplates = require('./seed/event-templates');
 const seedHomeValues = require('./seed/home-values');
 const seedBeliefs = require('./seed/beliefs');
+const seedGalleryTopics = require('./seed/gallery-topics');
+const { registerInvitationEmails } = require('./invitations');
 
 // E-mailurile de SISTEM ale Strapi (resetare parolă, invitații de administrator) folosesc
 // ACELEAȘI setări ca formularul de contact — cele din CMS („E-mail (SMTP)"), nu o a doua
@@ -308,6 +321,7 @@ module.exports = {
   register() {},
   async bootstrap({ strapi }) {
     useCmsSmtpForSystemEmails(strapi);
+    registerInvitationEmails(strapi);
     await ensureRomanianDefault(strapi);
     await grantPublicRead(strapi);
     await configureContentRoles(strapi);
@@ -320,6 +334,7 @@ module.exports = {
     await seedEventTemplates(strapi);
     await seedHomeValues(strapi);
     await seedBeliefs(strapi);
+    await seedGalleryTopics(strapi);
     await configureDelegateRoles(strapi);
   },
 };

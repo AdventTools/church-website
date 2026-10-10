@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "photo_albums",
+  "info": {
+    "singularName": "photo-album",
+    "pluralName": "photo-albums",
+    "displayName": "Album foto",
+    "description": "Un album de fotografii, cu pagina lui pe site, în secțiunea temei din care face parte."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "slug": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "oldSlugs": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "date": {
+      "type": "date",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "topic": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::gallery-topic.gallery-topic"
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "photos": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event"
+    }
+  }
+}

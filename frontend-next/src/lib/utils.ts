@@ -85,6 +85,35 @@ export const detailSeg = (e: Sluggable): string => e.slug || `${e.id}-${slugify(
 export const projectHref = (e: Sluggable, locale: Locale = 'ro'): string => localePath(locale, `/proiecte/${detailSeg(e)}`);
 export const eventHref = (e: Sluggable, locale: Locale = 'ro'): string => localePath(locale, `/evenimente/${detailSeg(e)}`);
 export const articleHref = (e: Sluggable, locale: Locale = 'ro'): string => localePath(locale, `/blog/${detailSeg(e)}`);
+export const albumHref = (e: Sluggable, locale: Locale = 'ro'): string => localePath(locale, `/galerie/foto/${detailSeg(e)}`);
+export const devotionalHref = (e: Sluggable, locale: Locale = 'ro'): string => localePath(locale, `/gandul-de-dimineata/${detailSeg(e)}`);
+
+// Id-ul de 11 caractere din orice formă de link YouTube (watch, youtu.be, shorts, embed, live).
+export const youtubeId = (url: string): string => {
+  const m = (url || '').match(/(?:youtu\.be\/|[?&]v=|\/(?:shorts|embed|live)\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+};
+
+// Imaginea filmului de pe YouTube. `hqdefault` există pentru orice film (`maxresdefault` nu);
+// e 4:3 cu benzi negre sus și jos, pe care decuparea 16:9 din pagină le taie exact.
+export const youtubeThumb = (id: string): string => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+// Albumele și filmele grupate pe temă, în ordinea temelor; ce n-are temă vine la final.
+export function groupByTopic<T extends { topic: { name: string; order: number } | null }>(
+  items: T[],
+  locale: Locale = 'ro',
+): { name: string | null; slug: string; items: T[] }[] {
+  const groups = new Map<string, { name: string | null; order: number; items: T[] }>();
+  for (const it of items) {
+    const key = it.topic?.name ?? '';
+    const g = groups.get(key) ?? { name: it.topic?.name ?? null, order: it.topic?.order ?? Infinity, items: [] };
+    g.items.push(it);
+    groups.set(key, g);
+  }
+  return [...groups.values()]
+    .sort((a, b) => a.order - b.order || (a.name ?? '').localeCompare(b.name ?? '', locale))
+    .map((g) => ({ name: g.name, slug: g.name ? slugify(g.name) : locale === 'en' ? 'other' : 'alte', items: g.items }));
+}
 
 // Din segmentul de URL: dacă începe cu cifre e forma veche → întoarce id-ul (pentru redirect 301).
 export const parseEventId = (idAndTitle: string): string => idAndTitle.split('-')[0];

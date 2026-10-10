@@ -244,3 +244,81 @@
     grid-template-columns: 1fr;
   }
 }
+
+// Gândul zilei: o bandă liniștită, ca o pagină de carte. Prima culoare de fundal e rezerva pentru
+// browserele fără `color-mix`.
+.thought {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(1.75rem, 5vw, 3rem) clamp(1.25rem, 5vw, 3.25rem);
+  border-radius: 24px;
+  background: var(--surface);
+  background:
+    radial-gradient(90% 120% at 100% 0%, color-mix(in srgb, var(--second-primary-color) 14%, transparent), transparent 60%),
+    radial-gradient(80% 120% at 0% 100%, color-mix(in srgb, var(--accent-color) 10%, transparent), transparent 60%),
+    var(--surface);
+}
+
+.thoughtMark {
+  position: absolute;
+  top: clamp(-1.1rem, -2vw, -0.8rem);
+  left: clamp(1.25rem, 5vw, 3.25rem);
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--primary-color);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.45);
+}
+
+.thoughtKicker {
+  margin: 0.6rem 0 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+.thoughtVerse {
+  margin: 0 0 1.1rem;
+
+  p {
+    margin: 0 0 0.55rem;
+    font-size: clamp(1.25rem, 2.8vw, 1.7rem);
+    font-style: italic;
+    line-height: 1.42;
+    text-wrap: balance;
+  }
+
+  cite {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+}
+
+.thoughtText {
+  margin: 0 0 1.5rem;
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.thoughtFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+
+.thoughtSource {
+  font-size: 0.9rem;
+  color: var(--muted);
+
+  a {
+    font-weight: 700;
+  }
+}

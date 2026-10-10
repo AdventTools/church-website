@@ -48,6 +48,18 @@ const CFG = {
     },
     layout: [['title'], ['author', 'date'], ['excerpt'], ['content'], ['cover']],
   },
+  'api::devotional.devotional': {
+    labels: {
+      title: ['Titlul devoționalului', 'Ex. „Gândul de dimineață — 12 aprilie”.'],
+      slug: [null, null, false],
+      oldSlugs: [null, null, false],
+      verse: ['Versetul', 'Textul biblic citat la început.'],
+      verseReference: ['Referința versetului', 'Ex. „Proverbe 1:7”.'],
+      content: ['Conținut', 'Meditația propriu-zisă.'],
+      date: ['Data', 'Ziua pentru care e scris. Pe site apar de la cel mai nou.'],
+    },
+    layout: [['title'], ['date'], ['verse'], ['verseReference'], ['content']],
+  },
   'api::event-template.event-template': {
     labels: {
       name: ['Numele șablonului', 'Ex. „Sfânta Cină”. Apare în lista din care alegi la un eveniment.'],
@@ -118,9 +130,51 @@ const CFG = {
   },
   'api::gallery.gallery': {
     labels: {
-      description: ['Descriere galerie', ''],
-      images: ['Fotografii', 'Trage pozele în ordinea dorită.'],
+      description: ['Text sub poze (opțional)', 'Apare pe pagina „Despre noi”, sub cele câteva poze care duc spre Galerie.'],
+      images: ['Poze pe „Despre noi”', 'Alege 4 poze frumoase; fiecare duce spre Galerie. Toate albumele stau în „Album foto”.'],
     },
+  },
+  'api::gallery-page.gallery-page': {
+    labels: {
+      intro: ['Text de introducere', 'Una-două propoziții sub titlul paginii Galerie. Apare și în rezultatele Google.'],
+      photoCardImages: ['Imagini pentru cardul „Fotografii” (opțional)', 'Alege 3 poze, prima e cea mare. Gol = copertele celor mai noi albume.'],
+      videoCardImages: ['Imagini pentru cardul „Video” (opțional)', 'Alege 3 imagini, prima e cea mare. Gol = miniaturile celor mai noi filme.'],
+    },
+    layout: [['intro'], ['photoCardImages'], ['videoCardImages']],
+  },
+  'api::gallery-topic.gallery-topic': {
+    labels: {
+      name: ['Numele temei', 'Ex. „Botezuri”, „Concerte”, „Tabere”. Apare ca titlu de secțiune pe site.'],
+      nameEn: ['Numele temei în engleză (opțional)', 'Pentru varianta /en a site-ului. Gol = se folosește numele în română.'],
+      order: ['Ordine', 'Ordinea secțiunilor pe site (crescător). Pune 10, 20, 30… ca să poți insera ușor una nouă.'],
+    },
+    layout: [['name', 'nameEn'], ['order']],
+  },
+  'api::photo-album.photo-album': {
+    labels: {
+      title: ['Titlul albumului', 'Ex. „Botez, iunie 2026”.'],
+      slug: [null, null, false],
+      oldSlugs: [null, null, false],
+      date: ['Data', 'Ziua evenimentului. Albumele se afișează de la cel mai nou.'],
+      topic: ['Tema', 'Secțiunea în care apare albumul. Se alege pe versiunea în română; engleza o preia. Temele noi se adaugă din „Temă galerie”.'],
+      description: ['Câteva rânduri (opțional)', 'Ce s-a întâmplat, cu cine. Ajută mult la găsirea pe Google.'],
+      photos: ['Fotografii', 'Trage toate pozele odată; ordinea se schimbă trăgând. Pozele de pe telefon merg direct, site-ul le micșorează. Pune doar poze cu oameni care și-au dat acordul să apară public.'],
+      cover: ['Copertă (opțional)', 'Poza care apare pe cardul albumului. Gol = prima fotografie.'],
+      event: ['Eveniment (opțional)', 'Pune pe pagina evenimentului butonul „Vezi fotografiile”. Se alege pe versiunea în română; engleza o preia.'],
+    },
+    layout: [['title'], ['date', 'topic'], ['description'], ['photos'], ['cover', 'event']],
+  },
+  'api::video.video': {
+    labels: {
+      title: ['Titlul filmului', ''],
+      youtubeUrl: ['Link YouTube', 'Linkul filmului de pe YouTube, ex. https://youtu.be/… Filmul poate fi „nelistat”: se vede pe site, dar nu apare în căutările YouTube.'],
+      date: ['Data', 'Filmele se afișează de la cel mai nou.'],
+      topic: ['Tema (opțional)', 'Se alege pe versiunea în română; engleza o preia.'],
+      description: ['Câteva rânduri (opțional)', ''],
+      thumbnail: ['Miniatură proprie (opțional)', 'Gol = imaginea filmului de pe YouTube. Pune una doar dacă vrei alta.'],
+      featured: ['Recomandat', 'Apare mare, sus, pe pagina Video. Dacă sunt mai multe, cel mai nou.'],
+    },
+    layout: [['title'], ['youtubeUrl'], ['date', 'topic'], ['description'], ['thumbnail', 'featured']],
   },
   'api::history.history': {
     labels: {

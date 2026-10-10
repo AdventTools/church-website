@@ -72,6 +72,11 @@ export const site = {
     { href: 'https://rvs.ro', label: 'Radio Vocea Speranței' },
     { href: 'https://adra.ro', label: 'ADRA' },
   ],
+
+  // "Today's thought" from the public Sola Scriptura feed (Romanian, Adventist), shown on the
+  // Romanian home page and on /gandul-de-dimineata above your own devotionals. Set to false to
+  // keep only the devotionals written in the CMS.
+  dailyThoughts: true,
 } as const;
 
 type L = 'ro' | 'en';

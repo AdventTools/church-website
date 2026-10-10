@@ -12,6 +12,29 @@
   }
 }
 
+.justified {
+  --row: 190px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+
+  // Ultimul rând nu se întinde: golul îl ia acest element, care crește cât rămâne.
+  &::after {
+    content: '';
+    flex-grow: 1000000;
+  }
+}
+@media (max-width: 520px) {
+  .justified {
+    --row: 120px;
+    gap: 0.4rem;
+
+    .thumb {
+      border-radius: 10px;
+    }
+  }
+}
+
 .thumb {
   position: relative;
   aspect-ratio: 1;

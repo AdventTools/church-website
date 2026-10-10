@@ -21,10 +21,7 @@ module.exports = async function seedHomeValues(strapi) {
   for (const [locale, values] of [['ro', RO], ['en', EN]]) {
     const row = await strapi.db.query(uid).findOne({ where: { locale }, populate: ['values'] });
     if (!row || (row.values && row.values.length > 0)) continue;
-    await strapi.documents(uid).update({
-      documentId: "__TODO__",
-      data: { values }
-    });
+    await strapi.documents(uid).update({ documentId: row.documentId, locale, data: { values } });
     strapi.log.info(`Seed: valori home-page „${locale}" adăugate.`);
   }
 };

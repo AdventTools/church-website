@@ -32,9 +32,19 @@ singur fișier de configurare pentru rebranding.
   avertisment de duplicat în aceeași zi și roluri de editor granulare (colaboratori per proiect +
   pe propriile evenimente).
 - **Blog** — text formatat + imagini din CMS, randat automat cu tipografie îngrijită.
-- **Galerie** — layout masonry cu lightbox (zoom, swipe, tastatură).
+- **Galerie** — pagina `/galerie` cu două intrări, fotografii și video. **Albume foto pe teme**
+  (Botezuri, Concerte, Tabere… — temele se definesc în panou, cu nume RO + EN), fiecare album cu
+  pagina lui, în rânduri care păstrează proporția fiecărei poze, cu lightbox (zoom, swipe,
+  tastatură). Un album se poate lega de un eveniment: pe pagina evenimentului apare „Vezi
+  fotografiile”. **Filme YouTube** alese din panou, grupate pe teme, cu unul recomandat sus;
+  playerul se încarcă abia la „play”, de pe domeniul fără cookie-uri. Pe „Despre noi” rămân 4
+  poze care duc spre galerie. JSON-LD `ImageGallery` / `VideoObject`, sitemap cu imagini.
 - **Integrare YouTube** — banner live + player încorporat când biserica transmite, plus o secțiune
-  de predici recente (via RSS public; detecția live e opțională, prin Data API).
+  de predici recente (via RSS public; detecția live e opțională, prin Data API). Aceleași
+  transmisiuni apar și pe pagina Video a galeriei, sub filmele alese.
+- **Gândul de dimineață** — devoționale scurte (verset + meditație) scrise în panou, RO/EN, cu
+  paginile lor și arhivă paginată. Opțional, **gândul zilei** din fluxul public Sola Scriptura
+  (în română) apare deasupra lor și pe prima pagină; se oprește din `site.ts` (`dailyThoughts`).
 - **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar
   pe server, niciodată în CMS/DB/API/browser.
 - **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar
@@ -42,6 +52,9 @@ singur fișier de configurare pentru rebranding.
 - **Administrare prietenoasă** — brandul bisericii, etichete în română + text de ajutor, grupare
   logică, panouri laterale în editor (test SMTP, avertisment de eveniment duplicat, „Aplică un
   șablon") și panou utilizabil de pe telefon.
+- **Invitații pe e-mail** — Strapi nu trimite singur e-mail când inviți un coleg în panou (doar
+  afișează un link de copiat). Aici linkul pleacă automat, prin setările SMTP din panou, iar
+  **Setări → Site → Invitații** arată invitațiile în așteptare, cu „Retrimite” și „Copiază linkul”.
 
 ---
 
@@ -95,10 +108,23 @@ cmsstrapi/          CMS Strapi 5
   src/index.js         bootstrap idempotent (roluri, permisiuni, date de seed)
   src/admin-views.js   etichete + grupare + ascundere de câmpuri în panou
   src/delegate-roles.js roluri delegate (colaborator eveniment, responsabil proiect)
+  src/invitations.js   trimiterea automată a invitațiilor în panou
   src/seed/            conținut de exemplu (o biserică îl suprascrie din admin)
+  scripts/             unelte de linie de comandă (vezi mai jos)
   config/              server / bază de date / plugin-uri / middlewares
   .env.example         șablon de variabile de mediu pentru CMS
 ```
+
+### Scripturi (din `cmsstrapi/`)
+
+| Script | La ce folosește |
+|---|---|
+| `node scripts/set-smtp.js --host … --port 587 --username … --password '…' --from-name '…' --from-email … --to …` | prima configurare a e-mailului din terminal; după aceea se schimbă din panou. Parola se păstrează criptată, ca la butonul din panou |
+| `node scripts/test-smtp.js [--send adresa@exemplu.ro]` | verifică conexiunea și autentificarea SMTP fără browser; cu `--send`, trimite o probă pe drumul resetării de parolă |
+| `node scripts/resend-invitation.js [--link\|--send adresa]` | listează invitațiile în așteptare, arată linkul unui coleg sau i-l retrimite |
+| `node scripts/generate-icons.js --logo sigla.svg --color '#rrggbb' [--wordmark logo.png] [--name '…'] [--tagline '…'] [--out dir]` | regenerează favicon-urile, iconițele de aplicație și imaginea de distribuire (Open Graph) din sigla bisericii |
+
+Scripturile pornesc Strapi în fundal, deci au nevoie de același `.env` și de baza de date.
 
 ---
 
@@ -156,19 +182,22 @@ refolosește stack-ul.
 comentat cu valorile care nu sunt nici secrete, nici conținut de zi cu zi: coordonatele GPS
 (folosite la JSON-LD și la ora apusului/începutul Sabatului), adresa poștală structurată, anul
 înființării, cuvinte-cheie SEO, linkurile denominaționale din footer, sloganul. Sunt folosite ca
-rezervă (fallback) când câmpul corespunzător din CMS e gol.
+rezervă (fallback) când câmpul corespunzător din CMS e gol. Tot aici, `dailyThoughts` pornește
+sau oprește gândul zilei preluat de la Sola Scriptura.
 
 ### Listă pentru rebranding
 
 - [ ] `cp .env.example .env` în `cmsstrapi` și `cp .env.example .env.local` în `frontend-next`, apoi completează valorile reale
 - [ ] Setează `NEXT_PUBLIC_SITE_URL` cu domeniul tău
 - [ ] Editează `frontend-next/src/config/site.ts` (nume, coordonate, adresă, linkuri, slogan)
-- [ ] Înlocuiește logo-ul/favicon-ul în `frontend-next/public/` și `cmsstrapi/src/admin/extensions/`
+- [ ] Înlocuiește logo-ul în `frontend-next/public/` și `cmsstrapi/src/admin/extensions/`, apoi
+      regenerează iconițele și imaginea de distribuire cu `node scripts/generate-icons.js` (din `cmsstrapi/`)
 - [ ] În panoul Strapi, completează **church-info**, **contact**, **style** (culori), **program**
       și setările **E-mail (SMTP)** (inclusiv adresa destinatarului)
 - [ ] Ajustează textele meta/descriptive editoriale din `frontend-next/src/lib/i18n.ts`
       (copywriting per pagină) și textele de rezervă pentru „ce credem"/galerie, dacă vrei
-- [ ] Înlocuiește conținutul de seed (evenimente, proiecte, articole, „ce credem") din admin
+- [ ] Înlocuiește conținutul de seed (evenimente, proiecte, articole, „ce credem") din admin și
+      ajustează temele galeriei (**Temă galerie**)
 
 ---
 

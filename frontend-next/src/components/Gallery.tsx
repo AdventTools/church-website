@@ -8,7 +8,19 @@ import { t } from '@/lib/i18n';
 import styles from './Gallery.module.scss';
 
 // Miniaturile vin gata redimensionate din Strapi (small ~500px) → <img> simplu, rapid, fără re-encodare.
-export default function Gallery({ images, locale = 'ro' }: { images: GalleryImage[]; locale?: Locale }) {
+// `justified` = rânduri ca la Flickr: fiecare poză își păstrează proporția, rândul se întinde pe toată
+// lățimea, iar ordinea rămâne pe rânduri, aceeași cu cea din vizualizarea pe tot ecranul. Doar flexbox;
+// înălțimea de pornire a unui rând vine din `--row` (Gallery.module.scss), mai mică pe telefon.
+export default function Gallery({
+  images,
+  locale = 'ro',
+  layout = 'grid',
+}: {
+  images: GalleryImage[];
+  locale?: Locale;
+  layout?: 'grid' | 'justified';
+}) {
+  const justified = layout === 'justified';
   const a11y = t(locale).a11y;
   const [index, setIndex] = useState<number | null>(null);
   const [zoom, setZoom] = useState(false);
@@ -60,14 +72,21 @@ export default function Gallery({ images, locale = 'ro' }: { images: GalleryImag
 
   return (
     <>
-      <div className={styles.grid}>
-        {images.map((img, i) => (
+      <div className={justified ? styles.justified : styles.grid}>
+        {images.map((img, i) => {
+          const ratio = img.width && img.height ? img.width / img.height : 4 / 3;
+          return (
           <button
             key={img.id}
             className={styles.thumb}
             onClick={() => setIndex(i)}
             type="button"
             aria-label={`${a11y.openPhoto} ${i + 1}`}
+            style={
+              justified
+                ? { aspectRatio: String(ratio), flexGrow: ratio, flexBasis: `calc(var(--row) * ${ratio.toFixed(3)})` }
+                : undefined
+            }
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -82,7 +101,8 @@ export default function Gallery({ images, locale = 'ro' }: { images: GalleryImag
               <ZoomIn size={22} />
             </span>
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {active &&

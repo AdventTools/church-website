@@ -43,6 +43,7 @@ export default function Header({
         { path: '/despre', label: dict.nav.whoWeAre },
         { path: '/ce-credem', label: dict.nav.beliefs },
         { path: '/prima-vizita', label: dict.nav.firstVisit },
+        { path: '/galerie', label: dict.nav.gallery },
       ],
     },
     { path: '/program', label: dict.nav.schedule },

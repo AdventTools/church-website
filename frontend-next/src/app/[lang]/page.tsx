@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import Link from 'next/link';
-import { HeartHandshake, ArrowRight, BookOpen, Users, Sunrise, HeartPulse, Heart, Music, BookMarked } from 'lucide-react';
+import { HeartHandshake, ArrowRight, BookOpen, Users, Sunrise, HeartPulse, Heart, Music, BookMarked, Quote } from 'lucide-react';
 import Hero from '@/components/Hero';
 import Section from '@/components/Section';
 import EventCard from '@/components/EventCard';
@@ -16,7 +16,8 @@ import JsonLd from '@/components/JsonLd';
 import { getHomePage, getBackgroundImages, getPrograms, getUpcomingEvents, getArchivedEvents, getProjects, getArticles, getBeliefs } from '@/lib/strapi';
 import { getLatestVideos, channelUrl } from '@/lib/youtube';
 import { videoListJsonLd, webPageJsonLd } from '@/lib/jsonld';
-import { summarize } from '@/lib/utils';
+import { getDailyThoughts, SOURCE_NAME } from '@/lib/solascriptura';
+import { summarize, formatToLocalDate } from '@/lib/utils';
 import { t, localePath, isLocale } from '@/lib/i18n';
 import type { Locale } from '@/lib/types';
 import styles from './home.module.scss';
@@ -39,7 +40,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const locale: Locale = isLocale(lang) ? lang : 'ro';
   const dict = t(locale);
 
-  const [home, bg, programs, upcoming, pastEvents, videos, projects, articles, beliefs] = await Promise.all([
+  // Gândul zilei vine dintr-un flux în română; pe /en nu se cere deloc.
+  const [home, bg, programs, upcoming, pastEvents, videos, projects, articles, beliefs, daily] = await Promise.all([
     getHomePage(locale),
     getBackgroundImages(),
     getPrograms(locale),
@@ -49,7 +51,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     getProjects(locale),
     getArticles(locale),
     getBeliefs(locale),
+    locale === 'ro' ? getDailyThoughts() : Promise.resolve({ today: null, previous: [] }),
   ]);
+  const thought = daily.today;
   const beliefsTeaser = beliefs?.intro ? summarize(beliefs.intro, 145) : '';
   // Sumar evenimente pe homepage: cele viitoare (primele 3) sau, dacă nu sunt, cele recente din arhivă.
   const homeEvents = (upcoming.length ? upcoming : pastEvents).slice(0, 3);
@@ -139,6 +143,38 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </Link>
         </Reveal>
       </div>
+
+      {thought && (
+        <Section>
+          <Reveal>
+            <article className={styles.thought} aria-labelledby="gandul-zilei">
+              <span className={styles.thoughtMark} aria-hidden>
+                <Quote size={26} />
+              </span>
+              <p className={styles.thoughtKicker}>
+                <span id="gandul-zilei">{dict.devotionals.today}</span> ·{' '}
+                <time dateTime={thought.date}>{formatToLocalDate(thought.date, locale)}</time>
+              </p>
+              <blockquote className={styles.thoughtVerse}>
+                <p>{thought.verse}</p>
+                {thought.reference && <cite>{thought.reference}</cite>}
+              </blockquote>
+              {thought.paragraphs[0] && <p className={styles.thoughtText}>{summarize(thought.paragraphs[0], 220)}</p>}
+              <div className={styles.thoughtFoot}>
+                <Link href={localePath(locale, '/gandul-de-dimineata')} className="btn">
+                  {dict.devotionals.homeCta} <ArrowRight size={18} aria-hidden />
+                </Link>
+                <span className={styles.thoughtSource}>
+                  {dict.devotionals.source}:{' '}
+                  <a href={thought.url} target="_blank" rel="noopener">
+                    {SOURCE_NAME}
+                  </a>
+                </span>
+              </div>
+            </article>
+          </Reveal>
+        </Section>
+      )}
 
       {videos.length > 0 && (
         <Section

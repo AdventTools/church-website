@@ -78,6 +78,56 @@ export type Gallery = {
   images: GalleryImage[];
 };
 
+// Numele temei vine deja în limba paginii (RO, sau EN cu rezervă pe RO).
+export type GalleryTopic = {
+  name: string;
+  order: number;
+};
+
+export type PhotoAlbum = {
+  id: number;
+  documentId: string;
+  title: string;
+  slug?: string;
+  date: string;
+  description: string;
+  topic: GalleryTopic | null;
+  cover: GalleryImage | null;
+  photos: GalleryImage[];
+  event: { id: number; title: string; slug?: string } | null;
+};
+
+// Filmele alese din CMS; cele de pe canal (RSS) au tipul `Video` din lib/youtube.ts.
+export type GalleryVideo = {
+  id: number;
+  documentId: string;
+  title: string;
+  date: string;
+  description: string;
+  youtubeId: string;
+  topic: GalleryTopic | null;
+  thumbnail: string;
+  featured: boolean;
+};
+
+export type Devotional = {
+  id: number;
+  title: string;
+  slug?: string;
+  verse?: string;
+  verseReference?: string;
+  content: string;
+  date?: string;
+  locale?: Locale;
+  alt?: { id: number; title: string; locale: Locale; slug?: string };
+};
+
+export type GalleryPage = {
+  intro: string;
+  photoCardImages: GalleryImage[];
+  videoCardImages: GalleryImage[];
+};
+
 export type Program = {
   id: number;
   name: string;
@@ -111,6 +161,7 @@ export type FirstVisit = {
 // Datele rămân string ISO (serializabile server -> client). Se convertesc cu new Date() la afișare.
 export type ChurchEvent = {
   id: number;
+  documentId?: string;
   title: string;
   slug?: string;
   startDate: string;

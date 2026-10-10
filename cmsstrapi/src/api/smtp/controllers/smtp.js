@@ -1,32 +1,8 @@
 'use strict';
 
-const jwt = require('jsonwebtoken');
-
-// Identifică administratorul din JWT-ul panoului. NU e suficient să validăm semnătura: tokenul
-// poate aparține unui cont șters, dezactivat sau cu drepturi minime. Încărcăm userul și rolurile.
-async function adminUser(strapi, ctx) {
-  const header = ctx.request.header.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return null;
-  let payload;
-  try {
-    payload = jwt.verify(token, strapi.config.get('admin.auth.secret'));
-  } catch {
-    return null;
-  }
-  if (!payload || !payload.id) return null;
-  const user = await strapi.db.query('admin::user').findOne({ where: { id: payload.id }, populate: ['roles'] });
-  if (!user || !user.isActive || user.blocked) return null;
-  return user;
-}
-
-const hasRole = (user, code) => (user.roles || []).some((r) => r.code === code);
-
-// Operațiuni sensibile (parola serverului de mail) — doar Super Admin.
-async function requireSuperAdmin(strapi, ctx) {
-  const user = await adminUser(strapi, ctx);
-  return user && hasRole(user, 'strapi-super-admin') ? user : null;
-}
+// Administratorul se identifică din tokenul panoului (cont activ, neblocat — vezi admin-auth.js).
+// Operațiunile sensibile (parola serverului de mail) cer Super Admin.
+const { adminFromToken: adminUser, superAdminFromToken: requireSuperAdmin } = require('../../../admin-auth');
 
 module.exports = {
   // Formular de contact — apelat DOAR server-side de Next, autentificat cu tokenul intern.

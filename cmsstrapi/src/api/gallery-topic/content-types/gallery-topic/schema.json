@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gallery_topics",
+  "info": {
+    "singularName": "gallery-topic",
+    "pluralName": "gallery-topics",
+    "displayName": "Temă galerie",
+    "description": "Temele după care se grupează albumele și filmele: Botezuri, Concerte, Tabere… Pe site, fiecare temă are secțiunea ei, în ordinea de aici."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "nameEn": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer",
+      "default": 10
+    }
+  }
+}

@@ -43,5 +43,19 @@ export default {
     // eveniment-duplicat, „Aplică un șablon". (Coloana „Limba” compactă din v4 nu are
     // echivalent în v5 — Content Manager afișează nativ limbile disponibile.)
     registerEditViewPanels(app);
+
+    // Ecran propriu pentru invitațiile în așteptare. Strapi arată linkul de înregistrare o singură
+    // dată, la invitare; dacă mesajul se pierde sau ai închis fereastra, colegul rămâne pe dinafară
+    // și nu se vede nicăieri. Aici sunt toate, cu buton de retrimitere.
+    app.addSettingsLink(
+      { id: 'site', intlLabel: { id: 'site.settings.section', defaultMessage: 'Site' } },
+      {
+        id: 'invitations',
+        to: 'invitations',
+        intlLabel: { id: 'site.settings.invitations', defaultMessage: 'Invitații' },
+        Component: () => import('./extensions/InvitationsPage').then((mod) => ({ default: mod.default })),
+        permissions: [],
+      },
+    );
   },
 };

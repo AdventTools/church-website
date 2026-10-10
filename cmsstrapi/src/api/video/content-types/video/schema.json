@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "videos",
+  "info": {
+    "singularName": "video",
+    "pluralName": "videos",
+    "displayName": "Film",
+    "description": "Un film urcat pe YouTube, afișat pe pagina Video a site-ului."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": { "localized": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "youtubeUrl": {
+      "type": "string",
+      "required": true,
+      "regex": "^https?://(www\\.|m\\.)?(youtube\\.com/(watch\\?.*v=|shorts/|embed/|live/)|youtu\\.be/)[A-Za-z0-9_-]{11}",
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "date": {
+      "type": "date",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "topic": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::gallery-topic.gallery-topic"
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "pluginOptions": { "i18n": { "localized": false } }
+    }
+  }
+}

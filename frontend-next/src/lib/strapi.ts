@@ -14,7 +14,14 @@ import type {
   Article,
   Beliefs,
   Locale,
+  Devotional,
+  GalleryPage,
+  GalleryTopic,
+  GalleryVideo,
+  PhotoAlbum,
 } from './types';
+import { youtubeId, youtubeThumb } from './utils';
+import { siteName } from '@/config/site';
 
 const STRAPI_URL = process.env.STRAPI_URL ?? 'http://127.0.0.1:1337';
 
@@ -22,7 +29,7 @@ export const EVENT_CAROUSEL_LIMIT = 7;
 export const PAGE_SIZE = 5;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type StrapiEntry = { id: number; attributes: any };
+type StrapiEntry = { id: number; documentId?: string; attributes: any };
 
 // Adaugă ?locale=xx la un path (respectă separatorul existent).
 function loc(path: string, locale?: Locale): string {
@@ -288,7 +295,7 @@ export async function getUnderConstruction(): Promise<boolean> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildEvent(id: number, a: any): ChurchEvent {
+function buildEvent(id: number, a: any, documentId?: string): ChurchEvent {
   const cover = a.cover?.data?.attributes;
   const large = cover?.formats?.large ?? cover;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -298,6 +305,7 @@ function buildEvent(id: number, a: any): ChurchEvent {
     : undefined;
   return {
     id,
+    documentId,
     title: a.title,
     slug: a.slug ?? undefined,
     startDate: a.startDate,
@@ -429,7 +437,7 @@ export async function getEvent(id: string): Promise<ChurchEvent | null> {
   const query = qs.stringify({ populate: { cover: true, localizations: true } }, { encodeValuesOnly: true });
   const res = await api<{ data: StrapiEntry | null }>(`/events/${id}?${query}`);
   if (!res?.data) return null;
-  return buildEvent(res.data.id, res.data.attributes);
+  return buildEvent(res.data.id, res.data.attributes, res.data.documentId);
 }
 
 // Un rând după (slug, locale) — cu fallback pe RO dacă versiunea în limba cerută lipsește.
@@ -452,7 +460,7 @@ async function firstBySlug(
 
 export async function getEventBySlug(slug: string, locale?: Locale): Promise<ChurchEvent | null> {
   const row = await firstBySlug('events', slug, locale, { cover: true, localizations: true });
-  return row ? buildEvent(row.id, row.attributes) : null;
+  return row ? buildEvent(row.id, row.attributes, row.documentId) : null;
 }
 
 // Caută un slug VECHI (redenumit) → pentru redirect 301 către slug-ul curent. Verifică apartenența exactă.
@@ -473,7 +481,7 @@ export async function getProjectByOldSlug(seg: string, locale?: Locale): Promise
 }
 export async function getEventByOldSlug(seg: string, locale?: Locale): Promise<ChurchEvent | null> {
   const row = await firstByOldSlug('events', seg, locale);
-  return row ? buildEvent(row.id, row.attributes) : null;
+  return row ? buildEvent(row.id, row.attributes, row.documentId) : null;
 }
 export async function getArticleByOldSlug(seg: string, locale?: Locale): Promise<Article | null> {
   const row = await firstByOldSlug('articles', seg, locale);
@@ -569,4 +577,185 @@ export async function getArticle(id: string): Promise<Article | null> {
 export async function getArticleBySlug(slug: string, locale?: Locale): Promise<Article | null> {
   const row = await firstBySlug('articles', slug, locale, { cover: true, localizations: true });
   return row ? buildArticle(row.id, row.attributes) : null;
+}
+
+// ------------------------------------------------------------- gândul de dimineață
+
+export const DEVOTIONAL_PAGE_SIZE = 12;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildDevotional(id: number, a: any): Devotional {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const locz = (a.localizations?.data ?? [])[0];
+  return {
+    id,
+    title: a.title,
+    slug: a.slug ?? undefined,
+    verse: a.verse ?? undefined,
+    verseReference: a.verseReference ?? undefined,
+    content: a.content ?? '',
+    date: a.date ?? undefined,
+    locale: (a.locale as Locale) ?? undefined,
+    alt: locz ? { id: locz.id, title: locz.attributes.title, locale: locz.attributes.locale, slug: locz.attributes.slug ?? undefined } : undefined,
+  };
+}
+
+export async function getDevotionals(locale?: Locale): Promise<Devotional[]> {
+  const query = qs.stringify(
+    { sort: ['date:desc', 'id:desc'], pagination: { pageSize: 100 }, populate: { localizations: true } },
+    { encodeValuesOnly: true },
+  );
+  const rows = await fetchListMerged(`/devotionals?${query}`, locale);
+  return rows.map((e) => buildDevotional(e.id, e.attributes)).sort((a, b) => (b.date ?? '').localeCompare(a.date ?? '') || b.id - a.id);
+}
+
+// Paginat pe server (arhiva poate avea sute de zile). Pe /en, dacă nu există niciun devoțional în
+// engleză, se arată cele în română — aceeași rezervă ca în restul site-ului, la nivel de listă.
+export async function getPaginatedDevotionals(page: number, locale?: Locale): Promise<{ devotionals: Devotional[]; pageCount: number }> {
+  const query = qs.stringify(
+    { sort: ['date:desc', 'id:desc'], pagination: { page, pageSize: DEVOTIONAL_PAGE_SIZE }, populate: { localizations: true } },
+    { encodeValuesOnly: true },
+  );
+  type Res = { data: StrapiEntry[]; meta: { pagination?: { pageCount: number; total: number } } };
+  let res = await api<Res>(loc(`/devotionals?${query}`, locale));
+  if (locale && locale !== 'ro' && !res?.meta?.pagination?.total) res = await api<Res>(`/devotionals?${query}`);
+  return {
+    devotionals: (res?.data ?? []).map((e) => buildDevotional(e.id, e.attributes)),
+    pageCount: res?.meta?.pagination?.pageCount ?? 0,
+  };
+}
+
+export async function getDevotionalBySlug(slug: string, locale?: Locale): Promise<Devotional | null> {
+  const row = await firstBySlug('devotionals', slug, locale, { localizations: true });
+  return row ? buildDevotional(row.id, row.attributes) : null;
+}
+
+export async function getDevotionalByOldSlug(seg: string, locale?: Locale): Promise<Devotional | null> {
+  const row = await firstByOldSlug('devotionals', seg, locale);
+  return row ? buildDevotional(row.id, row.attributes) : null;
+}
+
+// --------------------------------------------------------------------- galerie
+
+// Tema e comună ambelor limbi; pe /en se afișează `nameEn`, iar dacă lipsește, numele în română.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildTopic(field: any, locale?: Locale): GalleryTopic | null {
+  const t = field?.data?.attributes;
+  if (!t) return null;
+  return { name: (locale === 'en' && t.nameEn) || t.name, order: t.order ?? 10 };
+}
+
+// Strapi 5 ține orice relație pe limbă (ignoră `localized: false`), deci tema și evenimentul se
+// aleg o singură dată, pe versiunea RO; versiunea EN le preia de acolo dacă nu le are proprii.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function sharedRelation(a: any, field: string): any {
+  if (a[field]?.data) return a[field];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (a.localizations?.data ?? []).map((l: any) => l.attributes?.[field]).find((r: any) => r?.data) ?? null;
+}
+
+function buildAlbum(e: StrapiEntry, locale?: Locale): PhotoAlbum {
+  const a = e.attributes;
+  const alt = `${a.title} — ${siteName(locale ?? 'ro')}`;
+  const photos = mapImages(a.photos?.data ?? [], alt);
+  const cover = a.cover?.data ? mapImages([a.cover.data], alt)[0] : (photos[0] ?? null);
+  const ev = sharedRelation(a, 'event')?.data;
+  return {
+    id: e.id,
+    documentId: e.documentId ?? '',
+    title: a.title,
+    slug: a.slug ?? undefined,
+    date: a.date,
+    description: a.description ?? '',
+    topic: buildTopic(sharedRelation(a, 'topic'), locale),
+    cover,
+    photos,
+    event: ev ? { id: ev.id, title: ev.attributes.title, slug: ev.attributes.slug ?? undefined } : null,
+  };
+}
+
+function buildVideo(e: StrapiEntry, locale?: Locale): GalleryVideo {
+  const v = e.attributes;
+  const id = youtubeId(v.youtubeUrl ?? '');
+  const own = v.thumbnail?.data?.attributes;
+  return {
+    id: e.id,
+    documentId: e.documentId ?? '',
+    title: v.title,
+    date: v.date,
+    description: v.description ?? '',
+    youtubeId: id,
+    topic: buildTopic(sharedRelation(v, 'topic'), locale),
+    thumbnail: own ? (own.formats?.large?.url ?? own.formats?.medium?.url ?? own.url) : youtubeThumb(id),
+    featured: Boolean(v.featured),
+  };
+}
+
+const ALBUM_POPULATE = {
+  topic: true,
+  cover: true,
+  photos: true,
+  event: { fields: ['title', 'slug'] },
+  localizations: { populate: { topic: true, event: { fields: ['title', 'slug'] } } },
+};
+const byDateDesc = (a: { date: string; id: number }, b: { date: string; id: number }) =>
+  (b.date ?? '').localeCompare(a.date ?? '') || b.id - a.id;
+
+export async function getGalleryPage(locale?: Locale): Promise<GalleryPage> {
+  let res = await api<{ data: StrapiEntry | null }>(loc('/gallery-page?populate=*', locale));
+  if (!res?.data && locale && locale !== 'ro') res = await api('/gallery-page?populate=*');
+  const a = res?.data?.attributes;
+  const alt = siteName(locale ?? 'ro');
+  return {
+    intro: a?.intro ?? '',
+    photoCardImages: mapImages(a?.photoCardImages?.data ?? [], alt),
+    videoCardImages: mapImages(a?.videoCardImages?.data ?? [], alt),
+  };
+}
+
+export async function getAlbums(locale?: Locale): Promise<PhotoAlbum[]> {
+  const query = qs.stringify({ sort: ['date:desc', 'id:desc'], pagination: { pageSize: 100 }, populate: ALBUM_POPULATE }, { encodeValuesOnly: true });
+  const rows = await fetchListMerged(`/photo-albums?${query}`, locale);
+  return rows.map((e) => buildAlbum(e, locale)).sort(byDateDesc);
+}
+
+export async function getAlbumBySlug(slug: string, locale?: Locale): Promise<PhotoAlbum | null> {
+  const row = await firstBySlug('photo-albums', slug, locale, ALBUM_POPULATE);
+  return row ? buildAlbum(row, locale) : null;
+}
+
+export async function getAlbumByOldSlug(seg: string, locale?: Locale): Promise<PhotoAlbum | null> {
+  const row = await firstByOldSlug('photo-albums', seg, locale);
+  return row ? getAlbumBySlug(row.attributes.slug, locale) : null;
+}
+
+// Albumele legate de un eveniment. Legătura stă pe versiunea RO a albumului (vezi `sharedRelation`),
+// iar `documentId` e același în ambele limbi: căutăm în RO, apoi luăm versiunea EN unde există.
+export async function getAlbumsForEvent(eventDocumentId: string, locale?: Locale): Promise<PhotoAlbum[]> {
+  const query = qs.stringify(
+    { filters: { event: { documentId: { $eq: eventDocumentId } } }, sort: ['date:desc'], populate: { photos: { fields: ['id'] } } },
+    { encodeValuesOnly: true },
+  );
+  const rows = (await api<{ data: StrapiEntry[] }>(`/photo-albums?${query}`))?.data ?? [];
+  if (!locale || locale === 'ro' || !rows.length) return rows.map((e) => buildAlbum(e, locale));
+
+  const enQuery = qs.stringify(
+    { filters: { documentId: { $in: rows.map((r) => r.documentId) } }, populate: { photos: { fields: ['id'] } } },
+    { encodeValuesOnly: true },
+  );
+  const en = (await api<{ data: StrapiEntry[] }>(loc(`/photo-albums?${enQuery}`, locale)))?.data ?? [];
+  const byDoc = new Map(en.map((e) => [e.documentId, e]));
+  return rows.map((r) => buildAlbum(byDoc.get(r.documentId) ?? r, locale));
+}
+
+export async function getVideos(locale?: Locale): Promise<GalleryVideo[]> {
+  const query = qs.stringify(
+    { sort: ['date:desc', 'id:desc'], pagination: { pageSize: 100 }, populate: { topic: true, thumbnail: true, localizations: { populate: { topic: true } } } },
+    { encodeValuesOnly: true },
+  );
+  const rows = await fetchListMerged(`/videos?${query}`, locale);
+  return rows
+    .map((e) => buildVideo(e, locale))
+    .filter((v) => v.youtubeId)
+    .sort(byDateDesc);
 }

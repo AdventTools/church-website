@@ -96,17 +96,14 @@ async function uploadCover(strapi, filename) {
 module.exports = async function seedEventTemplates(strapi) {
   const uid = 'api::event-template.event-template';
   if ((await strapi.db.query(uid).count()) > 0) return;
-  const locSvc = strapi.plugin('i18n').service('localizations');
-  const model = strapi.getModel(uid);
+  const docs = strapi.documents(uid);
 
   for (const { ro, en, image } of TEMPLATES) {
     const coverId = await uploadCover(strapi, image);
-    const roEntry = await strapi.documents(uid).create({ data: { ...ro, ...(coverId ? { cover: coverId } : {}), locale: 'ro' } });
-    const enEntry = await strapi.documents(uid).create({
-      data: { ...en, ...(coverId ? { cover: coverId } : {}), locale: 'en', localizations: [roEntry.id] },
-      populate: ['localizations'],
-    });
-    await locSvc.syncLocalizations(enEntry, { model });
+    const cover = coverId ? { cover: coverId } : {};
+    // Strapi 5: EN e o limbă a aceluiași document, adăugată pe documentId-ul versiunii RO.
+    const roEntry = await docs.create({ locale: 'ro', data: { ...ro, ...cover } });
+    await docs.update({ documentId: roEntry.documentId, locale: 'en', data: { ...en, ...cover } });
     strapi.log.info(`Seed: șablon eveniment „${ro.name}” creat.`);
   }
 };

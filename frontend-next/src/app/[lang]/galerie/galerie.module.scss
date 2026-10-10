@@ -1,0 +1,288 @@
+.lead {
+  max-width: 62ch;
+  margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+.intro {
+  margin: 0;
+  font-size: clamp(1.08rem, 2vw, 1.25rem);
+  color: var(--muted);
+}
+
+.empty {
+  color: var(--muted);
+}
+
+// Doua „usi" mari, una langa alta; una singura cand exista doar fotografii sau doar filme.
+.doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.1rem, 2.5vw, 1.75rem);
+
+  // O singura usa ocupa tot randul: mozaicul in stanga, textul in dreapta.
+  &[data-single] {
+    grid-template-columns: minmax(0, 1fr);
+
+    .door {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      align-items: center;
+    }
+    .doorText {
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+    }
+  }
+}
+@media (max-width: 760px) {
+  .doors,
+  .doors[data-single] .door {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.door {
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--fg);
+  text-decoration: none;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s;
+
+  &:hover {
+    text-decoration: none;
+    transform: translateY(-4px);
+    box-shadow: 0 24px 44px -24px rgba(0, 0, 0, 0.4);
+  }
+  &:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 4px;
+  }
+}
+
+// O imagine mare in stanga si doua mici in dreapta; se adapteaza la 1 sau 2 imagini.
+.mosaic {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+  aspect-ratio: 16 / 10;
+  background: var(--border);
+
+  &[data-count='1'] {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  &[data-count='2'] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+  }
+}
+
+.tile {
+  position: relative;
+  overflow: hidden;
+
+  &:first-child {
+    grid-row: span 2;
+  }
+
+  img {
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+.mosaic[data-count='2'] .tile:first-child {
+  grid-row: auto;
+}
+.door:hover .tile img {
+  transform: scale(1.05);
+}
+
+// Benzile negre ocupa 1/8 sus si 1/8 jos din imaginea YouTube: marire de 4/3 le scoate din cadru.
+.ytCrop img {
+  transform: scale(1.34);
+}
+.door:hover .ytCrop img {
+  transform: scale(1.4);
+}
+
+.play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-color);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+
+  svg {
+    margin-left: 4px;
+  }
+}
+
+.doorText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: clamp(1.1rem, 2.5vw, 1.6rem) clamp(1.1rem, 2.5vw, 1.75rem) clamp(1.3rem, 2.8vw, 1.9rem);
+}
+
+.doorTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+}
+
+.icon {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--primary-color);
+}
+.video .icon {
+  background: var(--fg);
+}
+
+.doorMeta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.doorCta {
+  margin-top: 0.4rem;
+}
+
+// Ce s-a adaugat recent: patru carduri; pe telefon se gliseaza orizontal.
+.recent {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+@media (max-width: 1000px) {
+  .recent {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .recent {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 72%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+    margin-right: -1.25rem;
+    padding-right: 1.25rem;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    li {
+      scroll-snap-align: start;
+    }
+  }
+}
+
+.recentCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--fg);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+  &:hover .recentTitle {
+    color: var(--primary-color);
+  }
+  &:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 4px;
+    border-radius: 16px;
+  }
+}
+
+.recentThumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--border);
+  margin-bottom: 0.4rem;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.badge {
+  position: absolute;
+  left: 0.6rem;
+  top: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.badgeVideo {
+  background: var(--fg);
+}
+
+.recentTitle {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.recentMeta {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door,
+  .tile img {
+    transition: none;
+  }
+  .door:hover,
+  .door:hover .tile img {
+    transform: none;
+  }
+}
