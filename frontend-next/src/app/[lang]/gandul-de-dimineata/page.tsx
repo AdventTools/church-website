@@ -14,6 +14,7 @@ import { t, localePath, isLocale } from '@/lib/i18n';
 import { devotionalHref, formatToLocalDate, summarize } from '@/lib/utils';
 import { getDailyThoughts, SOURCE_NAME, SOURCE_URL } from '@/lib/solascriptura';
 import type { Locale } from '@/lib/types';
+import { site } from '@/config/site';
 import { cleanVerse } from './verse';
 import styles from './gandul-de-dimineata.module.scss';
 
@@ -23,9 +24,6 @@ type Params = Promise<{ lang: string }>;
 type Search = Promise<{ page?: string }>;
 
 const BASE = '/gandul-de-dimineata';
-
-// Câte zile dinainte apar sub gândul de azi; restul celor ~30 din flux rămân la sursă.
-const PREVIOUS = 6;
 
 const hrefFor = (locale: Locale) => (page: number): string => localePath(locale, page > 1 ? `${BASE}?page=${page}` : BASE);
 
@@ -66,11 +64,13 @@ export default async function DevotionalsPage({ params, searchParams }: { params
   const d = dict.devotionals;
   const page = toPage((await searchParams).page);
 
-  // Fluxul Sola Scriptura e doar în română: pe /en rămân devoționalele din CMS.
+  // Fluxul Sola Scriptura e doar în română: pe /en rămân devoționalele din CMS. Arhiva lui (~30 de
+  // zile, fiecare cu link la sursă) stă deasupra devoționalelor scrise de biserică.
+  const feedOn = page === 1 && locale === 'ro' && site.dailyThoughts;
   const [{ devotionals, pageCount }, bg, daily] = await Promise.all([
     getPaginatedDevotionals(page, locale),
     getBackgroundImages(),
-    page === 1 && locale === 'ro' ? getDailyThoughts() : Promise.resolve({ today: null, previous: [] }),
+    feedOn ? getDailyThoughts() : Promise.resolve({ today: null, previous: [] }),
   ]);
   if (page > 1 && page > pageCount) notFound();
   const { today, previous } = daily;
@@ -89,6 +89,18 @@ export default async function DevotionalsPage({ params, searchParams }: { params
       />
 
       <PageHeader title={d.title} image={bg.home} />
+
+      {feedOn && !today && (
+        <Section>
+          <p className={styles.empty}>
+            {d.unavailable}{' '}
+            <a href={SOURCE_URL} target="_blank" rel="noopener">
+              solascriptura.ro
+            </a>
+            .
+          </p>
+        </Section>
+      )}
 
       {today && (
         <Section>
@@ -117,8 +129,9 @@ export default async function DevotionalsPage({ params, searchParams }: { params
 
       {previous.length > 0 && (
         <Section title={d.previous} className="section--surface">
+          <p className={styles.feedIntro}>{d.feedIntro}</p>
           <ul className={styles.previous}>
-            {previous.slice(0, PREVIOUS).map((p) => (
+            {previous.map((p) => (
               <li key={p.date}>
                 <a href={p.url} target="_blank" rel="noopener" className={styles.prevCard}>
                   <time dateTime={p.date} className={styles.prevDate}>
@@ -142,8 +155,8 @@ export default async function DevotionalsPage({ params, searchParams }: { params
         </Section>
       )}
 
-      {(devotionals.length > 0 || !today) && (
-        <Section title={today ? d.archive : undefined}>
+      {(devotionals.length > 0 || !feedOn) && (
+        <Section title={feedOn ? d.archive : undefined}>
           {devotionals.length > 0 ? (
             <>
               {page === 1 && <p className={styles.intro}>{d.intro}</p>}

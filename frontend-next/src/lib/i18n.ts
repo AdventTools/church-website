@@ -37,6 +37,8 @@ type Dict = {
     previous: string;
     source: string;
     readAtSource: string;
+    feedIntro: string;
+    unavailable: string;
     archive: string;
     homeCta: string;
     back: string;
@@ -164,6 +166,8 @@ const DICT: Record<Locale, Dict> = {
       previous: 'Zilele trecute',
       source: 'Sursa',
       readAtSource: 'Citește pe solascriptura.ro',
+      feedIntro: 'Gândurile din zilele trecute. Fiecare se citește întreg la sursă.',
+      unavailable: 'Gândul zilei nu se poate încărca acum. Îl găsiți pe',
       archive: 'Devoționalele noastre',
       homeCta: 'Citește tot gândul',
       back: 'Înapoi la Gândul de dimineață',
@@ -333,6 +337,8 @@ const DICT: Record<Locale, Dict> = {
       previous: 'Previous days',
       source: 'Source',
       readAtSource: 'Read on solascriptura.ro',
+      feedIntro: 'Thoughts from the previous days. Each one is read in full at the source.',
+      unavailable: "Today's thought cannot be loaded right now. You can find it on",
       archive: 'Our devotionals',
       homeCta: 'Read the whole thought',
       back: 'Back to Morning thought',

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllEvents, getAllProjects, getAllArticles, getAlbums, getVideos, getDevotionals } from '@/lib/strapi';
 import { getLatestVideos } from '@/lib/youtube';
+import { todayInRomania } from '@/lib/solascriptura';
 import { detailSeg } from '@/lib/utils';
 import { site } from '@/config/site';
 
@@ -132,7 +133,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const devotionalHub: MetadataRoute.Sitemap =
     roDevotionals.length > 0 || site.dailyThoughts
       ? [
-          { url: `${SITE_URL}/gandul-de-dimineata`, changeFrequency: 'daily' as const, priority: 0.6, alternates: { languages: { ro: `${SITE_URL}/gandul-de-dimineata`, en: `${SITE_URL}/en/gandul-de-dimineata` } } },
+          {
+            url: `${SITE_URL}/gandul-de-dimineata`,
+            // Cu fluxul pornit, pagina se schimbă în fiecare zi (gândul zilei, ora României).
+            lastModified: site.dailyThoughts ? new Date(todayInRomania()) : undefined,
+            changeFrequency: 'daily' as const, priority: 0.6, alternates: { languages: { ro: `${SITE_URL}/gandul-de-dimineata`, en: `${SITE_URL}/en/gandul-de-dimineata` } } },
           ...(roDevotionals.length || enDevotionals.length
             ? [{ url: `${SITE_URL}/en/gandul-de-dimineata`, changeFrequency: 'weekly' as const, priority: 0.5, alternates: { languages: { ro: `${SITE_URL}/gandul-de-dimineata`, en: `${SITE_URL}/en/gandul-de-dimineata` } } }]
             : []),

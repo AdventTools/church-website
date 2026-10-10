@@ -44,7 +44,8 @@ singur fișier de configurare pentru rebranding.
   transmisiuni apar și pe pagina Video a galeriei, sub filmele alese.
 - **Gândul de dimineață** — devoționale scurte (verset + meditație) scrise în panou, RO/EN, cu
   paginile lor și arhivă paginată. Opțional, **gândul zilei** din fluxul public Sola Scriptura
-  (în română) apare deasupra lor și pe prima pagină; se oprește din `site.ts` (`dailyThoughts`).
+  (în română) apare deasupra lor și pe prima pagină, cu ultimele ~30 de zile din flux, fiecare
+  cu link la sursă; se oprește din `site.ts` (`dailyThoughts`).
 - **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar
   pe server, niciodată în CMS/DB/API/browser.
 - **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar

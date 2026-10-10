@@ -7,6 +7,14 @@
   color: var(--muted);
 }
 
+// Introducerea arhivei din flux: aliniată cu cardurile de sub ea, nu centrată.
+.feedIntro {
+  max-width: 62ch;
+  margin: 0 0 1.75rem;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

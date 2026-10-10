@@ -43,8 +43,8 @@ config file to rebrand.
   The same broadcasts also appear on the gallery's Video page, below the picked videos.
 - **Morning thought** — short devotionals (verse + reflection) written in the admin, RO/EN,
   with their own pages and a paginated archive. Optionally, **today's thought** from the public
-  Sola Scriptura feed (Romanian) appears above them and on the home page; switch it off in
-  `site.ts` (`dailyThoughts`).
+  Sola Scriptura feed (Romanian) appears above them and on the home page, with the feed's last
+  ~30 days, each linking to its source; switch it off in `site.ts` (`dailyThoughts`).
 - **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives
   only on the server, never in the CMS/DB/API/browser.
 - **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
