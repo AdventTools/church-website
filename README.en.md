@@ -63,7 +63,7 @@ config file to rebrand.
 | Layer     | Technology |
 |-----------|------------|
 | Front end | Next.js 16 (App Router, React 19), TypeScript, SCSS modules |
-| CMS       | Strapi 5.51 (i18n in core), MySQL/MariaDB |
+| CMS       | Strapi 5.58 (i18n in core), MySQL/MariaDB |
 | Runtime   | Node.js, self-hosted behind nginx + PM2 |
 | Email     | Nodemailer (SMTP), proxied through Strapi |
 

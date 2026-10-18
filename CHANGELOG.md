@@ -3,6 +3,7 @@
 > Scris în română.
 
 ## 2026-10-18
+- chore(deps): **vulnerabilitățile semnalate în dependințe, reparate**: Next.js 16.2.11 → 16.4.2 (una critică), Strapi și pluginurile lui 5.51.0 → 5.58.0, nodemailer 6 → 10.1.6 (și în providerul de e-mail al Strapi, prin `resolutions`), mysql2 3.24.6, markdown-it 14.3.3, plus pachetele aduse de ele, actualizate în limitele permise. În CMS au rămas 4 pachete fără reparație compatibilă (`braces`, nereparat nicăieri; `stream-json` 1.x, din `strapi transfer`; `webpack-dev-middleware` 6, doar la dezvoltare; `react-router` 6, cerut de panoul Strapi), iar în front end lanțul `braces` adus de pluginul ESLint, folosit doar la verificare.
 - fix(gallery): **la trecerea pe albume, pozele din galeria veche dispăreau** de pe site: „Despre noi” păstra 4, iar `/galerie` și `/galerie/foto` așteptau albume. Cât timp nu există niciun album, galeria veche ține locul lor (cardul Foto, mozaicul și pagina de poze, în rânduri care păstrează proporția); primul album creat în panou preia automat.
 - fix(lint): `npm run lint` cădea din prima („Converting circular structure to JSON”), fiindcă `eslint-config-next` 16 vine deja în format flat și trecea a doua oară prin `FlatCompat`. Configul îl folosește acum direct; lint-ul rulează și arată 7 erori vechi `set-state-in-effect`, încă nereparate.
 - chore(types): tipurile generate de Strapi erau încă cele din Strapi 4; regenerate pentru schema actuală (inclusiv galeria și devoționalele).

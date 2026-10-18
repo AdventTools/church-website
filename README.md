@@ -64,7 +64,7 @@ singur fișier de configurare pentru rebranding.
 | Nivel     | Tehnologie |
 |-----------|------------|
 | Front end | Next.js 16 (App Router, React 19), TypeScript, module SCSS |
-| CMS       | Strapi 5.51 (i18n în nucleu), MySQL/MariaDB |
+| CMS       | Strapi 5.58 (i18n în nucleu), MySQL/MariaDB |
 | Rulare    | Node.js, self-hosted în spatele nginx + PM2 |
 | E-mail    | Nodemailer (SMTP), proxat prin Strapi |
 
