@@ -35,7 +35,7 @@ config file to rebrand.
   (Baptisms, Concerts, Camps… — topics are defined in the admin, with RO + EN names), each album
   with its own page, in justified rows that keep every photo's proportions, with a lightbox
   (zoom, swipe, keyboard). An album can be linked to an event: the event page then shows "See the
-  photos". **YouTube videos** picked in the admin, grouped by topic, with one featured on top;
+  photos". Until the first album exists, the photos of the old gallery ("Gallery" in the admin) show here instead. **YouTube videos** picked in the admin, grouped by topic, with one featured on top;
   the player loads only on "play", from the no-cookie domain. The About page keeps 4 photos
   that lead to the gallery. `ImageGallery` / `VideoObject` JSON-LD, sitemap with images.
 - **YouTube integration** — live banner + embedded player when the church is streaming,

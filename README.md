@@ -36,7 +36,7 @@ singur fișier de configurare pentru rebranding.
   (Botezuri, Concerte, Tabere… — temele se definesc în panou, cu nume RO + EN), fiecare album cu
   pagina lui, în rânduri care păstrează proporția fiecărei poze, cu lightbox (zoom, swipe,
   tastatură). Un album se poate lega de un eveniment: pe pagina evenimentului apare „Vezi
-  fotografiile”. **Filme YouTube** alese din panou, grupate pe teme, cu unul recomandat sus;
+  fotografiile”. Până la primul album, pozele din galeria veche („Galerie” din panou) se văd tot aici. **Filme YouTube** alese din panou, grupate pe teme, cu unul recomandat sus;
   playerul se încarcă abia la „play”, de pe domeniul fără cookie-uri. Pe „Despre noi” rămân 4
   poze care duc spre galerie. JSON-LD `ImageGallery` / `VideoObject`, sitemap cu imagini.
 - **Integrare YouTube** — banner live + player încorporat când biserica transmite, plus o secțiune
