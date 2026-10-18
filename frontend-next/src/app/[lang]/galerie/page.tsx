@@ -5,7 +5,7 @@ import { ArrowRight, Camera, Clapperboard } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import Section from '@/components/Section';
 import JsonLd from '@/components/JsonLd';
-import { getAlbums, getBackgroundImages, getGalleryPage, getVideos } from '@/lib/strapi';
+import { getAlbums, getBackgroundImages, getGallery, getGalleryPage, getVideos } from '@/lib/strapi';
 import { getLatestVideos } from '@/lib/youtube';
 import { pageMetadata } from '@/lib/seo';
 import { breadcrumbJsonLd, webPageJsonLd } from '@/lib/jsonld';
@@ -25,19 +25,23 @@ const MOSAIC = 3;
 const isYoutubeThumb = (src: string) => src.startsWith('https://i.ytimg.com/');
 
 async function load(locale: Locale) {
-  const [page, albums, videos, channel, bg] = await Promise.all([
+  const [page, albums, videos, channel, bg, legacy] = await Promise.all([
     getGalleryPage(locale),
     getAlbums(locale),
     getVideos(locale),
     getLatestVideos(MOSAIC),
     getBackgroundImages(),
+    getGallery(locale),
   ]);
+  // Fără niciun album, pozele din galeria de dinainte de albume țin locul lor.
+  const loose = albums.length === 0 ? legacy.images : [];
 
   // Imaginile cardurilor le alege cine administrează; dacă nu a ales, vin copertele celor mai noi
   // albume, completate cu poze din ele cât să se umple mozaicul.
   const fallbackPhotos = [
     ...albums.map((a) => a.cover).filter((c): c is NonNullable<typeof c> => Boolean(c)),
     ...albums.flatMap((a) => a.photos),
+    ...loose,
   ].filter((img, i, all) => all.findIndex((o) => o.id === img.id) === i);
   const photoTiles: Tile[] = (page.photoCardImages.length ? page.photoCardImages : fallbackPhotos)
     .slice(0, MOSAIC)
@@ -51,21 +55,21 @@ async function load(locale: Locale) {
         : channel.map((v) => ({ src: v.thumb, alt: v.title }))
   ).slice(0, MOSAIC);
 
-  return { page, albums, videos, channel, bg, photoTiles, videoTiles };
+  return { page, albums, loose, videos, channel, bg, photoTiles, videoTiles };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : 'ro';
   const g = t(locale).gallery;
-  const { albums, videos, channel, photoTiles } = await load(locale);
+  const { albums, loose, videos, channel, photoTiles } = await load(locale);
   return pageMetadata({
     locale,
     title: `${g.title} — ${g.subtitle}`,
     description: g.meta,
     path: '/galerie',
     image: photoTiles[0]?.src,
-    noindex: albums.length === 0 && videos.length === 0 && channel.length === 0,
+    noindex: albums.length === 0 && loose.length === 0 && videos.length === 0 && channel.length === 0,
   });
 }
 
@@ -100,8 +104,9 @@ export default async function GaleriePage({ params }: { params: Promise<{ lang: 
   const locale: Locale = isLocale(lang) ? lang : 'ro';
   const dict = t(locale);
   const g = dict.gallery;
-  const { page, albums, videos, channel, bg, photoTiles, videoTiles } = await load(locale);
+  const { page, albums, loose, videos, channel, bg, photoTiles, videoTiles } = await load(locale);
   const photoCount = albums.reduce((n, a) => n + a.photos.length, 0);
+  const hasPhotos = albums.length > 0 || loose.length > 0;
   const hasVideo = videos.length > 0 || channel.length > 0;
 
   const recent = [
@@ -127,7 +132,7 @@ export default async function GaleriePage({ params }: { params: Promise<{ lang: 
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
     .slice(0, 4);
 
-  const empty = albums.length === 0 && !hasVideo;
+  const empty = !hasPhotos && !hasVideo;
 
   return (
     <>
@@ -159,8 +164,8 @@ export default async function GaleriePage({ params }: { params: Promise<{ lang: 
         {empty ? (
           <p className={styles.empty}>{g.empty}</p>
         ) : (
-          <div className={styles.doors} data-single={albums.length === 0 || !hasVideo ? '' : undefined}>
-            {albums.length > 0 && (
+          <div className={styles.doors} data-single={!hasPhotos || !hasVideo ? '' : undefined}>
+            {hasPhotos && (
               <Link href={localePath(locale, '/galerie/foto')} className={`${styles.door} ${styles.photo}`}>
                 <Mosaic tiles={photoTiles} />
                 <div className={styles.doorText}>
@@ -171,7 +176,7 @@ export default async function GaleriePage({ params }: { params: Promise<{ lang: 
                     {g.photos}
                   </h2>
                   <p className={styles.doorMeta}>
-                    {g.count.albums(albums.length)} · {g.count.photos(photoCount)}
+                    {albums.length > 0 ? `${g.count.albums(albums.length)} · ${g.count.photos(photoCount)}` : g.count.photos(loose.length)}
                   </p>
                   <span className={`btn ${styles.doorCta}`}>
                     {g.photosCta} <ArrowRight size={18} aria-hidden />

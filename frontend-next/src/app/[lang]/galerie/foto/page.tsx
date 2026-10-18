@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import PageHeader from '@/components/PageHeader';
 import Section from '@/components/Section';
 import AlbumCard from '@/components/AlbumCard';
+import Gallery from '@/components/Gallery';
 import JsonLd from '@/components/JsonLd';
-import { getAlbums, getBackgroundImages } from '@/lib/strapi';
+import { getAlbums, getBackgroundImages, getGallery } from '@/lib/strapi';
 import { pageMetadata } from '@/lib/seo';
 import { breadcrumbJsonLd, webPageJsonLd } from '@/lib/jsonld';
 import { groupByTopic } from '@/lib/utils';
@@ -17,15 +18,15 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : 'ro';
   const g = t(locale).gallery;
-  const albums = await getAlbums(locale);
-  const cover = albums[0]?.cover;
+  const [albums, legacy] = await Promise.all([getAlbums(locale), getGallery(locale)]);
+  const cover = albums[0]?.cover ?? legacy.images[0];
   return pageMetadata({
     locale,
     title: `${g.photos} — ${g.title}`,
     description: g.photosMeta,
     path: '/galerie/foto',
     image: cover ? cover.large || cover.small : undefined,
-    noindex: albums.length === 0,
+    noindex: albums.length === 0 && legacy.images.length === 0,
   });
 }
 
@@ -34,10 +35,12 @@ export default async function FotoPage({ params }: { params: Promise<{ lang: str
   const locale: Locale = isLocale(lang) ? lang : 'ro';
   const dict = t(locale);
   const g = dict.gallery;
-  const [albums, bg] = await Promise.all([getAlbums(locale), getBackgroundImages()]);
+  const [albums, legacy, bg] = await Promise.all([getAlbums(locale), getGallery(locale), getBackgroundImages()]);
   const groups = groupByTopic(albums, locale);
   const titled = groups.length > 1 || Boolean(groups[0]?.name);
-  const cover = albums[0]?.cover;
+  // Fără niciun album, pozele din galeria de dinainte de albume rămân vizibile aici.
+  const loose = albums.length === 0 ? legacy.images : [];
+  const cover = albums[0]?.cover ?? loose[0];
 
   return (
     <>
@@ -56,7 +59,8 @@ export default async function FotoPage({ params }: { params: Promise<{ lang: str
       <Section>
         <p className={styles.intro}>{g.photosIntro}</p>
 
-        {albums.length === 0 && <p className={styles.intro}>{g.empty}</p>}
+        {albums.length === 0 && loose.length === 0 && <p className={styles.intro}>{g.empty}</p>}
+        {loose.length > 0 && <Gallery images={loose} locale={locale} layout="justified" />}
 
         {groups.length > 1 && (
           <nav className={styles.topics} aria-label={g.topicsNav}>

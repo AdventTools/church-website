@@ -2,6 +2,11 @@
 
 > Scris în română.
 
+## 2026-10-18
+- fix(gallery): **la trecerea pe albume, pozele din galeria veche dispăreau** de pe site: „Despre noi” păstra 4, iar `/galerie` și `/galerie/foto` așteptau albume. Cât timp nu există niciun album, galeria veche ține locul lor (cardul Foto, mozaicul și pagina de poze, în rânduri care păstrează proporția); primul album creat în panou preia automat.
+- fix(lint): `npm run lint` cădea din prima („Converting circular structure to JSON”), fiindcă `eslint-config-next` 16 vine deja în format flat și trecea a doua oară prin `FlatCompat`. Configul îl folosește acum direct; lint-ul rulează și arată 7 erori vechi `set-state-in-effect`, încă nereparate.
+- chore(types): tipurile generate de Strapi erau încă cele din Strapi 4; regenerate pentru schema actuală (inclusiv galeria și devoționalele).
+
 ## 2026-10-10
 - feat(devotionals): arhiva din fluxul Sola Scriptura arată toate zilele pe care le ține fluxul (~30, nu doar 6), fiecare cu link la sursă; când fluxul nu răspunde, pagina spune asta și trimite la solascriptura.ro. Devoționalele scrise de biserică rămân sub flux. În sitemap, pagina are data zilei curente.
 - feat(gallery): **galerie completă**, adusă din stack-ul înrudit și făcută bilingvă: pagina `/galerie` (fotografii + video), albume foto pe teme (`/galerie/foto`, fiecare album cu pagina lui, în rânduri care păstrează proporția pozelor) și filme YouTube alese din panou (`/galerie/video`, cu unul recomandat și transmisiunile recente ale canalului dedesubt). Tipuri noi în CMS: Temă galerie (nume RO + EN), Album foto, Film, Pagina Galerie; cinci teme de pornire, fără nicio poză. Un album legat de un eveniment pune „Vezi fotografiile” pe pagina evenimentului. Playerul YouTube se încarcă abia la „play”. Pe „Despre noi” rămân 4 poze care duc spre galerie. Tema și evenimentul se aleg pe versiunea RO: Strapi 5 ține orice relație pe limbă, iar site-ul le preia pentru EN.

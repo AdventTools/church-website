@@ -35,5 +35,6 @@ tpm/
 .claude/
 CLAUDE.md
 CLAUDE.local.md
+AGENTS.md
 copilot-instructions.md
 COPILOT-INSTRUCTIONS.md
