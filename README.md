@@ -53,8 +53,13 @@ singur fișier de configurare pentru rebranding.
   IBAN, bancă, monedă, text implicit pentru „Detalii plată”, mesaj de mulțumire; textele RO + EN).
   Textul implicit poate rămâne gol: atunci câmpul nu are buton de copiere, iar pagina îi spune
   donatorului să-și scrie singur destinația.
-  Fără IBAN, pagina dă 404, nu apare în sitemap și nici în footer; nu apare niciodată în meniul
-  principal. Pentru QR folosește adresa fără prefix, `https://domeniul-tău/donatii`.
+  Cu IBAN completat, prima pagină arată la final o bandă discretă „Donații prin transfer bancar”
+  spre ea; fără IBAN, pagina dă 404 și nu apare nici în sitemap, nici pe prima pagină. Nu apare
+  niciodată în meniul principal. Pentru QR folosește adresa fără prefix, `https://domeniul-tău/donatii`.
+  **Slide de proiectat în sală**: `/donatii/proiectie` — ecran 16:9 cu QR mare spre `/donatii`,
+  adresa și IBAN-ul; un click sau tasta F îl pune pe tot ecranul. Cu `?scop=...` (max. 60 de
+  caractere, ex. `/donatii/proiectie?scop=Tabăra de copii`) titlul devine bugetul anunțat și spune
+  ce se scrie la „Detalii plată”. Nu se indexează și nu e în sitemap.
 - **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar
   pe server, niciodată în CMS/DB/API/browser.
 - **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar

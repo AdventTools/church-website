@@ -52,8 +52,14 @@ config file to rebrand.
   IBAN, bank, currency, default "Payment details" text, thank-you message; texts in RO + EN).
   The default text may stay empty: the field then has no copy button and the page asks the donor
   to write their own purpose.
-  Without an IBAN the page returns 404 and is left out of the sitemap and the footer; it never
-  appears in the main menu. For the QR code use the unprefixed address, `https://your-domain/donatii`.
+  With an IBAN filled in, the home page shows a discreet "Give by bank transfer" band at the end
+  linking to it; without an IBAN the page returns 404 and appears neither in the sitemap nor on
+  the home page. It never appears in the main menu. For the QR code use the unprefixed address, `https://your-domain/donatii`.
+  **Slide to project in the hall**: `/donatii/proiectie` — a 16:9 screen with a large QR code to
+  `/donatii`, the address and the IBAN; a click or the F key makes it full screen. With
+  `?scop=...` (max. 60 characters, e.g. `/donatii/proiectie?scop=Children's camp`) the title
+  becomes the announced cause and says what to write in "Payment details". Not indexed and not
+  in the sitemap.
 - **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives
   only on the server, never in the CMS/DB/API/browser.
 - **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
