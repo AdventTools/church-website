@@ -2,6 +2,9 @@
 
 > Scris în română.
 
+## 2026-10-23
+- chore(deps): **încă patru vulnerabilități reparate**: dompurify 3.4.17 (critică, din editorul panoului), zod 4.6.7 în Strapi și în pluginul ESLint, vite 6.4.5. Versiunea forțată de nodemailer nu se aplica de fapt (calea din `resolutions` nu se potrivea), deci în providerii de e-mail rămăsese 9.0.1; acum e 10.1.6 peste tot. Rămân fără reparație compatibilă: zod 3 (cerut de `koa-body` și `koa-session`, nereparat în seria 3), `webpack-dev-middleware` 6, `react-router` 6 și `stream-json` 1.x.
+
 ## 2026-10-18
 - chore(deps): **vulnerabilitățile semnalate în dependințe, reparate**: Next.js 16.2.11 → 16.4.2 (una critică), Strapi și pluginurile lui 5.51.0 → 5.58.0, nodemailer 6 → 10.1.6 (și în providerul de e-mail al Strapi, prin `resolutions`), mysql2 3.24.6, markdown-it 14.3.3, plus pachetele aduse de ele, actualizate în limitele permise. În CMS au rămas 4 pachete fără reparație compatibilă (`braces`, nereparat nicăieri; `stream-json` 1.x, din `strapi transfer`; `webpack-dev-middleware` 6, doar la dezvoltare; `react-router` 6, cerut de panoul Strapi), iar în front end lanțul `braces` adus de pluginul ESLint, folosit doar la verificare.
 - fix(gallery): **la trecerea pe albume, pozele din galeria veche dispăreau** de pe site: „Despre noi” păstra 4, iar `/galerie` și `/galerie/foto` așteptau albume. Cât timp nu există niciun album, galeria veche ține locul lor (cardul Foto, mozaicul și pagina de poze, în rânduri care păstrează proporția); primul album creat în panou preia automat.

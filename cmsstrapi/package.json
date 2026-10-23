@@ -23,8 +23,11 @@
     "styled-components": "^6.0.0"
   },
   "resolutions": {
-    "@strapi/provider-email-nodemailer/nodemailer": "^10.1.6",
-    "markdown-it": "^14.3.1"
+    "**/@strapi/provider-email-*/nodemailer": "^10.1.6",
+    "markdown-it": "^14.3.1",
+    "**/dompurify": "^3.4.17",
+    "**/vite": "^6.4.5",
+    "**/@strapi/*/zod": "^4.6.7"
   },
   "author": {
     "name": "A Strapi developer"
