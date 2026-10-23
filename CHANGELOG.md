@@ -3,6 +3,7 @@
 > Scris în română.
 
 ## 2026-10-24
+- chore(deps)!: **tot ce se putea actualiza, actualizat**: Node 24 LTS recomandat (minimul rămâne 22, cât timp producția e pe 22), Strapi 5.59.0, vite 8 în panoul Strapi, nodemailer 10.2.1, styled-components 6.6; în front end Next 16.4.3, React 19.3, ESLint 10, TypeScript 6.0, ioredis 6, react-markdown 10, lucide-react 1.61, sass 1.106. Rămân pe loc, fiindcă stricau ceva: TypeScript 7 (ESLint nu-l suportă încă), markdown-it 15 (cade previzualizarea din editorul panoului) și React 19 / react-router 7 în CMS (Strapi cere 18 / 6).
 - feat(donations): **pagină de donații prin transfer bancar**, opțională: `/donatii` (și `/en/donatii`), pentru codul QR din sală. Beneficiar, IBAN (în grupuri de 4, copiat fără spații) și „Detalii plată”, fiecare cu buton „Copiază” mare (confirmare 2 secunde; merge și pe telefoane fără `navigator.clipboard`), plus banca și moneda, explicația destinației și „Cum donez” în 3 pași. Tip nou în panou, **Donații**, gol la instalare; fără IBAN pagina dă 404 și lipsește din sitemap și footer. JSON-LD `BreadcrumbList` + `FAQPage` („Cum pot dona…”).
 
 ## 2026-10-23

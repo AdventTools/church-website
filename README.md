@@ -138,7 +138,7 @@ Scripturile pornesc Strapi în fundal, deci au nevoie de același `.env` și de 
 
 ## Cerințe
 
-- **Node.js 22 LTS** (Next.js 16 cere minimum 20.9; Strapi 5 e suportat oficial doar pe Node 22/24/26). Producția rulează Node 22.23.1.
+- **Node.js 24 LTS** (recomandat, testat pe 24.22.1; merge și pe 22, minimul cerut de `cmsstrapi`). Next.js 16 cere minimum 20.9; Strapi 5 e suportat oficial pe Node 22/24/26. Producția rulează Node 22.23.1.
 - **npm** pentru `frontend-next` (`package-lock.json`) și **Yarn** pentru `cmsstrapi` (`yarn.lock`)
 - **MySQL 8.0+** sau **MariaDB 10.3+** (minimul documentat de Strapi 5; recomandat MariaDB 11.4; producția rulează 10.11)
 
