@@ -159,6 +159,15 @@ type Dict = {
     howTitle: string;
     steps: [string, string, string];
     ownStep: string;
+    projection: {
+      scan: string;
+      eyebrow: string;
+      title: string;
+      sub: string;
+      purposeEyebrow: string;
+      writeIn: (purpose: string) => string;
+      fullscreen: string;
+    };
     question: (church: string) => string;
     answer: (o: { church: string; beneficiary: string; iban: string; bank?: string; details: string }) => string;
   };
@@ -349,6 +358,15 @@ const DICT: Record<Locale, Dict> = {
         'Lipește IBAN-ul și beneficiarul, iar la „Detalii plată” pune textul de mai sus (sau destinația ta).',
       ],
       ownStep: 'Lipește IBAN-ul și beneficiarul, iar la „Detalii plată” scrie destinația darului tău.',
+      projection: {
+        scan: 'Scanează pentru a dona',
+        eyebrow: 'Donații',
+        title: 'Dăruiește cu bucurie',
+        sub: 'Scanează codul și donează prin transfer bancar, din aplicația băncii tale.',
+        purposeEyebrow: 'Donează pentru',
+        writeIn: (purpose) => `La „Detalii plată” scrie: ${purpose}`,
+        fullscreen: 'Click sau F pentru ecran complet',
+      },
       question: (church) => `Cum pot dona pentru ${church}?`,
       answer: ({ church, beneficiary, iban, bank, details }) =>
         `Poți dona pentru ${church} prin transfer bancar în contul IBAN ${iban}` +
@@ -551,6 +569,15 @@ const DICT: Record<Locale, Dict> = {
         'Paste the IBAN and the beneficiary, and put the text above (or your own purpose) in “Payment details”.',
       ],
       ownStep: 'Paste the IBAN and the beneficiary, and write the purpose of your gift in “Payment details”.',
+      projection: {
+        scan: 'Scan to give',
+        eyebrow: 'Donate',
+        title: 'Give with joy',
+        sub: 'Scan the code and give by bank transfer from your banking app.',
+        purposeEyebrow: 'Give to',
+        writeIn: (purpose) => `In “Payment details” write: ${purpose}`,
+        fullscreen: 'Click or press F for full screen',
+      },
       question: (church) => `How can I give to ${church}?`,
       answer: ({ church, beneficiary, iban, bank, details }) =>
         `You can give to ${church} by bank transfer to the IBAN ${iban}` +

@@ -1,0 +1,32 @@
+/* Acoperă tot ecranul, peste antet (1000), meniu (1100) și bannerul de cookie-uri (1200). */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  cursor: pointer;
+}
+
+.full {
+  cursor: none;
+}
+
+.hint {
+  position: absolute;
+  right: 2vh;
+  bottom: 1.6vh;
+  margin: 0;
+  font-size: 1.4vh;
+  opacity: 0.45;
+  /* doar pentru cine pornește proiecția; dispare înainte să vadă sala */
+  animation: hintOut 0.6s ease 4s forwards;
+
+  .full & {
+    display: none;
+  }
+}
+
+@keyframes hintOut {
+  to {
+    opacity: 0;
+  }
+}
