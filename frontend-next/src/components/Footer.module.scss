@@ -115,6 +115,16 @@
 .slogan {
   color: var(--second-accent-color);
 }
+.donate {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+
+  &:hover {
+    color: #fff;
+  }
+}
 
 @media (max-width: 820px) {
   .grid {

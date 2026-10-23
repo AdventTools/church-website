@@ -2,6 +2,9 @@
 
 > Scris în română.
 
+## 2026-10-24
+- feat(donations): **pagină de donații prin transfer bancar**, opțională: `/donatii` (și `/en/donatii`), pentru codul QR din sală. Beneficiar, IBAN (în grupuri de 4, copiat fără spații) și „Detalii plată”, fiecare cu buton „Copiază” mare (confirmare 2 secunde; merge și pe telefoane fără `navigator.clipboard`), plus banca și moneda, explicația destinației și „Cum donez” în 3 pași. Tip nou în panou, **Donații**, gol la instalare; fără IBAN pagina dă 404 și lipsește din sitemap și footer. JSON-LD `BreadcrumbList` + `FAQPage` („Cum pot dona…”).
+
 ## 2026-10-23
 - chore(deps): **încă patru vulnerabilități reparate**: dompurify 3.4.17 (critică, din editorul panoului), zod 4.6.7 în Strapi și în pluginul ESLint, vite 6.4.5. Versiunea forțată de nodemailer nu se aplica de fapt (calea din `resolutions` nu se potrivea), deci în providerii de e-mail rămăsese 9.0.1; acum e 10.1.6 peste tot. Rămân fără reparație compatibilă: zod 3 (cerut de `koa-body` și `koa-session`, nereparat în seria 3), `webpack-dev-middleware` 6, `react-router` 6 și `stream-json` 1.x.
 

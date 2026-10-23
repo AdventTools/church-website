@@ -10,6 +10,7 @@ import type {
   Program,
   ChurchEvent,
   FirstVisit,
+  Donation,
   Project,
   Article,
   Beliefs,
@@ -258,6 +259,24 @@ export async function getPrograms(locale?: Locale): Promise<Program[]> {
   );
   const rows = await fetchListMerged(`/programs?${query}`, locale);
   return rows.map((p) => ({ id: p.id, ...p.attributes }));
+}
+
+// Donații: câmpurile lipsă pe EN se iau de pe RO (contul e același, doar textele se traduc).
+// Fără IBAN nu există pagină: null → 404, fără link în footer și fără intrare în sitemap.
+export async function getDonation(locale?: Locale): Promise<Donation | null> {
+  const ro = (await api<{ data: StrapiEntry | null }>(loc('/donation', 'ro')))?.data?.attributes;
+  const own = locale && locale !== 'ro' ? (await api<{ data: StrapiEntry | null }>(loc('/donation', locale)))?.data?.attributes : null;
+  const pick = (k: string): string => String(own?.[k] || ro?.[k] || '').trim();
+  const iban = pick('iban').replace(/\s+/g, '').toUpperCase();
+  if (!iban) return null;
+  return {
+    beneficiary: pick('beneficiary'),
+    iban,
+    bank: pick('bank') || undefined,
+    currency: pick('currency') || undefined,
+    paymentDetails: pick('paymentDetails'),
+    thankYou: pick('thankYou') || undefined,
+  };
 }
 
 export async function getFirstVisit(locale?: Locale): Promise<FirstVisit | null> {

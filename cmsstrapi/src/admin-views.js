@@ -85,6 +85,17 @@ const CFG = {
       closingText: ['Text de final', ''],
     },
   },
+  'api::donation.donation': {
+    labels: {
+      beneficiary: ['Beneficiar', 'Titularul contului, exact cum apare la bancă (ex. „Biserica Adventistă de Ziua a Șaptea …”).'],
+      iban: ['IBAN', 'Contul în care se fac donațiile. Cu sau fără spații. Gol = pagina /donatii nu există pe site.'],
+      bank: ['Banca', 'Doar informativ, ex. „Banca Transilvania”.'],
+      currency: ['Moneda', 'Doar informativ, ex. „RON”.'],
+      paymentDetails: ['Text implicit pentru „Detalii plată”', 'Textul pe care îl copiază cine donează, ex. „Dar - Biserica …”. Se traduce pe fiecare limbă.'],
+      thankYou: ['Mesaj de mulțumire', 'Una-două propoziții afișate sus, sub numele bisericii.'],
+    },
+    layout: [['beneficiary'], ['iban'], ['bank', 'currency'], ['paymentDetails'], ['thankYou']],
+  },
   'api::contact.contact': {
     labels: {
       pastor: ['Pastor', 'Numele pastorului.'],

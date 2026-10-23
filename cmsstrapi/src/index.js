@@ -14,6 +14,7 @@ const PUBLIC_READ = {
   'photo-album': ['find', 'findOne'],
   video: ['find', 'findOne'],
   'first-visit': ['find'],
+  donation: ['find'],
   beliefs: ['find'],
   event: ['find', 'findOne'],
   history: ['find', 'findOne'],

@@ -45,6 +45,13 @@ config file to rebrand.
   with their own pages and a paginated archive. Optionally, **today's thought** from the public
   Sola Scriptura feed (Romanian) appears above them and on the home page, with the feed's last
   ~30 days, each linking to its source; switch it off in `site.ts` (`dailyThoughts`).
+- **Bank-transfer donations (optional)** — the `/donatii` page (`/en/donatii`), built for
+  phones: the church shows a QR code to it in the hall, and people copy the beneficiary, the
+  IBAN (shown in groups of 4, copied without spaces) and the "Payment details" text with one tap
+  each, then pay from their banking app. Filled in from the admin (**Donații**: beneficiary,
+  IBAN, bank, currency, default "Payment details" text, thank-you message; texts in RO + EN).
+  Without an IBAN the page returns 404 and is left out of the sitemap and the footer; it never
+  appears in the main menu. For the QR code use the unprefixed address, `https://your-domain/donatii`.
 - **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives
   only on the server, never in the CMS/DB/API/browser.
 - **Privacy** — EU cookie-consent banner; Google Analytics loads only after consent.
@@ -192,6 +199,7 @@ is empty. Here too, `dailyThoughts` switches today's thought from Sola Scriptura
       regenerate the icons and sharing image with `node scripts/generate-icons.js` (from `cmsstrapi/`)
 - [ ] In the Strapi admin, fill in **church-info**, **contact**, **style** (colors), **program**,
       and the **E-mail (SMTP)** settings (recipient address included)
+- [ ] Optionally, fill in and publish **Donații** (the IBAN turns on the `/donatii` page)
 - [ ] Adjust the editorial meta/description strings in `frontend-next/src/lib/i18n.ts`
       (per-page marketing copy) and the beliefs/gallery fallback text if desired
 - [ ] Replace the seed content (events, projects, articles, beliefs) from the admin and adjust

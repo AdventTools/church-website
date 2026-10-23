@@ -140,7 +140,25 @@ type Dict = {
     };
   };
   firstVisit: { faqTitle: string; closingTitle: string; ctaContact: string; ctaSchedule: string; meta: string };
-  footer: { social: string; nav: string; useful: string };
+  donations: {
+    title: string;
+    meta: (church: string) => string;
+    beneficiary: string;
+    iban: string;
+    details: string;
+    bank: string;
+    currency: string;
+    copy: string;
+    copied: string;
+    copyFailed: string;
+    copyLabel: (field: string) => string;
+    destination: string;
+    howTitle: string;
+    steps: [string, string, string];
+    question: (church: string) => string;
+    answer: (o: { church: string; beneficiary: string; iban: string; bank?: string; details: string }) => string;
+  };
+  footer: { social: string; nav: string; useful: string; donate: string };
   music: {
     heading: string;
     play: string;
@@ -303,7 +321,33 @@ const DICT: Record<Locale, Dict> = {
       ctaSchedule: 'Vezi programul complet',
       meta: 'Vii prima dată la Biserica Adventistă „Speranța” din Cluj-Napoca? Află la ce oră încep serviciile de sâmbătă, unde parchezi, cum te îmbraci, unde stau copiii și la ce să te aștepți.',
     },
-    footer: { social: 'Social media', nav: 'Navigare', useful: 'Linkuri utile' },
+    donations: {
+      title: 'Donații',
+      meta: (church) => `Cum poți dona pentru ${church} prin transfer bancar: beneficiarul, IBAN-ul și detaliile de plată, gata de copiat în aplicația băncii.`,
+      beneficiary: 'Beneficiar',
+      iban: 'IBAN',
+      details: 'Detalii plată',
+      bank: 'Banca',
+      currency: 'Moneda',
+      copy: 'Copiază',
+      copied: 'Copiat',
+      copyFailed: 'Nu s-a putut copia. Ține apăsat pe text ca să-l copiezi.',
+      copyLabel: (field) => `Copiază ${field}`,
+      destination: 'Dacă vrei să susții ceva anume, scrie destinația în câmpul „Detalii plată”. Dacă nu scrii o destinație, darul tău merge la bugetul local al bisericii.',
+      howTitle: 'Cum donez',
+      steps: [
+        'Copiază IBAN-ul de mai sus.',
+        'Deschide aplicația băncii tale și alege „Transfer nou”.',
+        'Lipește IBAN-ul și beneficiarul, iar la „Detalii plată” pune textul de mai sus (sau destinația ta).',
+      ],
+      question: (church) => `Cum pot dona pentru ${church}?`,
+      answer: ({ church, beneficiary, iban, bank, details }) =>
+        `Poți dona pentru ${church} prin transfer bancar în contul IBAN ${iban}` +
+        (beneficiary ? `, beneficiar ${beneficiary}` : '') +
+        (bank ? `, deschis la ${bank}` : '') +
+        `. La „Detalii plată” scrie ${details ? `„${details}”` : 'destinația darului'}; dacă nu menționezi o destinație, darul merge la bugetul local al bisericii.`,
+    },
+    footer: { social: 'Social media', nav: 'Navigare', useful: 'Linkuri utile', donate: 'Donații' },
     music: {
       heading: 'Ascultă și privește',
       play: 'Redă',
@@ -474,7 +518,33 @@ const DICT: Record<Locale, Dict> = {
       ctaSchedule: 'See the full schedule',
       meta: 'Visiting the Speranța Seventh-day Adventist Church in Cluj-Napoca for the first time? Find out when Saturday services start, where to park, what to wear, where the children go, and what to expect.',
     },
-    footer: { social: 'Social media', nav: 'Navigation', useful: 'Useful links' },
+    donations: {
+      title: 'Donate',
+      meta: (church) => `How to give to ${church} by bank transfer: the beneficiary, IBAN and payment details, ready to copy into your banking app.`,
+      beneficiary: 'Beneficiary',
+      iban: 'IBAN',
+      details: 'Payment details',
+      bank: 'Bank',
+      currency: 'Currency',
+      copy: 'Copy',
+      copied: 'Copied',
+      copyFailed: 'Could not copy. Press and hold the text to copy it.',
+      copyLabel: (field) => `Copy ${field}`,
+      destination: 'If you want to support something specific, write it in the “Payment details” field. Without a stated purpose, your gift goes to the church’s local budget.',
+      howTitle: 'How to give',
+      steps: [
+        'Copy the IBAN above.',
+        'Open your banking app and choose “New transfer”.',
+        'Paste the IBAN and the beneficiary, and put the text above (or your own purpose) in “Payment details”.',
+      ],
+      question: (church) => `How can I give to ${church}?`,
+      answer: ({ church, beneficiary, iban, bank, details }) =>
+        `You can give to ${church} by bank transfer to the IBAN ${iban}` +
+        (beneficiary ? `, beneficiary ${beneficiary}` : '') +
+        (bank ? `, held at ${bank}` : '') +
+        `. In “Payment details” write ${details ? `“${details}”` : 'the purpose of your gift'}; without a stated purpose, the gift goes to the church’s local budget.`,
+    },
+    footer: { social: 'Social media', nav: 'Navigation', useful: 'Useful links', donate: 'Donate' },
     music: {
       heading: 'Listen & watch',
       play: 'Play',

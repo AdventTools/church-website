@@ -46,6 +46,13 @@ singur fișier de configurare pentru rebranding.
   paginile lor și arhivă paginată. Opțional, **gândul zilei** din fluxul public Sola Scriptura
   (în română) apare deasupra lor și pe prima pagină, cu ultimele ~30 de zile din flux, fiecare
   cu link la sursă; se oprește din `site.ts` (`dailyThoughts`).
+- **Donații prin transfer bancar (opțional)** — pagina `/donatii` (`/en/donatii`), gândită pentru
+  telefon: biserica afișează în sală un cod QR spre ea, iar omul copiază dintr-o atingere
+  beneficiarul, IBAN-ul (afișat în grupuri de 4, copiat fără spații) și textul pentru „Detalii
+  plată”, apoi plătește din aplicația băncii. Se completează din panou (**Donații**: beneficiar,
+  IBAN, bancă, monedă, text implicit pentru „Detalii plată”, mesaj de mulțumire; textele RO + EN).
+  Fără IBAN, pagina dă 404, nu apare în sitemap și nici în footer; nu apare niciodată în meniul
+  principal. Pentru QR folosește adresa fără prefix, `https://domeniul-tău/donatii`.
 - **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar
   pe server, niciodată în CMS/DB/API/browser.
 - **Confidențialitate** — banner de consimțământ cookie (UE); Google Analytics se încarcă doar
@@ -195,6 +202,7 @@ sau oprește gândul zilei preluat de la Sola Scriptura.
       regenerează iconițele și imaginea de distribuire cu `node scripts/generate-icons.js` (din `cmsstrapi/`)
 - [ ] În panoul Strapi, completează **church-info**, **contact**, **style** (culori), **program**
       și setările **E-mail (SMTP)** (inclusiv adresa destinatarului)
+- [ ] Opțional, completează și publică **Donații** (IBAN-ul pornește pagina `/donatii`)
 - [ ] Ajustează textele meta/descriptive editoriale din `frontend-next/src/lib/i18n.ts`
       (copywriting per pagină) și textele de rezervă pentru „ce credem"/galerie, dacă vrei
 - [ ] Înlocuiește conținutul de seed (evenimente, proiecte, articole, „ce credem") din admin și

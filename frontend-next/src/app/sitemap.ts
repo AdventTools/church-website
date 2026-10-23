@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getAllEvents, getAllProjects, getAllArticles, getAlbums, getVideos, getDevotionals } from '@/lib/strapi';
+import { getAllEvents, getAllProjects, getAllArticles, getAlbums, getVideos, getDevotionals, getDonation } from '@/lib/strapi';
 import { getLatestVideos } from '@/lib/youtube';
 import { todayInRomania } from '@/lib/solascriptura';
 import { detailSeg } from '@/lib/utils';
@@ -158,5 +158,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
   ];
 
-  return [...staticPages, ...eventPages, ...projectPages, ...articlePages, ...galleryPages, ...albumPages, ...devotionalHub, ...devotionalPages];
+  // Donații: doar când IBAN-ul e completat (altfel pagina dă 404).
+  const donationLanguages = { ro: `${SITE_URL}/donatii`, en: `${SITE_URL}/en/donatii` };
+  const donationPages: MetadataRoute.Sitemap = (await getDonation('ro'))
+    ? [
+        { url: donationLanguages.ro, changeFrequency: 'yearly' as const, priority: 0.5, alternates: { languages: donationLanguages } },
+        { url: donationLanguages.en, changeFrequency: 'yearly' as const, priority: 0.45, alternates: { languages: donationLanguages } },
+      ]
+    : [];
+
+  return [...staticPages, ...eventPages, ...projectPages, ...articlePages, ...galleryPages, ...albumPages, ...devotionalHub, ...devotionalPages, ...donationPages];
 }

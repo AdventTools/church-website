@@ -158,6 +158,16 @@ export type FirstVisit = {
   closingText?: string;
 };
 
+// Pagina de donații: IBAN-ul vine deja fără spații, cu majuscule; pagina există doar când e completat.
+export type Donation = {
+  beneficiary: string;
+  iban: string;
+  bank?: string;
+  currency?: string;
+  paymentDetails: string;
+  thankYou?: string;
+};
+
 // Datele rămân string ISO (serializabile server -> client). Se convertesc cu new Date() la afișare.
 export type ChurchEvent = {
   id: number;

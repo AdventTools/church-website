@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AnalyticsConsent from '@/components/AnalyticsConsent';
 import JsonLd from '@/components/JsonLd';
-import { getChurchInfo, getStyle, getUnderConstruction, getContact, getPrograms } from '@/lib/strapi';
+import { getChurchInfo, getStyle, getUnderConstruction, getContact, getPrograms, getDonation } from '@/lib/strapi';
 import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, absoluteUrl, DEFAULT_OG_IMAGE, OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT } from '@/lib/seo';
 import { churchJsonLd, websiteJsonLd } from '@/lib/jsonld';
 import { site } from '@/config/site';
@@ -80,12 +80,13 @@ export default async function RootLayout({
   const locale: Locale = lang;
   const dict = t(locale);
 
-  const [churchInfo, style, underConstruction, contact, programs] = await Promise.all([
+  const [churchInfo, style, underConstruction, contact, programs, donation] = await Promise.all([
     getChurchInfo(locale),
     getStyle(),
     getUnderConstruction(),
     getContact(locale),
     getPrograms(locale),
+    getDonation(locale),
   ]);
 
   // Următorul program din orar: cea mai apropiată zi+oră față de acum (se recalculează la revalidare).
@@ -140,7 +141,7 @@ export default async function RootLayout({
             <main id="main-content" tabIndex={-1}>
               {children}
             </main>
-            <Footer churchInfo={churchInfo} locale={locale} />
+            <Footer churchInfo={churchInfo} locale={locale} donations={Boolean(donation)} />
           </>
         )}
         <JsonLd data={[churchJsonLd(churchInfo, contact, programs, locale), websiteJsonLd(locale)]} />

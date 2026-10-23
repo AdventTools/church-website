@@ -857,6 +857,74 @@ export interface ApiDevotionalDevotional extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDonationDonation extends Struct.SingleTypeSchema {
+  collectionName: 'donations';
+  info: {
+    description: 'Pagina de dona\u021Bii prin transfer bancar (/donatii). Apare pe site doar c\u00E2nd IBAN-ul e completat \u0219i pagina e publicat\u0103.';
+    displayName: 'Dona\u021Bii';
+    pluralName: 'donations';
+    singularName: 'donation';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    bank: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    beneficiary: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currency: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    iban: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::donation.donation'
+    >;
+    paymentDetails: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    thankYou: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiEventTemplateEventTemplate
   extends Struct.CollectionTypeSchema {
   collectionName: 'event_templates';
@@ -2299,6 +2367,7 @@ declare module '@strapi/strapi' {
       'api::church-info.church-info': ApiChurchInfoChurchInfo;
       'api::contact.contact': ApiContactContact;
       'api::devotional.devotional': ApiDevotionalDevotional;
+      'api::donation.donation': ApiDonationDonation;
       'api::event-template.event-template': ApiEventTemplateEventTemplate;
       'api::event.event': ApiEventEvent;
       'api::first-visit.first-visit': ApiFirstVisitFirstVisit;

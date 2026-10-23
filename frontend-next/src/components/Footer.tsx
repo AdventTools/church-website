@@ -8,7 +8,8 @@ import styles from './Footer.module.scss';
 
 const EXTERNAL = site.footerLinks;
 
-export default function Footer({ churchInfo, locale }: { churchInfo: ChurchInfo | null; locale: Locale }) {
+// `donations`: pagina /donatii e activă (IBAN completat). Nu stă în meniu, doar un link discret aici.
+export default function Footer({ churchInfo, locale, donations }: { churchInfo: ChurchInfo | null; locale: Locale; donations?: boolean }) {
   const year = new Date().getFullYear();
   const dict = t(locale);
   const tagline = siteSlogan(locale);
@@ -90,6 +91,11 @@ export default function Footer({ churchInfo, locale }: { churchInfo: ChurchInfo 
       <div className={styles.copyright}>
         <div className={`container ${styles.copyInner}`}>
           <span>© {year} {name}</span>
+          {donations && (
+            <Link href={localePath(locale, '/donatii')} className={styles.donate}>
+              {dict.footer.donate}
+            </Link>
+          )}
           <span className={styles.slogan}>{tagline}</span>
         </div>
       </div>
