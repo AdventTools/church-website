@@ -91,7 +91,7 @@ const CFG = {
       iban: ['IBAN', 'Contul în care se fac donațiile. Cu sau fără spații. Gol = pagina /donatii nu există pe site.'],
       bank: ['Banca', 'Doar informativ, ex. „Banca Transilvania”.'],
       currency: ['Moneda', 'Doar informativ, ex. „RON”.'],
-      paymentDetails: ['Text implicit pentru „Detalii plată”', 'Textul pe care îl copiază cine donează, ex. „Dar - Biserica …”. Se traduce pe fiecare limbă.'],
+      paymentDetails: ['Text implicit pentru „Detalii plată”', 'Textul pe care îl copiază cine donează, ex. „Dar - Biserica …”. Se traduce pe fiecare limbă. Gol = donatorul își scrie singur destinația.'],
       thankYou: ['Mesaj de mulțumire', 'Una-două propoziții afișate sus, sub numele bisericii.'],
     },
     layout: [['beneficiary'], ['iban'], ['bank', 'currency'], ['paymentDetails'], ['thankYou']],

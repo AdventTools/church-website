@@ -50,6 +50,8 @@ config file to rebrand.
   IBAN (shown in groups of 4, copied without spaces) and the "Payment details" text with one tap
   each, then pay from their banking app. Filled in from the admin (**Donații**: beneficiary,
   IBAN, bank, currency, default "Payment details" text, thank-you message; texts in RO + EN).
+  The default text may stay empty: the field then has no copy button and the page asks the donor
+  to write their own purpose.
   Without an IBAN the page returns 404 and is left out of the sitemap and the footer; it never
   appears in the main menu. For the QR code use the unprefixed address, `https://your-domain/donatii`.
 - **Contact form** — messages sent through the CMS's SMTP settings; the SMTP password lives

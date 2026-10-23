@@ -51,6 +51,8 @@ singur fișier de configurare pentru rebranding.
   beneficiarul, IBAN-ul (afișat în grupuri de 4, copiat fără spații) și textul pentru „Detalii
   plată”, apoi plătește din aplicația băncii. Se completează din panou (**Donații**: beneficiar,
   IBAN, bancă, monedă, text implicit pentru „Detalii plată”, mesaj de mulțumire; textele RO + EN).
+  Textul implicit poate rămâne gol: atunci câmpul nu are buton de copiere, iar pagina îi spune
+  donatorului să-și scrie singur destinația.
   Fără IBAN, pagina dă 404, nu apare în sitemap și nici în footer; nu apare niciodată în meniul
   principal. Pentru QR folosește adresa fără prefix, `https://domeniul-tău/donatii`.
 - **Formular de contact** — mesajele se trimit prin setările SMTP din CMS; parola SMTP stă doar

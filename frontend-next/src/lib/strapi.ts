@@ -317,7 +317,6 @@ export async function getUnderConstruction(): Promise<boolean> {
 function buildEvent(id: number, a: any, documentId?: string): ChurchEvent {
   const cover = a.cover?.data?.attributes;
   const large = cover?.formats?.large ?? cover;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const loc = (a.localizations?.data ?? [])[0];
   const alt = loc
     ? { id: loc.id, title: loc.attributes.title, locale: loc.attributes.locale as 'ro' | 'en', slug: loc.attributes.slug ?? undefined }
@@ -354,7 +353,6 @@ function ytId(url: string): string {
 function buildProject(id: number, a: any): Project {
   const cover = a.cover?.data?.attributes;
   const large = cover?.formats?.large ?? cover;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locz = (a.localizations?.data ?? [])[0];
   const ensembles = (
     (a.ensembles ?? []) as {
@@ -554,7 +552,6 @@ export async function getAllProjects(locale?: Locale): Promise<Project[]> {
 function buildArticle(id: number, a: any): Article {
   const cover = a.cover?.data?.attributes;
   const large = cover?.formats?.large ?? cover;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locz = (a.localizations?.data ?? [])[0];
   return {
     id,
@@ -604,7 +601,6 @@ export const DEVOTIONAL_PAGE_SIZE = 12;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildDevotional(id: number, a: any): Devotional {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locz = (a.localizations?.data ?? [])[0];
   return {
     id,
