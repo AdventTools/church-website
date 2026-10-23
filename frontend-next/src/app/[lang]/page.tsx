@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import Link from 'next/link';
-import { HeartHandshake, ArrowRight, BookOpen, Users, Sunrise, HeartPulse, Heart, Music, BookMarked, Quote } from 'lucide-react';
+import { HeartHandshake, ArrowRight, BookOpen, Users, Sunrise, HeartPulse, Heart, Music, BookMarked, Quote, Landmark } from 'lucide-react';
 import Hero from '@/components/Hero';
 import Section from '@/components/Section';
 import EventCard from '@/components/EventCard';
@@ -13,7 +13,17 @@ import LivePlayer from '@/components/LivePlayer';
 import Sermons from '@/components/Sermons';
 import Reveal from '@/components/Reveal';
 import JsonLd from '@/components/JsonLd';
-import { getHomePage, getBackgroundImages, getPrograms, getUpcomingEvents, getArchivedEvents, getProjects, getArticles, getBeliefs } from '@/lib/strapi';
+import {
+  getHomePage,
+  getBackgroundImages,
+  getPrograms,
+  getUpcomingEvents,
+  getArchivedEvents,
+  getProjects,
+  getArticles,
+  getBeliefs,
+  getDonation,
+} from '@/lib/strapi';
 import { getLatestVideos, channelUrl } from '@/lib/youtube';
 import { videoListJsonLd, webPageJsonLd } from '@/lib/jsonld';
 import { getDailyThoughts, SOURCE_NAME } from '@/lib/solascriptura';
@@ -41,7 +51,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const dict = t(locale);
 
   // Gândul zilei vine dintr-un flux în română; pe /en nu se cere deloc.
-  const [home, bg, programs, upcoming, pastEvents, videos, projects, articles, beliefs, daily] = await Promise.all([
+  const [home, bg, programs, upcoming, pastEvents, videos, projects, articles, beliefs, daily, donation] = await Promise.all([
     getHomePage(locale),
     getBackgroundImages(),
     getPrograms(locale),
@@ -52,6 +62,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     getArticles(locale),
     getBeliefs(locale),
     locale === 'ro' ? getDailyThoughts() : Promise.resolve({ today: null, previous: [] }),
+    getDonation(locale),
   ]);
   const thought = daily.today;
   const beliefsTeaser = beliefs?.intro ? summarize(beliefs.intro, 145) : '';
@@ -231,6 +242,24 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             ))}
           </div>
         </Section>
+      )}
+
+      {/* Donații: o bandă discretă la final, doar când pagina /donatii e activă (IBAN completat). */}
+      {donation && (
+        <div className={styles.donateBand}>
+          <div className={`container ${styles.donateInner}`}>
+            <span className={styles.donateIcon} aria-hidden>
+              <Landmark size={22} />
+            </span>
+            <p className={styles.donateBody}>
+              <strong>{dict.home.donateTitle}</strong>
+              <span>{dict.home.donateText}</span>
+            </p>
+            <Link href={localePath(locale, '/donatii')} className={styles.donateLink}>
+              {dict.home.donateCta} <ArrowRight size={16} aria-hidden />
+            </Link>
+          </div>
+        </div>
       )}
 
       {videos.length > 0 && <JsonLd data={videoListJsonLd(videos)} />}

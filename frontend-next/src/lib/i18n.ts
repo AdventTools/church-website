@@ -81,6 +81,9 @@ type Dict = {
     valuesMore: string;
     beliefsTitle: string;
     beliefsMore: string;
+    donateTitle: string;
+    donateText: string;
+    donateCta: string;
   };
   about: { title: string; history: string; gallery: string; meta: string };
   gallery: {
@@ -171,7 +174,7 @@ type Dict = {
     question: (church: string) => string;
     answer: (o: { church: string; beneficiary: string; iban: string; bank?: string; details: string }) => string;
   };
-  footer: { social: string; nav: string; useful: string; donate: string };
+  footer: { social: string; nav: string; useful: string };
   music: {
     heading: string;
     play: string;
@@ -254,6 +257,9 @@ const DICT: Record<Locale, Dict> = {
       valuesMore: 'Citește mai multe despre ce credem',
       beliefsTitle: 'Ce credem',
       beliefsMore: 'Citește mai mult',
+      donateTitle: 'Donații prin transfer bancar',
+      donateText: 'O alternativă la darul în numerar: IBAN-ul și datele de plată, gata de copiat în aplicația băncii.',
+      donateCta: 'Donează',
     },
     about: { title: 'Despre noi', history: 'Istoric', gallery: 'Galerie', meta: 'Povestea și valorile Bisericii Adventiste „Speranța” din Cluj-Napoca — istoricul comunității și galerie foto.' },
     gallery: {
@@ -374,7 +380,7 @@ const DICT: Record<Locale, Dict> = {
         (bank ? `, deschis la ${bank}` : '') +
         `. La „Detalii plată” scrie ${details ? `„${details}”` : 'destinația darului'}; dacă nu menționezi o destinație, darul merge la bugetul local al bisericii.`,
     },
-    footer: { social: 'Social media', nav: 'Navigare', useful: 'Linkuri utile', donate: 'Donații' },
+    footer: { social: 'Social media', nav: 'Navigare', useful: 'Linkuri utile' },
     music: {
       heading: 'Ascultă și privește',
       play: 'Redă',
@@ -465,6 +471,9 @@ const DICT: Record<Locale, Dict> = {
       valuesMore: 'Read more about what we believe',
       beliefsTitle: 'What we believe',
       beliefsMore: 'Read more',
+      donateTitle: 'Give by bank transfer',
+      donateText: 'An alternative to giving in cash: the IBAN and payment details, ready to copy into your banking app.',
+      donateCta: 'Give',
     },
     about: { title: 'About us', history: 'Our history', gallery: 'Gallery', meta: 'The story and values of the Speranța (Hope) Seventh-day Adventist Church in Cluj-Napoca — our community history and photo gallery.' },
     gallery: {
@@ -585,7 +594,7 @@ const DICT: Record<Locale, Dict> = {
         (bank ? `, held at ${bank}` : '') +
         `. In “Payment details” write ${details ? `“${details}”` : 'the purpose of your gift'}; without a stated purpose, the gift goes to the church’s local budget.`,
     },
-    footer: { social: 'Social media', nav: 'Navigation', useful: 'Useful links', donate: 'Donate' },
+    footer: { social: 'Social media', nav: 'Navigation', useful: 'Useful links' },
     music: {
       heading: 'Listen & watch',
       play: 'Play',

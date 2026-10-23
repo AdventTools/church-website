@@ -96,6 +96,85 @@
   }
 }
 
+/* Donații: bandă albă, un singur rând, între ultima secțiune și footer — vizibilă, nu insistentă. */
+/* Stă în albul dinaintea footer-ului: marginea de sus a footer-ului (aceeași clamp) e preluată
+   de bandă ca spațiu interior, altfel s-ar aduna două goluri. */
+.donateBand {
+  margin-bottom: calc(-1 * clamp(2.5rem, 6vw, 4rem));
+  background: #fff;
+}
+.donateInner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+.donateIcon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 8%, #fff);
+}
+.donateBody {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.75rem;
+  margin: 0;
+  line-height: 1.5;
+
+  strong {
+    font-weight: 650;
+  }
+  span {
+    color: var(--muted);
+  }
+}
+.donateLink {
+  flex: none;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 30%, #fff);
+  border-radius: 999px;
+  color: var(--primary-color);
+  font-weight: 600;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+
+  &:hover {
+    text-decoration: none;
+    color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 7%, #fff);
+    border-color: var(--primary-color);
+  }
+}
+
+@media (max-width: 640px) {
+  .donateInner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  /* textul ia tot rândul de lângă iconiță, butonul coboară sub el */
+  .donateBody {
+    flex: 1 1 calc(100% - 44px - 1rem);
+    min-width: 0;
+  }
+  .donateLink {
+    margin-left: calc(44px + 1rem);
+  }
+}
+
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
