@@ -9,10 +9,10 @@
 }
 
 .label {
-  margin: 0 0 0.35rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  margin: 0 0 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -27,37 +27,42 @@
   flex: 1;
   min-width: 0;
   margin: 0;
-  font-size: clamp(1.2rem, 4.6vw, 1.45rem);
-  font-weight: 650;
-  line-height: 1.35;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.45;
   color: var(--fg);
   overflow-wrap: anywhere;
   user-select: all;
 }
 
+/* IBAN-ul e câmpul care se verifică cu ochiul: puțin mai mare, cifre egale, grupuri aerisite. */
 .mono {
+  /* 29 de caractere încap pe un rând de ~310 px (telefon de 360-390 px) */
+  font-size: clamp(1rem, 4.6vw, 1.2rem);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   /* pe ecrane înguste se rupe doar între grupurile de 4 */
   overflow-wrap: normal;
 }
 
+/* Buton nuanțat, nu plin: trei butoane roșii unul sub altul ar acoperi datele. */
 .button {
   flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  min-width: 9.5rem;
-  min-height: 56px;
-  padding: 0 1.4rem;
-  border: 0;
-  border-radius: 14px;
-  background: var(--primary-color);
-  color: #fff;
+  gap: 0.45rem;
+  min-width: 8.5rem;
+  min-height: 48px;
+  padding: 0 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 28%, #fff);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primary-color) 7%, #fff);
+  color: var(--primary-color);
   font: inherit;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -66,7 +71,7 @@
     transform 0.12s;
 
   &:hover {
-    filter: brightness(1.08);
+    background: color-mix(in srgb, var(--primary-color) 12%, #fff);
   }
   &:active {
     transform: scale(0.97);
@@ -78,8 +83,11 @@
 }
 
 /* Verde închis: confirmarea se vede și fără să citești textul (contrast AA cu alb). */
-.done {
+.done,
+.done:hover {
+  border-color: #1e7a3c;
   background: #1e7a3c;
+  color: #fff;
 }
 
 .status {
@@ -110,7 +118,7 @@
   }
   .button {
     width: 100%;
-    min-height: 58px;
+    min-height: 50px;
   }
   .status {
     margin-top: 0.5rem;

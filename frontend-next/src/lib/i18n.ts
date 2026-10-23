@@ -143,6 +143,7 @@ type Dict = {
   donations: {
     title: string;
     meta: (church: string) => string;
+    lead: (church: string) => string;
     beneficiary: string;
     iban: string;
     details: string;
@@ -153,8 +154,11 @@ type Dict = {
     copyFailed: string;
     copyLabel: (field: string) => string;
     destination: string;
+    ownDetails: string;
+    ownDetailsHint: string;
     howTitle: string;
     steps: [string, string, string];
+    ownStep: string;
     question: (church: string) => string;
     answer: (o: { church: string; beneficiary: string; iban: string; bank?: string; details: string }) => string;
   };
@@ -324,6 +328,8 @@ const DICT: Record<Locale, Dict> = {
     donations: {
       title: 'Donații',
       meta: (church) => `Cum poți dona pentru ${church} prin transfer bancar: beneficiarul, IBAN-ul și detaliile de plată, gata de copiat în aplicația băncii.`,
+      lead: (church) =>
+        `Aici găsești datele pentru o donație prin transfer bancar către ${church}. Atinge „Copiază” la fiecare câmp și lipește-l în aplicația băncii tale.`,
       beneficiary: 'Beneficiar',
       iban: 'IBAN',
       details: 'Detalii plată',
@@ -334,12 +340,15 @@ const DICT: Record<Locale, Dict> = {
       copyFailed: 'Nu s-a putut copia. Ține apăsat pe text ca să-l copiezi.',
       copyLabel: (field) => `Copiază ${field}`,
       destination: 'Dacă vrei să susții ceva anume, scrie destinația în câmpul „Detalii plată”. Dacă nu scrii o destinație, darul tău merge la bugetul local al bisericii.',
+      ownDetails: 'Scrie tu destinația darului',
+      ownDetailsHint: 'De exemplu, proiectul sau scopul pentru care dai. Dacă lași câmpul gol, darul va fi folosit pentru nevoile bisericii.',
       howTitle: 'Cum donez',
       steps: [
         'Copiază IBAN-ul de mai sus.',
         'Deschide aplicația băncii tale și alege „Transfer nou”.',
         'Lipește IBAN-ul și beneficiarul, iar la „Detalii plată” pune textul de mai sus (sau destinația ta).',
       ],
+      ownStep: 'Lipește IBAN-ul și beneficiarul, iar la „Detalii plată” scrie destinația darului tău.',
       question: (church) => `Cum pot dona pentru ${church}?`,
       answer: ({ church, beneficiary, iban, bank, details }) =>
         `Poți dona pentru ${church} prin transfer bancar în contul IBAN ${iban}` +
@@ -521,6 +530,8 @@ const DICT: Record<Locale, Dict> = {
     donations: {
       title: 'Donate',
       meta: (church) => `How to give to ${church} by bank transfer: the beneficiary, IBAN and payment details, ready to copy into your banking app.`,
+      lead: (church) =>
+        `Here are the details for giving to ${church} by bank transfer. Tap “Copy” next to each field and paste it into your banking app.`,
       beneficiary: 'Beneficiary',
       iban: 'IBAN',
       details: 'Payment details',
@@ -531,12 +542,15 @@ const DICT: Record<Locale, Dict> = {
       copyFailed: 'Could not copy. Press and hold the text to copy it.',
       copyLabel: (field) => `Copy ${field}`,
       destination: 'If you want to support something specific, write it in the “Payment details” field. Without a stated purpose, your gift goes to the church’s local budget.',
+      ownDetails: 'Write the purpose of your gift',
+      ownDetailsHint: 'For example, the project or cause you are giving to. If you leave it empty, your gift will be used for the needs of the church.',
       howTitle: 'How to give',
       steps: [
         'Copy the IBAN above.',
         'Open your banking app and choose “New transfer”.',
         'Paste the IBAN and the beneficiary, and put the text above (or your own purpose) in “Payment details”.',
       ],
+      ownStep: 'Paste the IBAN and the beneficiary, and write the purpose of your gift in “Payment details”.',
       question: (church) => `How can I give to ${church}?`,
       answer: ({ church, beneficiary, iban, bank, details }) =>
         `You can give to ${church} by bank transfer to the IBAN ${iban}` +

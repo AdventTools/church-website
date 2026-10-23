@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Info } from 'lucide-react';
+import { Info, PenLine } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import CopyField from '@/components/CopyField';
 import JsonLd from '@/components/JsonLd';
@@ -42,7 +42,7 @@ export default async function DonatiiPage({ params }: { params: Promise<{ lang: 
   const copyProps = { copy: d.copy, copied: d.copied, copyFailed: d.copyFailed };
   const destination = (
     <p className={styles.destination}>
-      <Info size={20} aria-hidden className={styles.destinationIcon} />
+      <Info size={18} aria-hidden className={styles.destinationIcon} />
       <span className="speakable">{d.destination}</span>
     </p>
   );
@@ -69,10 +69,7 @@ export default async function DonatiiPage({ params }: { params: Promise<{ lang: 
 
       <section className={styles.page}>
         <div className={`container ${styles.inner}`}>
-          <div className={styles.intro}>
-            <p className={styles.church}>{church}</p>
-            {donation.thankYou && <p className={`${styles.thanks} speakable`}>{donation.thankYou}</p>}
-          </div>
+          <p className={`${styles.lead} speakable`}>{d.lead(church)}</p>
 
           <div className={styles.card}>
             {donation.beneficiary && (
@@ -86,7 +83,11 @@ export default async function DonatiiPage({ params }: { params: Promise<{ lang: 
             ) : (
               <div className={styles.plainField}>
                 <p className={styles.plainLabel}>{d.details}</p>
-                {destination}
+                <p className={styles.ownDetails}>
+                  <PenLine size={18} aria-hidden className={styles.ownIcon} />
+                  {d.ownDetails}
+                </p>
+                <p className={`${styles.ownHint} speakable`}>{d.ownDetailsHint}</p>
               </div>
             )}
 
@@ -111,7 +112,7 @@ export default async function DonatiiPage({ params }: { params: Promise<{ lang: 
           <div className={styles.how}>
             <h2>{d.howTitle}</h2>
             <ol className={styles.steps}>
-              {d.steps.map((s, i) => (
+              {(donation.paymentDetails ? d.steps : [d.steps[0], d.steps[1], d.ownStep]).map((s, i) => (
                 <li key={i}>
                   <span className={styles.stepNum} aria-hidden>
                     {i + 1}
@@ -121,6 +122,8 @@ export default async function DonatiiPage({ params }: { params: Promise<{ lang: 
               ))}
             </ol>
           </div>
+
+          {donation.thankYou && <p className={`${styles.thanks} speakable`}>{donation.thankYou}</p>}
         </div>
       </section>
     </>
