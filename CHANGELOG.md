@@ -2,6 +2,9 @@
 
 > Scris în română.
 
+## 2026-11-05
+- fix(cms): **panoul de administrare Strapi era o pagină albă** de la actualizarea din 24 octombrie: vite 8, forțat în `resolutions`, construia panoul greșit (`Prism is not defined` în browser). Scoasă forțarea, panoul folosește vite 6.4.5, cel fixat de Strapi; Strapi urcat la 5.61.0.
+
 ## 2026-10-24
 - feat(donations): **slide de proiectat în sală**, `/donatii/proiectie`: QR mare spre `/donatii` (generat pe server, pachet nou `qrcode`), adresa și IBAN-ul, ecran complet la click sau F; cu `?scop=...` arată bugetul anunțat. Linkul din footer spre donații e înlocuit de o bandă discretă la finalul primei pagini, afișată doar când IBAN-ul e completat.
 - feat(donations): pagina de donații, adusă la forma din adventistcluj.ro: aspect mai liniștit pe telefon (texte mai mici, IBAN pe un rând, butoane „Copiază” nuanțate, verzi doar după copiere), un text de introducere sus și mulțumirea la final. Fără text implicit pentru „Detalii plată”, donatorul e rugat să-și scrie singur destinația. Scoase 4 directive `eslint-disable` devenite inutile după ESLint 10.
