@@ -2,6 +2,7 @@ import type { ChurchInfo, Contact, Program, ChurchEvent, PhotoAlbum, GalleryVide
 import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION, GEO, STREET, LOCALITY, absoluteUrl, DEFAULT_OG_IMAGE, LOGO_IMAGE } from './seo';
 import { site, siteSlogan } from '@/config/site';
 import { SOURCE_NAME, SOURCE_URL, type DailyThought } from './solascriptura';
+import { formatToLocalDate } from './utils';
 
 const clean = (s: string) => (s || '').replace(/\s+/g, ' ').trim();
 
@@ -245,7 +246,7 @@ export function dailyThoughtJsonLd(d: DailyThought) {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
-    name: `Gândul zilei, ${d.date}`,
+    name: `Gândul zilei, ${formatToLocalDate(d.date, 'ro')}`,
     ...(d.reference ? { about: d.reference } : {}),
     text: clean([d.verse, ...d.paragraphs].join(' ')),
     datePublished: d.date,

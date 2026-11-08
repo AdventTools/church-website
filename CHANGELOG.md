@@ -3,6 +3,7 @@
 > Scris în română.
 
 ## 2026-11-08
+- fix(date): în panoul Strapi datele apar cu ziua înaintea lunii (limba `en-GB`, aceleași texte în engleză), inclusiv în calendarele de alegere a datei; în datele structurate, „Gândul zilei” are data în format românesc. `follow-redirects` 1.16.2 (GHSA-mrwp-f3q8-3g9p); zod 3 rămâne doar în `koa-body` și `koa-session`, unde validează setările de la pornire, nu date de la vizitatori.
 - fix(cms): la înregistrarea unui coleg invitat, bifa de noutăți a firmei Strapi ducea la chestionarul „What type of work do you do?”, iar emailul și prenumele plecau la `analytics.strapi.io`, chiar și la „Skip”. Bifa e ascunsă, așa că omul ajunge direct în panou; verificat printr-o înregistrare reală pe un cont local de test.
 
 ## 2026-11-05

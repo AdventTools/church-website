@@ -4,6 +4,17 @@ import { initMobileAdmin } from './extensions/mobileAdmin';
 import { hideVendorNewsletter } from './extensions/hideVendorNewsletter';
 import { registerEditViewPanels } from './extensions/editViewPanels.jsx';
 
+// Strapi's default `en` shows dates month-first; `en-GB` has the same texts, with the day first.
+const DAY_FIRST_LOCALE = 'en-GB';
+const ADMIN_LANGUAGE_KEY = 'strapi-admin-language';
+const BRAND_MESSAGES = {
+  'Auth.form.welcome.title': 'Biserica „Speranța” Cluj-Napoca',
+  'Auth.form.welcome.subtitle': 'Administrare conținut',
+  'Auth.form.button.login.strapi': 'Autentificare',
+  'app.components.LeftMenu.navbrand.title': 'Speranța',
+  'app.components.LeftMenu.navbrand.workplace': 'Administrare',
+};
+
 export default {
   config: {
     // Sigla bisericii peste tot, în locul identității Strapi
@@ -11,7 +22,7 @@ export default {
     menu: { logo: churchLogo },
     // Favicon = emblema site-ului, în alb-negru (același simbol ca pe adventistcluj.ro).
     head: { favicon, title: 'Speranța · Administrare' },
-    locales: [],
+    locales: [DAY_FIRST_LOCALE],
     tutorials: false,
     notifications: { releases: false },
     theme: {
@@ -28,16 +39,15 @@ export default {
       },
     },
     translations: {
-      en: {
-        'Auth.form.welcome.title': 'Biserica „Speranța” Cluj-Napoca',
-        'Auth.form.welcome.subtitle': 'Administrare conținut',
-        'Auth.form.button.login.strapi': 'Autentificare',
-        'app.components.LeftMenu.navbrand.title': 'Speranța',
-        'app.components.LeftMenu.navbrand.workplace': 'Administrare',
-      },
+      en: BRAND_MESSAGES,
+      [DAY_FIRST_LOCALE]: BRAND_MESSAGES,
     },
   },
   bootstrap(app) {
+    // Runs before Strapi reads the stored language, so the first render is already day-first.
+    const storedLocale = localStorage.getItem(ADMIN_LANGUAGE_KEY);
+    if (!storedLocale || storedLocale === 'en') localStorage.setItem(ADMIN_LANGUAGE_KEY, DAY_FIRST_LOCALE);
+
     // Panou utilizabil pe telefon (sertar pentru bara principală, conținut full-width).
     initMobileAdmin();
     hideVendorNewsletter();
