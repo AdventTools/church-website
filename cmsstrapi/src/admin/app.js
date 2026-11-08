@@ -1,6 +1,7 @@
 import churchLogo from './extensions/church-logo.png';
 import favicon from './extensions/favicon.png';
 import { initMobileAdmin } from './extensions/mobileAdmin';
+import { hideVendorNewsletter } from './extensions/hideVendorNewsletter';
 import { registerEditViewPanels } from './extensions/editViewPanels.jsx';
 
 export default {
@@ -39,6 +40,7 @@ export default {
   bootstrap(app) {
     // Panou utilizabil pe telefon (sertar pentru bara principală, conținut full-width).
     initMobileAdmin();
+    hideVendorNewsletter();
     // Panouri în bara laterală a ecranului de editare (Strapi 5): test SMTP, avertisment
     // eveniment-duplicat, „Aplică un șablon". (Coloana „Limba” compactă din v4 nu are
     // echivalent în v5 — Content Manager afișează nativ limbile disponibile.)

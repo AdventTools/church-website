@@ -2,6 +2,9 @@
 
 > Scris în română.
 
+## 2026-11-08
+- fix(cms): la înregistrarea unui coleg invitat, bifa de noutăți a firmei Strapi ducea la chestionarul „What type of work do you do?”, iar emailul și prenumele plecau la `analytics.strapi.io`, chiar și la „Skip”. Bifa e ascunsă, așa că omul ajunge direct în panou; verificat printr-o înregistrare reală pe un cont local de test.
+
 ## 2026-11-05
 - fix(cms): **panoul de administrare Strapi era o pagină albă** de la actualizarea din 24 octombrie: vite 8, forțat în `resolutions`, construia panoul greșit (`Prism is not defined` în browser). Scoasă forțarea, panoul folosește vite 6.4.5, cel fixat de Strapi; Strapi urcat la 5.61.0.
 
